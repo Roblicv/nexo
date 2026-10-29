@@ -1,6 +1,6 @@
 {
  "version_reglas": 1,
- "generado": "2026-10-29T15:44:35+00:00",
+ "generado": "2026-10-29T16:30:52+00:00",
  "reglas": {
   "tendencia": 0.015,
   "justificacion_tendencia": "Un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023).",
@@ -14,9 +14,14 @@
    "motor": "brotes",
    "fuente": "oms_don",
    "regla": "Notas de Disease Outbreak News publicadas en las últimas 12 semanas. Línea base: La misma ventana de 12 semanas en cada año de 2015 a 2025.",
-   "estado": "error",
-   "valor": null,
-   "detalle": "Sin conexión con la fuente en esta ejecución; se reintentará en la próxima."
+   "estado": "ok",
+   "lectura": 8,
+   "media": 16.1818,
+   "desviacion": 8.7679,
+   "z": -0.933,
+   "valor": -0.435,
+   "fecha_dato": "2026-10-23",
+   "detalle": "8 notas en 12 semanas; media histórica 16.2 (11 años)"
   },
   "resp_europa": {
    "etiqueta": "Gripe en Europa (ECDC)",
@@ -37,36 +42,56 @@
    "motor": "brotes",
    "fuente": "delphi_fluview",
    "regla": "Porcentaje ponderado de consultas por síndrome gripal (wILI) del CDC, vía Delphi. Línea base: Misma semana epidemiológica (±2) en las 5 temporadas anteriores.",
-   "estado": "error",
-   "valor": null,
-   "detalle": "Sin conexión con la fuente en esta ejecución; se reintentará en la próxima."
+   "estado": "ok",
+   "lectura": 2.201,
+   "media": 2.235,
+   "desviacion": 0.6036,
+   "z": -0.056,
+   "valor": -0.028,
+   "fecha_dato": "2026-10-10",
+   "detalle": "wILI 2.20 % en 2026-S41; media de 5 temporadas 2.23 %"
   },
   "movilizacion_global": {
    "etiqueta": "Movilización social mundial (GDELT)",
    "motor": "prot",
    "fuente": "gdelt",
    "regla": "Intensidad de cobertura de noticias sobre protestas, últimas 4 semanas. Línea base: Las 8 semanas anteriores dentro de la ventana de GDELT.",
-   "estado": "error",
-   "valor": null,
-   "detalle": "Sin conexión con la fuente en esta ejecución; se reintentará en la próxima."
+   "estado": "ok",
+   "lectura": 5.371,
+   "media": 3.8922,
+   "desviacion": 0.2331,
+   "z": 6.344,
+   "valor": 0.996,
+   "fecha_dato": "2026-10-27",
+   "detalle": "Intensidad 5.371 en las últimas 4 semanas; 3.892 en las 8 anteriores"
   },
   "movilizacion_francia": {
    "etiqueta": "Movilización en Francia (contexto)",
    "motor": null,
    "fuente": "gdelt",
    "regla": "Igual que la mundial, solo medios de Francia. Línea base: Las 8 semanas anteriores.",
-   "estado": "error",
-   "valor": null,
-   "detalle": "Sin conexión con la fuente en esta ejecución; se reintentará en la próxima."
+   "estado": "ok",
+   "lectura": 0.2056,
+   "media": 0.0863,
+   "desviacion": 0.05,
+   "z": 2.386,
+   "valor": 0.832,
+   "fecha_dato": "2026-10-27",
+   "detalle": "Intensidad 0.206 en las últimas 4 semanas; 0.086 en las 8 anteriores"
   },
   "movilizacion_brasil": {
    "etiqueta": "Movilización en Brasil (contexto)",
    "motor": null,
    "fuente": "gdelt",
    "regla": "Igual que la mundial, solo medios de Brasil. Línea base: Las 8 semanas anteriores.",
-   "estado": "error",
-   "valor": null,
-   "detalle": "Sin conexión con la fuente en esta ejecución; se reintentará en la próxima."
+   "estado": "ok",
+   "lectura": 0.065,
+   "media": 0.0762,
+   "desviacion": 0.05,
+   "z": -0.224,
+   "valor": -0.112,
+   "fecha_dato": "2026-10-27",
+   "detalle": "Intensidad 0.065 en las últimas 4 semanas; 0.076 en las 8 anteriores"
   },
   "protestas_acled": {
    "etiqueta": "Eventos de protesta (ACLED)",
@@ -80,14 +105,16 @@
  },
  "motores": {
   "brotes": {
-   "valor": 0.077,
+   "valor": -0.129,
    "componentes": [
     "brotes_oms",
     "resp_europa",
     "ili_eeuu"
    ],
    "usadas": [
-    "resp_europa"
+    "brotes_oms",
+    "resp_europa",
+    "ili_eeuu"
    ],
    "e_previa": 0.2,
    "pendiente": null,
@@ -95,18 +122,23 @@
    "e": 0.0,
    "validacion": {
     "predictor": "Notas de la OMS del año anterior",
-    "estado": "historial_insuficiente",
-    "n": 0,
-    "mensaje": "Sin serie anual de la OMS esta semana."
+    "estado": "no_mejora",
+    "n": 13,
+    "brier_base": 0.2867,
+    "brier_con_variable": 0.3092,
+    "elasticidad": 0.0,
+    "mensaje": "La variable no mejora los aciertos: su peso queda en 0."
    }
   },
   "prot": {
-   "valor": null,
+   "valor": 0.996,
    "componentes": [
     "movilizacion_global",
     "protestas_acled"
    ],
-   "usadas": [],
+   "usadas": [
+    "movilizacion_global"
+   ],
    "e_previa": 0.05,
    "pendiente": null,
    "en_pronostico": false,
