@@ -1,0 +1,46 @@
+name: Actualizar datos de Nexo
+
+on:
+  schedule:
+    - cron: "0 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: actualizar-datos
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Descargar datos y recalcular
+        env:
+          ACLED_USUARIO: ${{ secrets.ACLED_USUARIO }}
+          ACLED_CLAVE: ${{ secrets.ACLED_CLAVE }}
+        run: python -m pipeline.ejecutar
+
+      - name: Guardar los datos nuevos
+        run: |
+          git config user.name "nexo-datos"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add docs/data/nexo-data.json datos/lecturas.csv
+          if git diff --staged --quiet; then
+            echo "Sin cambios esta semana."
+          else
+            git commit -m "Datos semanales $(date -u +%Y-%m-%d)"
+            git push
+          fi
