@@ -1,0 +1,95 @@
+# Reglas de Nexo. Se escriben ANTES de mirar los resultados.
+# Ninguna variable se ajusta a mano: cada valor sale de una fuente pública con la regla escrita aquí.
+# Cambiar una regla exige subir "version" y queda registrado en el historial de Git.
+
+version: 1
+registrado: "2026-10-29"
+
+transformacion: "x = tanh(z / 2), con z = (lectura - media de la línea base) / desviación de la línea base"
+vigencia_dias: 28  # una lectura más vieja que esto se muestra, pero no entra al pronóstico
+
+pronostico:
+  tasa_base:
+    cualquiera: {eventos: 5, anios: 126, nota: "Pandemias de 1918, 1957, 1968, 2009 y 2020"}
+    severa: {eventos: 2, anios: 126, nota: "Pandemias de 1918 y 2020"}
+  tendencia_anual: 0.015
+  justificacion_tendencia: "Un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023)."
+  simulaciones: 1500
+  semilla: 20261029
+
+validacion:
+  resultado: "Año con al menos una nueva emergencia de salud pública de importancia internacional declarada por la OMS"
+  archivo: datos/emergencias_oms.yaml
+  regla: "Un motor entra al pronóstico solo si mejora la puntuación de Brier fuera de muestra frente a la tasa base."
+  minimo_anios: 10
+  anios_calentamiento: 5
+
+variables:
+  brotes_oms:
+    motor: brotes
+    fuente: oms_don
+    etiqueta: "Brotes notificados por la OMS"
+    lectura: "Notas de Disease Outbreak News publicadas en las últimas 12 semanas"
+    linea_base: "La misma ventana de 12 semanas en cada año de 2015 a 2025"
+  resp_europa:
+    motor: brotes
+    fuente: ecdc_erviss
+    etiqueta: "Gripe en Europa (ECDC)"
+    lectura: "Positividad de gripe en atención primaria centinela, UE/EEE, última semana publicada"
+    linea_base: "Misma semana epidemiológica (±2) en temporadas anteriores"
+  ili_eeuu:
+    motor: brotes
+    fuente: delphi_fluview
+    etiqueta: "Síndrome gripal en EE. UU. (CDC)"
+    lectura: "Porcentaje ponderado de consultas por síndrome gripal (wILI) del CDC, vía Delphi"
+    linea_base: "Misma semana epidemiológica (±2) en las 5 temporadas anteriores"
+  movilizacion_global:
+    motor: prot
+    fuente: gdelt
+    etiqueta: "Movilización social mundial (GDELT)"
+    consulta: "theme:PROTEST"
+    lectura: "Intensidad de cobertura de noticias sobre protestas, últimas 4 semanas"
+    linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
+  movilizacion_francia:
+    motor: null
+    fuente: gdelt
+    etiqueta: "Movilización en Francia (contexto)"
+    consulta: "theme:PROTEST sourcecountry:france"
+    lectura: "Igual que la mundial, solo medios de Francia"
+    linea_base: "Las 8 semanas anteriores"
+  movilizacion_brasil:
+    motor: null
+    fuente: gdelt
+    etiqueta: "Movilización en Brasil (contexto)"
+    consulta: "theme:PROTEST sourcecountry:brazil"
+    lectura: "Igual que la mundial, solo medios de Brasil"
+    linea_base: "Las 8 semanas anteriores"
+  protestas_acled:
+    motor: prot
+    fuente: acled
+    opcional: true
+    etiqueta: "Eventos de protesta (ACLED)"
+    paises: [France, Brazil, Chile, Colombia, United States]
+    lectura: "Eventos de protesta en los países vigilados, últimas 4 semanas"
+    linea_base: "Las mismas 4 semanas del calendario en 2018-2025"
+
+motores:
+  brotes: {e_previa: 0.20, combinacion: "media de las variables disponibles"}
+  prot:   {e_previa: 0.05, combinacion: "ACLED si está disponible; si no, GDELT mundial"}
+  ganado: {e_previa: 0.25, pendiente: "WOAH-WAHIS no tiene API pública"}
+  suelo:  {e_previa: 0.20, pendiente: "Global Forest Watch publica una vez al año"}
+  fauna:  {e_previa: 0.15, pendiente: "Sin serie abierta y continua"}
+  clima:  {e_previa: 0.10, pendiente: "Copernicus requiere procesar datos en rejilla"}
+  aereo:  {e_previa: 0.15, pendiente: "Los datos de la OACI son de pago"}
+  urbano: {e_previa: 0.10, pendiente: "ONU-Hábitat publica una vez al año"}
+  conf:   {e_previa: -0.15, pendiente: "Encuestas de confianza anuales"}
+
+hipotesis_autor:
+  regla: "Su peso es el que resulte de la validación con protestas e emergencias; 0 mientras no haya historial suficiente."
+
+poder_economico:
+  pendiente: "Concentración de riqueza durante emergencias: World Inequality Database y listas de multimillonarios."
+
+eventos:
+  regla_simetria: "Los bloques políticos se clasifican con una fuente externa (ParlGov o V-Party), nunca a mano, y la misma regla se aplica gane quien gane."
+  regla_participantes: "Media geométrica entre la cifra oficial y la de los organizadores, con ambas como rango."

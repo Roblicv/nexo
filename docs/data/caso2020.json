@@ -1,0 +1,21 @@
+{
+ "titulo": "Caso 2020: los tres pilares en un ejemplo real",
+ "nota": "Reconstrucción documental. Muestra cómo interactuaron las variables; no prueba hacia dónde apunta la flecha causal.",
+ "eventos": [
+  {"fecha": "2019", "pilar": "movilizacion", "texto": "Ola de protestas en muchos países: Hong Kong, Chile, Líbano, Irak, Ecuador, Colombia y Francia, entre otros."},
+  {"fecha": "2019-12-30", "pilar": "juego", "texto": "El médico Li Wenliang advierte a colegas en Wuhan sobre casos de una neumonía similar al SARS."},
+  {"fecha": "2019-12-31", "pilar": "agencias", "texto": "Wuhan informa de un grupo de casos de neumonía de causa desconocida; la OMS recibe la alerta."},
+  {"fecha": "2020-01-03", "pilar": "juego", "texto": "La policía amonesta a Li Wenliang por «difundir rumores». Castigar al mensajero alarga la demora de detección."},
+  {"fecha": "2020-01-11", "pilar": "juego", "texto": "Se publica la secuencia genómica del virus, lo que permite diseñar pruebas en todo el mundo."},
+  {"fecha": "2020-01-23", "pilar": "agencias", "texto": "Cierre de Wuhan."},
+  {"fecha": "2020-01-30", "pilar": "agencias", "texto": "La OMS declara una emergencia de salud pública de importancia internacional."},
+  {"fecha": "2020-03-11", "pilar": "agencias", "texto": "La OMS califica la COVID-19 de pandemia."},
+  {"fecha": "2020-03", "pilar": "movilizacion", "texto": "Chile aplaza su plebiscito constitucional de abril a octubre por la pandemia."},
+  {"fecha": "2020-03-29", "pilar": "movilizacion", "texto": "Hong Kong limita las reuniones públicas a cuatro personas; las marchas masivas se apagan."},
+  {"fecha": "2020-05-25", "pilar": "movilizacion", "texto": "Tras el asesinato de George Floyd, protestas masivas en EE. UU. pese a las restricciones sanitarias."},
+  {"fecha": "2020-06-30", "pilar": "movilizacion", "texto": "Entra en vigor en Hong Kong la ley de seguridad nacional."},
+  {"fecha": "2020-08-09", "pilar": "movilizacion", "texto": "Protestas masivas en Bielorrusia tras las elecciones presidenciales."},
+  {"fecha": "2020-10-02", "pilar": "movilizacion", "texto": "Freedom House documenta nuevas restricciones a las protestas en 158 de 192 países, y protestas significativas en al menos 90."},
+  {"fecha": "2020-10-25", "pilar": "movilizacion", "texto": "Chile celebra el plebiscito aplazado."}
+ ]
+}

@@ -1,0 +1,25 @@
+# Eventos políticos y sociales registrados como datos, no como interpretación.
+# Regla de simetría: los bloques se clasificarán con ParlGov o V-Party, y la misma regla aplica gane quien gane.
+eventos:
+  - id: brasil-2026-presidencial
+    pais: Brasil
+    tipo: eleccion
+    fecha: "2026-10-25"
+    resumen: "Segunda vuelta presidencial: Lula (PT) 51,79 %, Flávio Bolsonaro (PL) 48,21 %. Gana quien terminó segundo en la primera vuelta."
+    datos: {incumbente_reelegido: true, margen_pp: 3.58}
+    contexto: "En la elección legislativa del 4 de octubre, el PL quedó como la mayor bancada de la Cámara."
+    fuente: "Tribunal Superior Eleitoral"
+  - id: francia-2026-10-17
+    pais: Francia
+    tipo: protesta
+    fecha: "2026-10-17"
+    resumen: "Jornada nacional contra la vida cara, en el contexto del choque petrolero de 2026, junto al movimiento estudiantil."
+    datos: {participantes_oficial: 550000, participantes_organizadores: 800000}
+    fuente: "Ministerio del Interior y organizadores, recogidos por la prensa"
+  - id: francia-2026-10-24
+    pais: Francia
+    tipo: protesta
+    fecha: "2026-10-24"
+    resumen: "Segunda jornada. Prohibiciones de manifestación en Bouches-du-Rhône y Lyon y toques de queda en París y Marsella tras los disturbios del 17."
+    datos: {participantes_oficial: 410000, participantes_organizadores: 800000, detenidos: 1435, restriccion_reuniones: true}
+    fuente: "Ministerio del Interior y CGT, recogidos por la prensa"

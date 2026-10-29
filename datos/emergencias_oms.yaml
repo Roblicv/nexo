@@ -1,0 +1,13 @@
+# Emergencias de salud pública de importancia internacional (ESPII) declaradas por la OMS.
+# Resultado observado para validar el modelo: 1 si en el año se declaró al menos una nueva.
+declaradas:
+  - {fecha: "2009-04-25", evento: "Gripe A(H1N1)"}
+  - {fecha: "2014-05-05", evento: "Poliovirus"}
+  - {fecha: "2014-08-08", evento: "Ébola en África Occidental"}
+  - {fecha: "2016-02-01", evento: "Zika"}
+  - {fecha: "2019-07-17", evento: "Ébola en Kivu"}
+  - {fecha: "2020-01-30", evento: "COVID-19"}
+  - {fecha: "2022-07-23", evento: "Mpox"}
+  - {fecha: "2024-08-14", evento: "Mpox clado Ib"}
+  - {fecha: "2026-05-16", evento: "Enfermedad por virus Bundibugyo"}
+primer_anio: 2008
