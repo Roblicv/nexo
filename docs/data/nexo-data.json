@@ -1,6 +1,6 @@
 {
  "version_reglas": 1,
- "generado": "2026-10-29T16:30:52+00:00",
+ "generado": "2026-11-02T13:56:29+00:00",
  "reglas": {
   "tendencia": 0.015,
   "justificacion_tendencia": "Un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023).",
@@ -16,12 +16,12 @@
    "regla": "Notas de Disease Outbreak News publicadas en las últimas 12 semanas. Línea base: La misma ventana de 12 semanas en cada año de 2015 a 2025.",
    "estado": "ok",
    "lectura": 8,
-   "media": 16.1818,
-   "desviacion": 8.7679,
-   "z": -0.933,
-   "valor": -0.435,
+   "media": 16.3636,
+   "desviacion": 8.7933,
+   "z": -0.951,
+   "valor": -0.443,
    "fecha_dato": "2026-10-23",
-   "detalle": "8 notas en 12 semanas; media histórica 16.2 (11 años)"
+   "detalle": "8 notas en 12 semanas; media histórica 16.4 (11 años)"
   },
   "resp_europa": {
    "etiqueta": "Gripe en Europa (ECDC)",
@@ -29,13 +29,13 @@
    "fuente": "ecdc_erviss",
    "regla": "Positividad de gripe en atención primaria centinela, UE/EEE, última semana publicada. Línea base: Misma semana epidemiológica (±2) en temporadas anteriores.",
    "estado": "ok",
-   "lectura": 4.5,
-   "media": 4.05,
-   "desviacion": 2.9277,
-   "z": 0.154,
-   "valor": 0.077,
-   "fecha_dato": "2026-10-18",
-   "detalle": "Positividad 4.5 % en 2026-S42; media de temporadas anteriores 4.0 %"
+   "lectura": 2.8,
+   "media": 4.705,
+   "desviacion": 3.4077,
+   "z": -0.559,
+   "valor": -0.272,
+   "fecha_dato": "2026-10-25",
+   "detalle": "Positividad 2.8 % en 2026-S43; media de temporadas anteriores 4.7 %"
   },
   "ili_eeuu": {
    "etiqueta": "Síndrome gripal en EE. UU. (CDC)",
@@ -43,41 +43,41 @@
    "fuente": "delphi_fluview",
    "regla": "Porcentaje ponderado de consultas por síndrome gripal (wILI) del CDC, vía Delphi. Línea base: Misma semana epidemiológica (±2) en las 5 temporadas anteriores.",
    "estado": "ok",
-   "lectura": 2.201,
-   "media": 2.235,
-   "desviacion": 0.6036,
-   "z": -0.056,
-   "valor": -0.028,
-   "fecha_dato": "2026-10-10",
-   "detalle": "wILI 2.20 % en 2026-S41; media de 5 temporadas 2.23 %"
+   "lectura": 2.4443,
+   "media": 2.4244,
+   "desviacion": 0.8594,
+   "z": 0.023,
+   "valor": 0.012,
+   "fecha_dato": "2026-10-17",
+   "detalle": "wILI 2.44 % en 2026-S42; media de 5 temporadas 2.42 %"
   },
   "movilizacion_global": {
    "etiqueta": "Movilización social mundial (GDELT)",
    "motor": "prot",
    "fuente": "gdelt",
    "regla": "Intensidad de cobertura de noticias sobre protestas, últimas 4 semanas. Línea base: Las 8 semanas anteriores dentro de la ventana de GDELT.",
-   "estado": "ok",
+   "estado": "desactualizado",
    "lectura": 5.371,
    "media": 3.8922,
    "desviacion": 0.2331,
    "z": 6.344,
    "valor": 0.996,
    "fecha_dato": "2026-10-27",
-   "detalle": "Intensidad 5.371 en las últimas 4 semanas; 3.892 en las 8 anteriores"
+   "detalle": "Intensidad 5.371 en las últimas 4 semanas; 3.892 en las 8 anteriores. Última lectura válida; esta semana falló: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Max retries exceeded with url: /api/v2/doc/doc?query=theme%3APROTEST&mode=timelinevol&format=json&timespan=12w (Caused by ResponseError('too many 429 error responses'))"
   },
   "movilizacion_francia": {
    "etiqueta": "Movilización en Francia (contexto)",
    "motor": null,
    "fuente": "gdelt",
    "regla": "Igual que la mundial, solo medios de Francia. Línea base: Las 8 semanas anteriores.",
-   "estado": "ok",
+   "estado": "desactualizado",
    "lectura": 0.2056,
    "media": 0.0863,
    "desviacion": 0.05,
    "z": 2.386,
    "valor": 0.832,
    "fecha_dato": "2026-10-27",
-   "detalle": "Intensidad 0.206 en las últimas 4 semanas; 0.086 en las 8 anteriores"
+   "detalle": "Intensidad 0.206 en las últimas 4 semanas; 0.086 en las 8 anteriores. Última lectura válida; esta semana falló: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Max retries exceeded with url: /api/v2/doc/doc?query=theme%3APROTEST+sourcecountry%3Afrance&mode=timelinevol&format=json&timespan=12w (Caused by ResponseError('too many 429 error responses'))"
   },
   "movilizacion_brasil": {
    "etiqueta": "Movilización en Brasil (contexto)",
@@ -86,12 +86,12 @@
    "regla": "Igual que la mundial, solo medios de Brasil. Línea base: Las 8 semanas anteriores.",
    "estado": "ok",
    "lectura": 0.065,
-   "media": 0.0762,
+   "media": 0.0769,
    "desviacion": 0.05,
-   "z": -0.224,
-   "valor": -0.112,
+   "z": -0.239,
+   "valor": -0.119,
    "fecha_dato": "2026-10-27",
-   "detalle": "Intensidad 0.065 en las últimas 4 semanas; 0.076 en las 8 anteriores"
+   "detalle": "Intensidad 0.065 en las últimas 4 semanas; 0.077 en las 8 anteriores"
   },
   "protestas_acled": {
    "etiqueta": "Eventos de protesta (ACLED)",
@@ -105,7 +105,7 @@
  },
  "motores": {
   "brotes": {
-   "valor": -0.129,
+   "valor": -0.234,
    "componentes": [
     "brotes_oms",
     "resp_europa",
@@ -131,14 +131,12 @@
    }
   },
   "prot": {
-   "valor": 0.996,
+   "valor": null,
    "componentes": [
     "movilizacion_global",
     "protestas_acled"
    ],
-   "usadas": [
-    "movilizacion_global"
-   ],
+   "usadas": [],
    "e_previa": 0.05,
    "pendiente": null,
    "en_pronostico": false,
@@ -727,6 +725,11 @@
  "historial": [
   {
    "fecha": "2026-10-29",
+   "anio_50": 2041,
+   "p_2027_2036": 0.3736
+  },
+  {
+   "fecha": "2026-11-02",
    "anio_50": 2041,
    "p_2027_2036": 0.3736
   }
