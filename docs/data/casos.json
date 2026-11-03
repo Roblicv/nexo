@@ -1,0 +1,170 @@
+{
+ "casos": [
+  {
+   "id": "1918-1939",
+   "titulo": "1918–1939",
+   "nota": "Medible a medias: para esa época hay series anuales de mortalidad, desempleo, huelgas y muertes en combate, pero no datos semanales como hoy.",
+   "leccion": "La censura de guerra retrasó el aviso de la gripe de 1918, el mismo dilema del pilar 1. Y las grandes luchas de poder de los años treinta (depresión, huelgas masivas, decretos de emergencia y guerra) ocurrieron sin ninguna pandemia: el poder se disputó por la economía y por las armas.",
+   "eventos": [
+    {
+     "fecha": "1914",
+     "pilar": "conflicto",
+     "texto": "Comienza la Primera Guerra Mundial: movilización masiva de tropas entre continentes."
+    },
+    {
+     "fecha": "1917",
+     "pilar": "movilizacion",
+     "texto": "Revolución rusa y ola de huelgas y motines en varios países en guerra."
+    },
+    {
+     "fecha": "1918",
+     "pilar": "agencias",
+     "texto": "Pandemia de gripe: infecta a cerca de un tercio de la población mundial y mata a decenas de millones de personas entre 1918 y 1920."
+    },
+    {
+     "fecha": "1918",
+     "pilar": "juego",
+     "texto": "Los países en guerra censuran las noticias del brote para no desmoralizar. España, neutral, informa con libertad, y por eso la enfermedad pasa a la historia como «gripe española»."
+    },
+    {
+     "fecha": "1918-11",
+     "pilar": "conflicto",
+     "texto": "Termina la guerra. El regreso de los soldados y las celebraciones masivas coinciden con oleadas del virus."
+    },
+    {
+     "fecha": "1919",
+     "pilar": "movilizacion",
+     "texto": "Huelgas generales en Seattle (febrero) y Winnipeg (mayo y junio), y revoluciones en Alemania y Hungría, en plena pandemia."
+    },
+    {
+     "fecha": "1923",
+     "pilar": "agencias",
+     "texto": "Nace la Organización de Salud de la Sociedad de Naciones, antecesora de la OMS. Desde 1926 publica un registro epidemiológico semanal."
+    },
+    {
+     "fecha": "1929-10",
+     "pilar": "economia",
+     "texto": "Quiebra de la bolsa de Nueva York y comienzo de la Gran Depresión."
+    },
+    {
+     "fecha": "1932",
+     "pilar": "movilizacion",
+     "texto": "Marchas del hambre en varios países. En Washington, el ejército desaloja por la fuerza a miles de veteranos que reclamaban su pago."
+    },
+    {
+     "fecha": "1933",
+     "pilar": "economia",
+     "texto": "El desempleo en EE. UU. llega a cerca de una cuarta parte de la población activa."
+    },
+    {
+     "fecha": "1933-02-28",
+     "pilar": "juego",
+     "texto": "En Alemania, un decreto de emergencia tras el incendio del Reichstag suspende libertades civiles. Una emergencia, sin pandemia, usada para concentrar el poder."
+    },
+    {
+     "fecha": "1936-06",
+     "pilar": "movilizacion",
+     "texto": "Huelgas generales en Francia que terminan en los acuerdos de Matignon. En julio empieza la guerra civil española."
+    },
+    {
+     "fecha": "1939-09-01",
+     "pilar": "conflicto",
+     "texto": "Alemania invade Polonia y comienza la Segunda Guerra Mundial. La siguiente pandemia no llegará hasta 1957."
+    }
+   ]
+  },
+  {
+   "id": "2020",
+   "titulo": "2020",
+   "nota": "Reconstrucción documental. Muestra cómo interactuaron las variables; un solo caso no prueba hacia dónde apunta la flecha causal.",
+   "leccion": "La demora del aviso en Wuhan muestra el pilar 1; las restricciones a protestas en 158 países, el pilar 3. Y el llamado a una tregua mundial no se cumplió: la pandemia no detuvo el conflicto armado.",
+   "eventos": [
+    {
+     "fecha": "2019",
+     "pilar": "movilizacion",
+     "texto": "Ola de protestas en muchos países: Hong Kong, Chile, Líbano, Irak, Ecuador, Colombia y Francia, entre otros."
+    },
+    {
+     "fecha": "2019-12-30",
+     "pilar": "juego",
+     "texto": "El médico Li Wenliang advierte a colegas en Wuhan sobre casos de una neumonía similar al SARS."
+    },
+    {
+     "fecha": "2019-12-31",
+     "pilar": "agencias",
+     "texto": "Wuhan informa de un grupo de casos de neumonía de causa desconocida; la OMS recibe la alerta."
+    },
+    {
+     "fecha": "2020-01-03",
+     "pilar": "juego",
+     "texto": "La policía amonesta a Li Wenliang por «difundir rumores». Castigar al mensajero alarga la demora de detección."
+    },
+    {
+     "fecha": "2020-01-11",
+     "pilar": "juego",
+     "texto": "Se publica la secuencia genómica del virus, lo que permite diseñar pruebas en todo el mundo."
+    },
+    {
+     "fecha": "2020-01-23",
+     "pilar": "agencias",
+     "texto": "Cierre de Wuhan."
+    },
+    {
+     "fecha": "2020-01-30",
+     "pilar": "agencias",
+     "texto": "La OMS declara una emergencia de salud pública de importancia internacional."
+    },
+    {
+     "fecha": "2020-03-11",
+     "pilar": "agencias",
+     "texto": "La OMS califica la COVID-19 de pandemia."
+    },
+    {
+     "fecha": "2020-03-23",
+     "pilar": "conflicto",
+     "texto": "El secretario general de la ONU pide un alto el fuego mundial para enfrentar la pandemia."
+    },
+    {
+     "fecha": "2020-03",
+     "pilar": "movilizacion",
+     "texto": "Chile aplaza su plebiscito constitucional de abril a octubre por la pandemia."
+    },
+    {
+     "fecha": "2020-03-29",
+     "pilar": "movilizacion",
+     "texto": "Hong Kong limita las reuniones públicas a cuatro personas; las marchas masivas se apagan."
+    },
+    {
+     "fecha": "2020-05-13",
+     "pilar": "conflicto",
+     "texto": "ACLED revisa la respuesta: de 43 países con violencia organizada relevante, solo en 10 hubo actores que acogieron el llamado o declararon un alto el fuego, y en varios la violencia aumentó. La pandemia no funcionó como tregua general."
+    },
+    {
+     "fecha": "2020-05-25",
+     "pilar": "movilizacion",
+     "texto": "Tras el asesinato de George Floyd, protestas masivas en EE. UU. pese a las restricciones sanitarias."
+    },
+    {
+     "fecha": "2020-06-30",
+     "pilar": "movilizacion",
+     "texto": "Entra en vigor en Hong Kong la ley de seguridad nacional."
+    },
+    {
+     "fecha": "2020-08-09",
+     "pilar": "movilizacion",
+     "texto": "Protestas masivas en Bielorrusia tras las elecciones presidenciales."
+    },
+    {
+     "fecha": "2020-10-02",
+     "pilar": "movilizacion",
+     "texto": "Freedom House documenta nuevas restricciones a las protestas en 158 de 192 países, y protestas significativas en al menos 90."
+    },
+    {
+     "fecha": "2020-10-25",
+     "pilar": "movilizacion",
+     "texto": "Chile celebra el plebiscito aplazado."
+    }
+   ]
+  }
+ ]
+}

@@ -23,3 +23,15 @@ eventos:
     resumen: "Segunda jornada. Prohibiciones de manifestación en Bouches-du-Rhône y Lyon y toques de queda en París y Marsella tras los disturbios del 17."
     datos: {participantes_oficial: 410000, participantes_organizadores: 800000, detenidos: 1435, restriccion_reuniones: true}
     fuente: "Ministerio del Interior y CGT, recogidos por la prensa"
+  - id: iran-2026-02-28
+    pais: Irán
+    tipo: conflicto
+    fecha: "2026-02-28"
+    resumen: "EE. UU. e Israel lanzan ataques conjuntos contra Irán y comienza la guerra de 2026. Irán responde con misiles y drones contra países del Golfo y el estrecho de Ormuz."
+    fuente: "Prensa internacional"
+  - id: iran-2026-11-02
+    pais: Irán
+    tipo: conflicto
+    fecha: "2026-11-02"
+    resumen: "Ataques limitados de EE. UU. contra la isla de Qeshm, en el estrecho de Ormuz, descritos por funcionarios estadounidenses como defensivos. Llegan tras más de dos meses sin ataques anunciados y en plenas negociaciones."
+    fuente: "The Wall Street Journal, Reuters y AP, recogidos por la prensa"

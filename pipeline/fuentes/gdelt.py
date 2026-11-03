@@ -1,28 +1,49 @@
-"""GDELT: intensidad de cobertura de noticias sobre un tema (API DOC 2.0)."""
+"""GDELT: intensidad de cobertura de noticias sobre un tema (API DOC 2.0).
+
+GDELT limita las consultas por dirección IP, y las máquinas de GitHub comparten direcciones.
+Por eso se espera 10 segundos entre consultas y, si responde 429 (demasiadas peticiones),
+se reintenta con esperas cada vez más largas.
+"""
 from __future__ import annotations
 
 import datetime as dt
 import statistics
 import time
 
-from .comun import FuenteError, resumen
+import requests
+
+from .comun import AGENTE, FuenteError, resumen
 
 URL = "https://api.gdeltproject.org/api/v2/doc/doc"
+ESPERA_ENTRE_CONSULTAS = 10
+ESPERAS_429 = (30, 60, 120)
 _ULTIMA_LLAMADA = [0.0]
 
 
+def _consultar(consulta: str) -> dict:
+    params = {"query": consulta, "mode": "timelinevol", "format": "json", "timespan": "12w"}
+    for intento in range(len(ESPERAS_429) + 1):
+        espera = ESPERA_ENTRE_CONSULTAS - (time.time() - _ULTIMA_LLAMADA[0])
+        if espera > 0:
+            time.sleep(espera)
+        _ULTIMA_LLAMADA[0] = time.time()
+        r = requests.get(URL, params=params, timeout=60, headers={"User-Agent": AGENTE})
+        if r.status_code == 429 and intento < len(ESPERAS_429):
+            time.sleep(ESPERAS_429[intento])
+            continue
+        r.raise_for_status()
+        try:
+            return r.json()
+        except ValueError as e:  # GDELT responde en texto cuando la consulta no es válida
+            raise FuenteError(f"GDELT no aceptó la consulta: {r.text[:120]}") from e
+    raise FuenteError("GDELT limitó las consultas tras varios reintentos.")
+
+
 def leer(s, regla: dict, hoy: dt.date) -> dict:
-    espera = 6 - (time.time() - _ULTIMA_LLAMADA[0])  # GDELT pide una consulta cada 5 segundos
-    if espera > 0:
-        time.sleep(espera)
-    _ULTIMA_LLAMADA[0] = time.time()
-    r = s.get(URL, params={"query": regla["consulta"], "mode": "timelinevol",
-                           "format": "json", "timespan": "12w"}, timeout=60)
-    r.raise_for_status()
     try:
-        puntos = r.json()["timeline"][0]["data"]
-    except (ValueError, KeyError, IndexError) as e:
-        raise FuenteError(f"Respuesta de GDELT sin serie temporal: {e}") from e
+        puntos = _consultar(regla["consulta"])["timeline"][0]["data"]
+    except (KeyError, IndexError) as e:
+        raise FuenteError("Respuesta de GDELT sin serie temporal.") from e
     diarios = []
     for p in puntos:
         try:

@@ -35,11 +35,14 @@ def _mensaje(e: Exception) -> str:
         return f"La fuente respondió con el código {e.response.status_code}; se reintentará en la próxima ejecución."
     if isinstance(e, requests.Timeout):
         return "La fuente tardó demasiado en responder; se reintentará en la próxima ejecución."
+    if isinstance(e, requests.exceptions.RetryError):
+        return "La fuente limitó las consultas por exceso de peticiones; se reintentará en la próxima ejecución."
+    if isinstance(e, requests.RequestException):
+        return "La fuente no respondió bien en esta ejecución; se reintentará en la próxima."
     return str(e) or e.__class__.__name__
 
 
-def leer_variables(reglas: dict, anterior: dict, hoy: dt.date) -> tuple[dict, dict]:
-    s = comun.sesion()
+def leer_variables(s, reglas: dict, anterior: dict, hoy: dt.date) -> tuple[dict, dict]:
     salida, extras = {}, {}
     for clave, regla in reglas["variables"].items():
         info = {"etiqueta": regla["etiqueta"], "motor": regla.get("motor"), "fuente": regla["fuente"],
@@ -51,7 +54,7 @@ def leer_variables(reglas: dict, anterior: dict, hoy: dt.date) -> tuple[dict, di
             salida[clave] = {**info, "estado": "ok" if edad <= reglas["vigencia_dias"] else "desactualizado",
                              "lectura": round(r["lectura"], 4), "media": round(r["media"], 4),
                              "desviacion": round(r["desviacion"], 4), "z": round(z, 3), "valor": round(x, 3),
-                             "fecha_dato": r["fecha_dato"], "detalle": r["detalle"]}
+                             "fecha_dato": r["fecha_dato"], "detalle": r["detalle"], "detalle_lectura": r["detalle"]}
             if "extra" in r:
                 extras[clave] = r["extra"]
             print(f"  ok   {clave}: {r['detalle']}")
@@ -59,8 +62,9 @@ def leer_variables(reglas: dict, anterior: dict, hoy: dt.date) -> tuple[dict, di
             mensaje = _mensaje(e)
             previa = anterior.get("variables", {}).get(clave, {})
             if previa.get("valor") is not None:
-                salida[clave] = {**previa, **info, "estado": "desactualizado",
-                                 "detalle": f"{previa.get('detalle', '')}. Última lectura válida; esta semana falló: {mensaje}"}
+                base = previa.get("detalle_lectura") or previa.get("detalle", "").split(". Última lectura válida")[0]
+                salida[clave] = {**previa, **info, "estado": "desactualizado", "detalle_lectura": base,
+                                 "detalle": f"{base}. Última lectura válida; en esta ejecución falló: {mensaje}"}
             else:
                 desactivada = regla.get("opcional") and "credenciales" in mensaje
                 salida[clave] = {**info, "estado": "desactivada" if desactivada else "error",
@@ -74,8 +78,9 @@ def combinar_motores(reglas: dict, vars_: dict) -> dict:
     for nombre, info in reglas["motores"].items():
         comps = [k for k, v in reglas["variables"].items() if v.get("motor") == nombre]
         al_dia = [k for k in comps if vars_[k]["estado"] == "ok"]
-        if nombre == "prot" and "protestas_acled" in al_dia:
-            al_dia = ["protestas_acled"]  # regla: ACLED tiene prioridad sobre GDELT
+        de_acled = [k for k in al_dia if reglas["variables"][k]["fuente"] == "acled"]
+        if de_acled:
+            al_dia = de_acled  # regla: ACLED tiene prioridad sobre GDELT
         valor = round(statistics.fmean(vars_[k]["valor"] for k in al_dia), 3) if al_dia else None
         motores[nombre] = {"valor": valor, "componentes": comps, "usadas": al_dia,
                            "e_previa": info["e_previa"], "pendiente": info.get("pendiente"),
@@ -107,13 +112,44 @@ def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> 
                                "mensaje": m["pendiente"] or "Aún no hay historial anual para compararlo con las emergencias."}
 
 
+def validar_hipotesis(s, reglas: dict, hoy: dt.date) -> dict:
+    h = reglas["hipotesis"]
+    salida = {"autor": {"nombre": h["autor"]["nombre"], "peso": 0.0, "estado": "historial_insuficiente",
+                        "mensaje": h["autor"]["regla"]}}
+    t = h["tregua"]
+    tregua = {"nombre": t["nombre"], "peso": 0.0, "estado": "historial_insuficiente", "mensaje": t["regla"], "eventos": []}
+    try:
+        emerg = _yaml(RAIZ / reglas["validacion"]["archivo"])
+        fechas = [dt.date.fromisoformat(d["fecha"]) for d in emerg["declaradas"]]
+        eventos = acled.tregua(s, fechas, t["ventana_semanas"], hoy)
+        validos = [e for e in eventos if e["cociente"] is not None]
+        tregua["eventos"] = eventos
+        if len(validos) >= 3:
+            a_favor = sum(e["cociente"] < t["umbral"] for e in validos)
+            tregua["estado"] = "apoya" if a_favor > len(validos) / 2 else "no_apoya"
+            tregua["mensaje"] = (f"En {a_favor} de {len(validos)} emergencias el conflicto bajó al menos un "
+                                 f"{round((1 - t['umbral']) * 100)} % en las {t['ventana_semanas']} semanas siguientes.")
+        else:
+            tregua["mensaje"] = f"Solo {len(validos)} emergencias con datos completos; la regla pide 3."
+    except Exception as e:
+        if "credenciales" in str(e):
+            tregua["estado"] = "sin_fuente"
+            tregua["mensaje"] = ("Necesita una cuenta gratuita de ACLED para comparar los combates y bombardeos "
+                                 "antes y después de cada emergencia declarada desde 2018.")
+        else:
+            tregua["mensaje"] = f"No se pudo probar en esta ejecución: {_mensaje(e)}"
+    salida["tregua"] = tregua
+    return salida
+
+
 def main() -> None:
     reglas = _yaml(RAIZ / "reglas.yaml")
     anterior = json.loads(SALIDA.read_text(encoding="utf-8")) if SALIDA.exists() else {}
     hoy = dt.date.today()
     print(f"Nexo, reglas v{reglas['version']}, {hoy}")
 
-    vars_, extras = leer_variables(reglas, anterior, hoy)
+    s = comun.sesion()
+    vars_, extras = leer_variables(s, reglas, anterior, hoy)
     motores = combinar_motores(reglas, vars_)
     validar_motores(reglas, motores, extras, hoy)
 
@@ -139,10 +175,9 @@ def main() -> None:
         "juego": {k: round(v, 4) for k, v in juego.items()},
         "multiplicador": round(math.exp(log_m), 4),
         "pronostico": pron,
-        "hipotesis_autor": {"peso": 0.0, "estado": "historial_insuficiente",
-                            "mensaje": reglas["hipotesis_autor"]["regla"]},
+        "hipotesis": validar_hipotesis(s, reglas, hoy),
         "eventos": _yaml(RAIZ / "datos" / "eventos.yaml")["eventos"],
-        "historial": historial[-260:],
+        "historial": historial[-400:],
     }
     SALIDA.parent.mkdir(parents=True, exist_ok=True)
     SALIDA.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")

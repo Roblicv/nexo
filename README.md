@@ -4,8 +4,9 @@ Observatorio abierto que estima, año por año, la probabilidad de la próxima p
 el juego de incentivos entre países para reportar brotes, los datos de las agencias sanitarias
 (CDC de EE. UU., ECDC, OMS y equivalentes) y la movilización social.
 
-Cada lunes una tarea automática de GitHub descarga los datos, aplica las reglas de `reglas.yaml`,
-valida qué variables mejoran los aciertos y publica el resultado en la página.
+Cada 2 días una tarea automática de GitHub descarga los datos, aplica las reglas de `reglas.yaml`,
+valida qué variables mejoran los aciertos y publica el resultado en la página. No hay simulación:
+todo lo que muestra la página sale de datos públicos y reglas fijas.
 
 ## Principio: nadie mueve los datos a mano
 
@@ -14,26 +15,27 @@ valida qué variables mejoran los aciertos y publica el resultado en la página.
 2. **El norte es acertar.** Un motor entra al pronóstico solo si, probado hacia atrás, anticipa mejor que la tasa
    base los años con emergencias sanitarias internacionales (puntuación de Brier). Si no, su peso es 0.
    Esto vale también para la hipótesis del autor.
-3. **La simulación va aparte.** Los deslizadores de la página son para escenarios hipotéticos y nunca se mezclan
-   con el pronóstico de datos.
+3. **Las hipótesis se prueban, no se asumen.** La hipótesis del autor y la de la tregua (que una emergencia
+   sanitaria reduce el conflicto armado) tienen reglas de prueba escritas en `reglas.yaml`.
 
 ## Estructura
 
 ```
-.github/workflows/actualizar.yml   tarea semanal (lunes 06:00 UTC) y botón manual
+.github/workflows/actualizar.yml   tarea cada 2 días (06:00 UTC) y botón manual
 reglas.yaml                        reglas registradas
 pipeline/                          código en Python
   ejecutar.py                      orquesta todo: descarga, reglas, validación, publicación
   modelo.py                        la misma matemática que la página
   validacion.py                    prueba hacia atrás con puntuación de Brier
   fuentes/                         un archivo por fuente (OMS, ECDC, CDC vía Delphi, GDELT, ACLED)
+                                   GDELT mide protestas, conflicto armado, EE. UU.-Irán y cooperación
 datos/
   emergencias_oms.yaml             resultado observado para validar
   eventos.yaml                     eventos políticos y sociales registrados como datos
   lecturas.csv                     historial de lecturas (lo crea la tarea)
 docs/                              la página que publica GitHub Pages
   index.html
-  data/nexo-data.json              lo escribe la tarea cada semana
+  data/nexo-data.json              lo escribe la tarea cada 2 días
   data/caso2020.json               línea de tiempo del caso 2020
 ```
 
@@ -54,17 +56,25 @@ docs/                              la página que publica GitHub Pages
 5. **Comprueba los permisos si falla el guardado.** Si el registro dice `Permission denied` al hacer `git push`,
    ve a *Settings → Actions → General → Workflow permissions*, elige *Read and write permissions* y guarda.
 
-Desde ahí se actualiza sola cada lunes. GitHub pausa las tareas programadas de repositorios sin actividad
+Desde ahí se actualiza sola cada 2 días. GitHub pausa las tareas programadas de repositorios sin actividad
 durante 60 días; los guardados semanales cuentan como actividad, pero si alguna vez se pausa, se reactiva
 en la pestaña *Actions*.
 
 ### Opcional: ACLED
 
-ACLED registra protestas evento por evento y es la mejor fuente para la movilización. Necesita una cuenta
+ACLED registra protestas, combates y bombardeos evento por evento. Es la mejor fuente para la movilización
+y el conflicto, y la única con historia suficiente para probar la hipótesis de la tregua. Necesita una cuenta
 gratuita en acleddata.com. Guarda tu usuario y contraseña en *Settings → Secrets and variables → Actions →
 New repository secret* con los nombres `ACLED_USUARIO` y `ACLED_CLAVE`. Nunca los escribas en el código.
 ACLED cambió su sistema de acceso en 2025: si esa fuente falla en el registro, revisa su documentación y
 ajusta las dos direcciones al inicio de `pipeline/fuentes/acled.py`. El resto sigue funcionando.
+
+## Actualizar el repositorio con una versión nueva
+
+Sube solo los archivos que cambian con *Add file → Upload files*, desde la raíz del repositorio. GitHub
+reemplaza los que tienen el mismo nombre y deja el resto intacto. Nunca subas `docs/data/nexo-data.json`
+ni `datos/lecturas.csv`: los escribe la tarea, y reemplazarlos borraría el historial. No subas nada mientras
+una ejecución esté en curso.
 
 ## Ejecutarlo en tu computador
 
@@ -82,6 +92,9 @@ cd docs && python -m http.server 8000   # y abre http://localhost:8000
   servicio real: la primera ejecución en GitHub es la prueba de fuego. Si una falla, aparece como «Sin dato»
   en la página, el registro de *Actions* dice por qué y las demás siguen.
 - GDELT solo ofrece unos tres meses hacia atrás, así que su línea base empieza corta y crece con `lecturas.csv`.
+  Además limita las consultas por dirección, y las máquinas de GitHub comparten direcciones: si responde 429,
+  la tarea espera y reintenta; si aun así falla, la lectura queda «Desactualizada» hasta la siguiente ejecución.
+- Las fuentes semanales (ECDC y CDC) no cambian más de una vez por semana aunque la tarea corra cada 2 días.
 - Al principio casi ningún motor tendrá historial suficiente para validarse, así que el pronóstico de datos
   se parecerá a la línea histórica con tendencia. No es un error: significa que aún ninguna variable ha
   demostrado que mejora los aciertos.

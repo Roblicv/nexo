@@ -2,8 +2,11 @@
 # Ninguna variable se ajusta a mano: cada valor sale de una fuente pública con la regla escrita aquí.
 # Cambiar una regla exige subir "version" y queda registrado en el historial de Git.
 
-version: 1
-registrado: "2026-10-29"
+version: 2
+registrado: "2026-11-03"
+cambios:
+  - "v1 (2026-10-29): primera versión."
+  - "v2 (2026-11-03): se elimina la simulación; se añaden conflicto armado, conflicto EE. UU.-Irán y cooperación entre países; hipótesis de la tregua; ejecución cada 2 días."
 
 transformacion: "x = tanh(z / 2), con z = (lectura - media de la línea base) / desviación de la línea base"
 vigencia_dias: 28  # una lectura más vieja que esto se muestra, pero no entra al pronóstico
@@ -64,6 +67,36 @@ variables:
     consulta: "theme:PROTEST sourcecountry:brazil"
     lectura: "Igual que la mundial, solo medios de Brasil"
     linea_base: "Las 8 semanas anteriores"
+  conflicto_global:
+    motor: conflicto
+    fuente: gdelt
+    etiqueta: "Conflicto armado mundial (GDELT)"
+    consulta: "theme:ARMEDCONFLICT"
+    lectura: "Intensidad de cobertura de noticias sobre conflicto armado, últimas 4 semanas"
+    linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
+  eeuu_iran:
+    motor: null
+    fuente: gdelt
+    etiqueta: "Conflicto EE. UU.-Irán (contexto)"
+    consulta: 'iran "united states" theme:ARMEDCONFLICT'
+    lectura: "Cobertura de conflicto armado que menciona a Irán y a EE. UU., últimas 4 semanas"
+    linea_base: "Las 8 semanas anteriores"
+  cooperacion_global:
+    motor: cooperacion
+    fuente: gdelt
+    etiqueta: "Cooperación y diplomacia entre países (GDELT)"
+    consulta: "(theme:NEGOTIATIONS OR theme:WB_2473_DIPLOMACY_AND_NEGOTIATIONS OR theme:WB_2471_PEACEKEEPING)"
+    lectura: "Intensidad de cobertura de negociaciones, diplomacia y mantenimiento de la paz, últimas 4 semanas"
+    linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
+  conflicto_acled:
+    motor: conflicto
+    fuente: acled
+    opcional: true
+    etiqueta: "Eventos de combate y bombardeo (ACLED)"
+    tipos_evento: ["Battles", "Explosions/Remote violence"]
+    paises: [Iran, Israel, Ukraine, Russia, Sudan, "Democratic Republic of Congo", Myanmar, Yemen]
+    lectura: "Combates, bombardeos y explosiones en los países vigilados, últimas 4 semanas"
+    linea_base: "Las mismas 4 semanas del calendario en 2018-2025"
   protestas_acled:
     motor: prot
     fuente: acled
@@ -76,6 +109,8 @@ variables:
 motores:
   brotes: {e_previa: 0.20, combinacion: "media de las variables disponibles"}
   prot:   {e_previa: 0.05, combinacion: "ACLED si está disponible; si no, GDELT mundial"}
+  conflicto: {e_previa: 0.15, combinacion: "ACLED si está disponible; si no, GDELT mundial", razon: "La guerra debilita la vigilancia y los sistemas de salud"}
+  cooperacion: {e_previa: -0.10, combinacion: "media de las variables disponibles", razon: "Más cooperación abarata anunciar un brote (pilar 1)"}
   ganado: {e_previa: 0.25, pendiente: "WOAH-WAHIS no tiene API pública"}
   suelo:  {e_previa: 0.20, pendiente: "Global Forest Watch publica una vez al año"}
   fauna:  {e_previa: 0.15, pendiente: "Sin serie abierta y continua"}
@@ -84,8 +119,15 @@ motores:
   urbano: {e_previa: 0.10, pendiente: "ONU-Hábitat publica una vez al año"}
   conf:   {e_previa: -0.15, pendiente: "Encuestas de confianza anuales"}
 
-hipotesis_autor:
-  regla: "Su peso es el que resulte de la validación con protestas e emergencias; 0 mientras no haya historial suficiente."
+hipotesis:
+  autor:
+    nombre: "Hipótesis del autor: las élites desactivan la movilización social a través de enfermedades"
+    regla: "Su peso es el que resulte de la validación con protestas y emergencias; 0 mientras no haya historial suficiente."
+  tregua:
+    nombre: "Hipótesis de la tregua: una emergencia sanitaria reduce el conflicto armado"
+    regla: "Se apoya si, en la mayoría de las emergencias declaradas desde 2018, los combates y bombardeos de las 12 semanas siguientes son al menos un 10 % menores que en las 12 anteriores. Necesita ACLED."
+    umbral: 0.9
+    ventana_semanas: 12
 
 poder_economico:
   pendiente: "Concentración de riqueza durante emergencias: World Inequality Database y listas de multimillonarios."
