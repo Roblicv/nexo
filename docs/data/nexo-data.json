@@ -1,6 +1,6 @@
 {
- "version_reglas": 1,
- "generado": "2026-11-02T13:56:29+00:00",
+ "version_reglas": 2,
+ "generado": "2026-11-03T21:55:34+00:00",
  "reglas": {
   "tendencia": 0.015,
   "justificacion_tendencia": "Un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023).",
@@ -16,12 +16,13 @@
    "regla": "Notas de Disease Outbreak News publicadas en las últimas 12 semanas. Línea base: La misma ventana de 12 semanas en cada año de 2015 a 2025.",
    "estado": "ok",
    "lectura": 8,
-   "media": 16.3636,
-   "desviacion": 8.7933,
-   "z": -0.951,
-   "valor": -0.443,
+   "media": 16.2727,
+   "desviacion": 8.9045,
+   "z": -0.929,
+   "valor": -0.434,
    "fecha_dato": "2026-10-23",
-   "detalle": "8 notas en 12 semanas; media histórica 16.4 (11 años)"
+   "detalle": "8 notas en 12 semanas; media histórica 16.3 (11 años)",
+   "detalle_lectura": "8 notas en 12 semanas; media histórica 16.3 (11 años)"
   },
   "resp_europa": {
    "etiqueta": "Gripe en Europa (ECDC)",
@@ -35,7 +36,8 @@
    "z": -0.559,
    "valor": -0.272,
    "fecha_dato": "2026-10-25",
-   "detalle": "Positividad 2.8 % en 2026-S43; media de temporadas anteriores 4.7 %"
+   "detalle": "Positividad 2.8 % en 2026-S43; media de temporadas anteriores 4.7 %",
+   "detalle_lectura": "Positividad 2.8 % en 2026-S43; media de temporadas anteriores 4.7 %"
   },
   "ili_eeuu": {
    "etiqueta": "Síndrome gripal en EE. UU. (CDC)",
@@ -49,21 +51,23 @@
    "z": 0.023,
    "valor": 0.012,
    "fecha_dato": "2026-10-17",
-   "detalle": "wILI 2.44 % en 2026-S42; media de 5 temporadas 2.42 %"
+   "detalle": "wILI 2.44 % en 2026-S42; media de 5 temporadas 2.42 %",
+   "detalle_lectura": "wILI 2.44 % en 2026-S42; media de 5 temporadas 2.42 %"
   },
   "movilizacion_global": {
    "etiqueta": "Movilización social mundial (GDELT)",
    "motor": "prot",
    "fuente": "gdelt",
    "regla": "Intensidad de cobertura de noticias sobre protestas, últimas 4 semanas. Línea base: Las 8 semanas anteriores dentro de la ventana de GDELT.",
-   "estado": "desactualizado",
-   "lectura": 5.371,
-   "media": 3.8922,
-   "desviacion": 0.2331,
-   "z": 6.344,
-   "valor": 0.996,
-   "fecha_dato": "2026-10-27",
-   "detalle": "Intensidad 5.371 en las últimas 4 semanas; 3.892 en las 8 anteriores. Última lectura válida; esta semana falló: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Max retries exceeded with url: /api/v2/doc/doc?query=theme%3APROTEST&mode=timelinevol&format=json&timespan=12w (Caused by ResponseError('too many 429 error responses'))"
+   "estado": "ok",
+   "lectura": 5.3633,
+   "media": 3.9689,
+   "desviacion": 0.2825,
+   "z": 4.937,
+   "valor": 0.986,
+   "fecha_dato": "2026-11-03",
+   "detalle": "Intensidad 5.363 en las últimas 4 semanas; 3.969 en las 8 anteriores",
+   "detalle_lectura": "Intensidad 5.363 en las últimas 4 semanas; 3.969 en las 8 anteriores"
   },
   "movilizacion_francia": {
    "etiqueta": "Movilización en Francia (contexto)",
@@ -77,7 +81,8 @@
    "z": 2.386,
    "valor": 0.832,
    "fecha_dato": "2026-10-27",
-   "detalle": "Intensidad 0.206 en las últimas 4 semanas; 0.086 en las 8 anteriores. Última lectura válida; esta semana falló: HTTPSConnectionPool(host='api.gdeltproject.org', port=443): Max retries exceeded with url: /api/v2/doc/doc?query=theme%3APROTEST+sourcecountry%3Afrance&mode=timelinevol&format=json&timespan=12w (Caused by ResponseError('too many 429 error responses'))"
+   "detalle": "Intensidad 0.206 en las últimas 4 semanas; 0.086 en las 8 anteriores. Última lectura válida; en esta ejecución falló: La fuente respondió con el código 429; se reintentará en la próxima ejecución.",
+   "detalle_lectura": "Intensidad 0.206 en las últimas 4 semanas; 0.086 en las 8 anteriores"
   },
   "movilizacion_brasil": {
    "etiqueta": "Movilización en Brasil (contexto)",
@@ -85,13 +90,62 @@
    "fuente": "gdelt",
    "regla": "Igual que la mundial, solo medios de Brasil. Línea base: Las 8 semanas anteriores.",
    "estado": "ok",
-   "lectura": 0.065,
-   "media": 0.0769,
+   "lectura": 0.0647,
+   "media": 0.0721,
    "desviacion": 0.05,
-   "z": -0.239,
-   "valor": -0.119,
-   "fecha_dato": "2026-10-27",
-   "detalle": "Intensidad 0.065 en las últimas 4 semanas; 0.077 en las 8 anteriores"
+   "z": -0.149,
+   "valor": -0.074,
+   "fecha_dato": "2026-11-03",
+   "detalle": "Intensidad 0.065 en las últimas 4 semanas; 0.072 en las 8 anteriores",
+   "detalle_lectura": "Intensidad 0.065 en las últimas 4 semanas; 0.072 en las 8 anteriores"
+  },
+  "conflicto_global": {
+   "etiqueta": "Conflicto armado mundial (GDELT)",
+   "motor": "conflicto",
+   "fuente": "gdelt",
+   "regla": "Intensidad de cobertura de noticias sobre conflicto armado, últimas 4 semanas. Línea base: Las 8 semanas anteriores dentro de la ventana de GDELT.",
+   "estado": "error",
+   "valor": null,
+   "detalle": "La fuente respondió con el código 429; se reintentará en la próxima ejecución."
+  },
+  "eeuu_iran": {
+   "etiqueta": "Conflicto EE. UU.-Irán (contexto)",
+   "motor": null,
+   "fuente": "gdelt",
+   "regla": "Cobertura de conflicto armado que menciona a Irán y a EE. UU., últimas 4 semanas. Línea base: Las 8 semanas anteriores.",
+   "estado": "ok",
+   "lectura": 1.0336,
+   "media": 0.9618,
+   "desviacion": 0.1301,
+   "z": 0.552,
+   "valor": 0.269,
+   "fecha_dato": "2026-11-03",
+   "detalle": "Intensidad 1.034 en las últimas 4 semanas; 0.962 en las 8 anteriores",
+   "detalle_lectura": "Intensidad 1.034 en las últimas 4 semanas; 0.962 en las 8 anteriores"
+  },
+  "cooperacion_global": {
+   "etiqueta": "Cooperación y diplomacia entre países (GDELT)",
+   "motor": "cooperacion",
+   "fuente": "gdelt",
+   "regla": "Intensidad de cobertura de negociaciones, diplomacia y mantenimiento de la paz, últimas 4 semanas. Línea base: Las 8 semanas anteriores dentro de la ventana de GDELT.",
+   "estado": "ok",
+   "lectura": 4.2073,
+   "media": 3.9192,
+   "desviacion": 0.361,
+   "z": 0.798,
+   "valor": 0.379,
+   "fecha_dato": "2026-11-03",
+   "detalle": "Intensidad 4.207 en las últimas 4 semanas; 3.919 en las 8 anteriores",
+   "detalle_lectura": "Intensidad 4.207 en las últimas 4 semanas; 3.919 en las 8 anteriores"
+  },
+  "conflicto_acled": {
+   "etiqueta": "Eventos de combate y bombardeo (ACLED)",
+   "motor": "conflicto",
+   "fuente": "acled",
+   "regla": "Combates, bombardeos y explosiones en los países vigilados, últimas 4 semanas. Línea base: Las mismas 4 semanas del calendario en 2018-2025.",
+   "estado": "desactivada",
+   "valor": null,
+   "detalle": "Sin credenciales de ACLED: fuente opcional desactivada."
   },
   "protestas_acled": {
    "etiqueta": "Eventos de protesta (ACLED)",
@@ -105,7 +159,7 @@
  },
  "motores": {
   "brotes": {
-   "valor": -0.234,
+   "valor": -0.231,
    "componentes": [
     "brotes_oms",
     "resp_europa",
@@ -131,13 +185,48 @@
    }
   },
   "prot": {
-   "valor": null,
+   "valor": 0.986,
    "componentes": [
     "movilizacion_global",
     "protestas_acled"
    ],
-   "usadas": [],
+   "usadas": [
+    "movilizacion_global"
+   ],
    "e_previa": 0.05,
+   "pendiente": null,
+   "en_pronostico": false,
+   "e": 0.0,
+   "validacion": {
+    "estado": "historial_insuficiente",
+    "mensaje": "Aún no hay historial anual para compararlo con las emergencias."
+   }
+  },
+  "conflicto": {
+   "valor": null,
+   "componentes": [
+    "conflicto_global",
+    "conflicto_acled"
+   ],
+   "usadas": [],
+   "e_previa": 0.15,
+   "pendiente": null,
+   "en_pronostico": false,
+   "e": 0.0,
+   "validacion": {
+    "estado": "historial_insuficiente",
+    "mensaje": "Aún no hay historial anual para compararlo con las emergencias."
+   }
+  },
+  "cooperacion": {
+   "valor": 0.379,
+   "componentes": [
+    "cooperacion_global"
+   ],
+   "usadas": [
+    "cooperacion_global"
+   ],
+   "e_previa": -0.1,
    "pendiente": null,
    "en_pronostico": false,
    "e": 0.0,
@@ -676,10 +765,20 @@
    }
   }
  },
- "hipotesis_autor": {
-  "peso": 0.0,
-  "estado": "historial_insuficiente",
-  "mensaje": "Su peso es el que resulte de la validación con protestas e emergencias; 0 mientras no haya historial suficiente."
+ "hipotesis": {
+  "autor": {
+   "nombre": "Hipótesis del autor: las élites desactivan la movilización social a través de enfermedades",
+   "peso": 0.0,
+   "estado": "historial_insuficiente",
+   "mensaje": "Su peso es el que resulte de la validación con protestas y emergencias; 0 mientras no haya historial suficiente."
+  },
+  "tregua": {
+   "nombre": "Hipótesis de la tregua: una emergencia sanitaria reduce el conflicto armado",
+   "peso": 0.0,
+   "estado": "sin_fuente",
+   "mensaje": "Necesita una cuenta gratuita de ACLED para comparar los combates y bombardeos antes y después de cada emergencia declarada desde 2018.",
+   "eventos": []
+  }
  },
  "eventos": [
   {
@@ -720,6 +819,22 @@
     "restriccion_reuniones": true
    },
    "fuente": "Ministerio del Interior y CGT, recogidos por la prensa"
+  },
+  {
+   "id": "iran-2026-02-28",
+   "pais": "Irán",
+   "tipo": "conflicto",
+   "fecha": "2026-02-28",
+   "resumen": "EE. UU. e Israel lanzan ataques conjuntos contra Irán y comienza la guerra de 2026. Irán responde con misiles y drones contra países del Golfo y el estrecho de Ormuz.",
+   "fuente": "Prensa internacional"
+  },
+  {
+   "id": "iran-2026-11-02",
+   "pais": "Irán",
+   "tipo": "conflicto",
+   "fecha": "2026-11-02",
+   "resumen": "Ataques limitados de EE. UU. contra la isla de Qeshm, en el estrecho de Ormuz, descritos por funcionarios estadounidenses como defensivos. Llegan tras más de dos meses sin ataques anunciados y en plenas negociaciones.",
+   "fuente": "The Wall Street Journal, Reuters y AP, recogidos por la prensa"
   }
  ],
  "historial": [
@@ -730,6 +845,11 @@
   },
   {
    "fecha": "2026-11-02",
+   "anio_50": 2041,
+   "p_2027_2036": 0.3736
+  },
+  {
+   "fecha": "2026-11-03",
    "anio_50": 2041,
    "p_2027_2036": 0.3736
   }

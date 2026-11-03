@@ -13,3 +13,14 @@ fecha,variable,estado,lectura,z,valor,fecha_dato
 2026-11-02,movilizacion_francia,desactualizado,0.2056,2.386,0.832,2026-10-27
 2026-11-02,movilizacion_brasil,ok,0.065,-0.239,-0.119,2026-10-27
 2026-11-02,protestas_acled,desactivada,,,,
+2026-11-03,brotes_oms,ok,8,-0.929,-0.434,2026-10-23
+2026-11-03,resp_europa,ok,2.8,-0.559,-0.272,2026-10-25
+2026-11-03,ili_eeuu,ok,2.4443,0.023,0.012,2026-10-17
+2026-11-03,movilizacion_global,ok,5.3633,4.937,0.986,2026-11-03
+2026-11-03,movilizacion_francia,desactualizado,0.2056,2.386,0.832,2026-10-27
+2026-11-03,movilizacion_brasil,ok,0.0647,-0.149,-0.074,2026-11-03
+2026-11-03,conflicto_global,error,,,,
+2026-11-03,eeuu_iran,ok,1.0336,0.552,0.269,2026-11-03
+2026-11-03,cooperacion_global,ok,4.2073,0.798,0.379,2026-11-03
+2026-11-03,conflicto_acled,desactivada,,,,
+2026-11-03,protestas_acled,desactivada,,,,
