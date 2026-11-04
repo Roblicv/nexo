@@ -28,11 +28,12 @@ pipeline/                          código en Python
   modelo.py                        la misma matemática que la página
   validacion.py                    prueba hacia atrás con puntuación de Brier
   fuentes/                         un archivo por fuente (OMS, ECDC, CDC vía Delphi, GDELT, ACLED)
-                                   GDELT mide protestas, conflicto armado, EE. UU.-Irán y cooperación
+                                   gdelt_eventos.py lee los archivos de eventos de GDELT, sin límite de consultas
 datos/
   emergencias_oms.yaml             resultado observado para validar
   eventos.yaml                     eventos políticos y sociales registrados como datos
   lecturas.csv                     historial de lecturas (lo crea la tarea)
+  gdelt_diario.jsonl               resumen diario de GDELT desde 2015 (lo crea y amplía la tarea)
 docs/                              la página que publica GitHub Pages
   index.html
   data/nexo-data.json              lo escribe la tarea cada 2 días
@@ -72,8 +73,8 @@ ajusta las dos direcciones al inicio de `pipeline/fuentes/acled.py`. El resto si
 ## Actualizar el repositorio con una versión nueva
 
 Sube solo los archivos que cambian con *Add file → Upload files*, desde la raíz del repositorio. GitHub
-reemplaza los que tienen el mismo nombre y deja el resto intacto. Nunca subas `docs/data/nexo-data.json`
-ni `datos/lecturas.csv`: los escribe la tarea, y reemplazarlos borraría el historial. No subas nada mientras
+reemplaza los que tienen el mismo nombre y deja el resto intacto. Nunca subas `docs/data/nexo-data.json`,
+`datos/lecturas.csv` ni `datos/gdelt_diario.jsonl`: los escribe la tarea, y reemplazarlos borraría el historial. No subas nada mientras
 una ejecución esté en curso.
 
 ## Ejecutarlo en tu computador

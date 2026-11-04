@@ -407,9 +407,32 @@ function renderLecturas(){
       (apagadas.length ? '<p class="off-line">Opcional sin activar: ' + apagadas.map(esc).join(', ') + '. Necesita una cuenta gratuita de ACLED.</p>' : '') + '</div>';
   }
   GRUPOS.forEach(function(g){ html += grupo(g[0], g[1]); });
+  html += contraste(vars, usadas);
   var otras = Object.keys(vars).filter(function(k){ return !usadas[k]; });
   if (otras.length) html += grupo('Otras', otras);
   document.getElementById('lecturas-panel').innerHTML = html;
+}
+
+function contraste(vars, usadas){
+  var filas = [['Medios rusos', 'goldstein_rusos', 'conflicto_rusos'], ['Medios chinos', 'goldstein_chinos', 'conflicto_chinos'],
+               ['Resto de medios', 'goldstein_otros', 'conflicto_otros']];
+  var hay = false;
+  var cuerpo = filas.map(function(f){
+    var g = vars[f[1]], c = vars[f[2]];
+    if (g) usadas[f[1]] = true; if (c) usadas[f[2]] = true;
+    function celda(v, esPct){
+      if (!v || v.estado !== 'ok' || v.lectura == null) return '<td>–</td>';
+      hay = true;
+      return '<td>' + (esPct ? nf(v.lectura, 1) + '\u00a0%' : signed(v.lectura, 2)) + '</td>';
+    }
+    return '<tr><td>' + f[0] + '</td>' + celda(g, false) + celda(c, true) + '</tr>';
+  }).join('');
+  if (!vars.goldstein_rusos && !vars.conflicto_rusos) return '';
+  return '<div class="group"><h3>Contraste de medios</h3>' +
+    '<p class="off-line">El mismo tipo de hecho visto por distintas lentes. GDELT es un proyecto estadounidense, pero lee medios de todo el mundo, incluidos los estatales rusos y chinos; aquí se separan por el dominio de cada noticia.</p>' +
+    '<div style="overflow-x:auto"><table class="hist"><tr><th></th><th>Clima entre países</th><th>Conflicto armado</th></tr>' + cuerpo + '</table></div>' +
+    '<p class="off-line">Clima: promedio de la escala de Goldstein, de −10 (conflicto) a +10 (cooperación). Conflicto: porcentaje de eventos que son agresiones, combates o violencia masiva.' +
+    (hay ? '' : ' Sin datos todavía: aparecerán tras la próxima ejecución.') + '</p></div>';
 }
 
 /* ---------- el norte ---------- */
@@ -571,7 +594,7 @@ var SOURCES = [
     {n:'Africa CDC, OPS, UKHSA, JIHS, KDCA, NCDC, Brasil', w:'Informes semanales nacionales y regionales.', on:false}
   ]},
   {group:'Conflicto, cooperación y movilización', items:[
-    {n:'GDELT', w:'Cobertura mundial de noticias sobre protestas, conflicto armado, diplomacia y negociaciones; también EE. UU.-Irán, Latinoamérica y Europa.', on:true},
+    {n:'GDELT, archivos de eventos', w:'Eventos de las noticias del mundo cada 15 minutos, en inglés y traducidos de otros idiomas: protestas, conflicto, cooperación y escala de Goldstein, por país del evento y por medio, incluidos los rusos y chinos. Descarga directa, sin límite de consultas.', on:true},
     {n:'ACLED', w:'Protestas, combates y bombardeos evento por evento. Opcional: necesita cuenta gratuita.', on:true},
     {n:'Freedom House, V-Dem, OxCGRT', w:'Restricciones políticas y sanitarias durante la COVID-19. Calibran el contexto.', on:false}
   ]},

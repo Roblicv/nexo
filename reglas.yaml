@@ -2,12 +2,13 @@
 # Ninguna variable se ajusta a mano: cada valor sale de una fuente pública con la regla escrita aquí.
 # Cambiar una regla exige subir "version" y queda registrado en el historial de Git.
 
-version: 3
+version: 4
 registrado: "2026-11-04"
 cambios:
   - "v1 (2026-10-29): primera versión."
   - "v2 (2026-11-03): se elimina la simulación; se añaden conflicto armado, conflicto EE. UU.-Irán y cooperación entre países; hipótesis de la tregua; ejecución cada 2 días."
   - "v3 (2026-11-04): Francia y Brasil se sustituyen por regiones (Latinoamérica, Europa occidental, Europa del Este); el juego del pilar 1 toma sus entradas de los datos."
+  - "v4 (2026-11-04): GDELT pasa de la API de consultas (limitada con errores 429) a sus archivos de eventos; las regiones se miden por el lugar del evento; se añade el contraste entre medios rusos, chinos y el resto."
 
 transformacion: "x = tanh(z / 2), con z = (lectura - media de la línea base) / desviación de la línea base"
 vigencia_dias: 28  # una lectura más vieja que esto se muestra, pero no entra al pronóstico
@@ -47,55 +48,133 @@ variables:
     etiqueta: "Síndrome gripal en EE. UU. (CDC)"
     lectura: "Porcentaje ponderado de consultas por síndrome gripal (wILI) del CDC, vía Delphi"
     linea_base: "Misma semana epidemiológica (±2) en las 5 temporadas anteriores"
+  # GDELT, archivos de eventos. Proporción = eventos del tipo / eventos de referencia, en %.
+  # Raíz CAMEO 14 = protesta; 18, 19 y 20 = agresión, combate y violencia masiva.
+  # Cooperación = eventos entre actores de países distintos con clase 1 o 2 (cooperación verbal o material).
   movilizacion_global:
     motor: prot
-    fuente: gdelt
-    etiqueta: "Movilización social mundial (GDELT)"
-    consulta: "theme:PROTEST"
-    lectura: "Intensidad de cobertura de noticias sobre protestas, últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
+    fuente: gdelt_eventos
+    etiqueta: "Movilización social mundial"
+    numerador: protesta
+    denominador: total
+    que: "Protestas sobre el total de eventos"
+    lectura: "Porcentaje de eventos de protesta en las noticias del mundo, últimas 4 semanas"
+    linea_base: "Las mismas 4 semanas en años anteriores (si hay al menos 3) o las 8 semanas previas"
   movilizacion_latam:
     motor: null
-    fuente: gdelt
+    fuente: gdelt_eventos
     etiqueta: "Movilización en Latinoamérica"
-    consulta: "theme:PROTEST (sourcecountry:argentina OR sourcecountry:bolivia OR sourcecountry:brazil OR sourcecountry:chile OR sourcecountry:colombia OR sourcecountry:ecuador OR sourcecountry:mexico OR sourcecountry:peru OR sourcecountry:venezuela)"
-    lectura: "Cobertura de protestas en medios de nueve países latinoamericanos, últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores"
+    numerador: latam_protesta
+    denominador: latam_total
+    que: "Protestas sobre los eventos ocurridos en Latinoamérica"
+    lectura: "Porcentaje de eventos de protesta ocurridos en 20 países latinoamericanos, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
   movilizacion_europa_oeste:
     motor: null
-    fuente: gdelt
+    fuente: gdelt_eventos
     etiqueta: "Movilización en Europa occidental"
-    consulta: "theme:PROTEST (sourcecountry:france OR sourcecountry:germany OR sourcecountry:spain OR sourcecountry:italy OR sourcecountry:unitedkingdom OR sourcecountry:portugal OR sourcecountry:belgium OR sourcecountry:netherlands)"
-    lectura: "Cobertura de protestas en medios de ocho países de Europa occidental, últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores"
+    numerador: europa_oeste_protesta
+    denominador: europa_oeste_total
+    que: "Protestas sobre los eventos ocurridos en Europa occidental"
+    lectura: "Porcentaje de eventos de protesta ocurridos en 16 países de Europa occidental, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
   movilizacion_europa_este:
     motor: null
-    fuente: gdelt
+    fuente: gdelt_eventos
     etiqueta: "Movilización en Europa del Este"
-    consulta: "theme:PROTEST (sourcecountry:poland OR sourcecountry:ukraine OR sourcecountry:hungary OR sourcecountry:romania OR sourcecountry:serbia OR sourcecountry:georgia OR sourcecountry:slovakia OR sourcecountry:bulgaria)"
-    lectura: "Cobertura de protestas en medios de ocho países de Europa del Este, últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores"
+    numerador: europa_este_protesta
+    denominador: europa_este_total
+    que: "Protestas sobre los eventos ocurridos en Europa del Este"
+    lectura: "Porcentaje de eventos de protesta ocurridos en 21 países de Europa del Este, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
   conflicto_global:
     motor: conflicto
-    fuente: gdelt
-    etiqueta: "Conflicto armado mundial (GDELT)"
-    consulta: "theme:ARMEDCONFLICT"
-    lectura: "Intensidad de cobertura de noticias sobre conflicto armado, últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
+    fuente: gdelt_eventos
+    etiqueta: "Conflicto armado mundial"
+    numerador: conflicto
+    denominador: total
+    que: "Agresiones, combates y violencia masiva sobre el total de eventos"
+    lectura: "Porcentaje de eventos de conflicto armado en las noticias del mundo, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
   eeuu_iran:
     motor: null
-    fuente: gdelt
-    etiqueta: "Conflicto EE. UU.-Irán (contexto)"
-    consulta: 'iran "united states" theme:ARMEDCONFLICT'
-    lectura: "Cobertura de conflicto armado que menciona a Irán y a EE. UU., últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores"
+    fuente: gdelt_eventos
+    etiqueta: "Conflicto EE. UU.-Irán"
+    numerador: eeuu_iran
+    denominador: intl
+    que: "Conflicto material entre EE. UU. e Irán sobre los eventos entre países"
+    lectura: "Porcentaje de eventos entre países que son conflicto material entre EE. UU. e Irán, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
   cooperacion_global:
     motor: cooperacion
-    fuente: gdelt
-    etiqueta: "Cooperación y diplomacia entre países (GDELT)"
-    consulta: "(theme:NEGOTIATIONS OR theme:WB_2473_DIPLOMACY_AND_NEGOTIATIONS OR theme:WB_2471_PEACEKEEPING)"
-    lectura: "Intensidad de cobertura de negociaciones, diplomacia y mantenimiento de la paz, últimas 4 semanas"
-    linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
+    fuente: gdelt_eventos
+    etiqueta: "Cooperación entre países"
+    numerador: coop_intl
+    denominador: intl
+    que: "Cooperación sobre el total de eventos entre países"
+    lectura: "Porcentaje de eventos entre países que son cooperación verbal o material, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
+  # Contraste de medios: misma medida, distinta lente. Escala de Goldstein de −10 (conflicto) a +10 (cooperación).
+  goldstein_otros:
+    motor: null
+    fuente: gdelt_eventos
+    etiqueta: "Clima entre países, resto de medios"
+    numerador: otros_intl_gold
+    denominador: otros_intl
+    escala: 1
+    unidad: goldstein
+    que: "Promedio de Goldstein"
+    lectura: "Promedio de la escala de Goldstein de los eventos entre países en el resto de medios, últimas 4 semanas"
+    linea_base: "Igual que la mundial"
+  goldstein_rusos:
+    motor: null
+    fuente: gdelt_eventos
+    etiqueta: "Clima entre países, medios rusos"
+    numerador: ru_intl_gold
+    denominador: ru_intl
+    escala: 1
+    unidad: goldstein
+    que: "Promedio de Goldstein"
+    lectura: "Igual, solo con noticias de dominios rusos (.ru, RT, Sputnik, TASS)"
+    linea_base: "Igual que la mundial"
+  goldstein_chinos:
+    motor: null
+    fuente: gdelt_eventos
+    etiqueta: "Clima entre países, medios chinos"
+    numerador: cn_intl_gold
+    denominador: cn_intl
+    escala: 1
+    unidad: goldstein
+    que: "Promedio de Goldstein"
+    lectura: "Igual, solo con noticias de dominios chinos (.cn, Xinhua, CGTN, Global Times, China Daily)"
+    linea_base: "Igual que la mundial"
+  conflicto_rusos:
+    motor: null
+    fuente: gdelt_eventos
+    etiqueta: "Conflicto armado según medios rusos"
+    numerador: ru_conflicto
+    denominador: ru_total
+    que: "Conflicto armado sobre el total de eventos"
+    lectura: "Porcentaje de eventos de conflicto armado en noticias de dominios rusos"
+    linea_base: "Igual que la mundial"
+  conflicto_chinos:
+    motor: null
+    fuente: gdelt_eventos
+    etiqueta: "Conflicto armado según medios chinos"
+    numerador: cn_conflicto
+    denominador: cn_total
+    que: "Conflicto armado sobre el total de eventos"
+    lectura: "Porcentaje de eventos de conflicto armado en noticias de dominios chinos"
+    linea_base: "Igual que la mundial"
+  conflicto_otros:
+    motor: null
+    fuente: gdelt_eventos
+    etiqueta: "Conflicto armado según el resto de medios"
+    numerador: otros_conflicto
+    denominador: otros_total
+    que: "Conflicto armado sobre el total de eventos"
+    lectura: "Porcentaje de eventos de conflicto armado en noticias del resto de dominios"
+    linea_base: "Igual que la mundial"
   conflicto_acled:
     motor: conflicto
     fuente: acled
@@ -116,7 +195,7 @@ variables:
 
 motores:
   brotes: {e_previa: 0.20, combinacion: "media de las variables disponibles"}
-  prot:   {e_previa: 0.05, combinacion: "ACLED si está disponible; si no, GDELT mundial"}
+  prot:   {e_previa: 0.05, combinacion: "ACLED si está disponible; si no, GDELT eventos mundial"}
   conflicto: {e_previa: 0.15, combinacion: "ACLED si está disponible; si no, GDELT mundial", razon: "La guerra debilita la vigilancia y los sistemas de salud"}
   cooperacion: {e_previa: -0.10, combinacion: "media de las variables disponibles", razon: "Más cooperación abarata anunciar un brote (pilar 1)"}
   ganado: {e_previa: 0.25, pendiente: "WOAH-WAHIS no tiene API pública"}

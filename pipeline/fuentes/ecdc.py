@@ -5,7 +5,7 @@ import csv
 import datetime as dt
 import io
 
-from .comun import FuenteError, distancia_semanas, resumen
+from .comun import FuenteError, distancia_semanas, es, resumen
 
 URL = ("https://raw.githubusercontent.com/EU-ECDC/Respiratory_viruses_weekly_data/"
        "main/data/sentinelTestsDetectionsPositivity.csv")
@@ -35,5 +35,5 @@ def leer(s, regla: dict, hoy: dt.date) -> dict:
         "media": media,
         "desviacion": desv,
         "fecha_dato": fecha.isoformat(),
-        "detalle": f"Positividad {valor:.1f} % en {anio}-S{semana:02d}; media de temporadas anteriores {media:.1f} %",
+        "detalle": f"Positividad {es(valor)} % en {anio}-S{semana:02d}; media de temporadas anteriores {es(media)} %",
     }

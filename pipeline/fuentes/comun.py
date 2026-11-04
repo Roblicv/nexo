@@ -41,3 +41,8 @@ def semana_iso(fecha: dt.date) -> tuple[int, int]:
 def distancia_semanas(s1: int, s2: int) -> int:
     d = abs(s1 - s2)
     return min(d, 52 - d)
+
+
+def es(x: float, decimales: int = 1) -> str:
+    """Número con coma decimal, como se escribe en español."""
+    return f"{x:.{decimales}f}".replace(".", ",")

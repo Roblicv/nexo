@@ -15,13 +15,13 @@ import requests
 import yaml
 
 from . import modelo, validacion, variables
-from .fuentes import acled, cdc, comun, ecdc, gdelt, oms
+from .fuentes import acled, cdc, comun, ecdc, gdelt, gdelt_eventos, oms
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "docs" / "data" / "nexo-data.json"
 LECTURAS = RAIZ / "datos" / "lecturas.csv"
 FUENTES = {"oms_don": oms.leer, "ecdc_erviss": ecdc.leer, "delphi_fluview": cdc.leer,
-           "gdelt": gdelt.leer, "acled": acled.leer}
+           "gdelt": gdelt.leer, "gdelt_eventos": gdelt_eventos.leer, "acled": acled.leer}
 
 
 def _yaml(ruta: pathlib.Path) -> dict:
@@ -105,21 +105,36 @@ def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> 
     kw = {"minimo_anios": reglas["validacion"]["minimo_anios"],
           "calentamiento": reglas["validacion"]["anios_calentamiento"]}
 
-    anuales = extras.get("brotes_oms", {}).get("anuales", {})
-    primera = extras.get("brotes_oms", {}).get("primera_fecha", "9999")
-    completos = {int(a): math.log1p(n) for a, n in anuales.items()
-                 if int(a) < hoy.year and f"{a}-01-15" >= primera}
-    v = validacion.validar(completos, resultado, **kw) if completos else {
-        "estado": "historial_insuficiente", "n": 0, "mensaje": "Sin serie anual de la OMS esta semana."}
-    motores["brotes"]["validacion"] = {"predictor": "Notas de la OMS del año anterior", **v}
-    if v["estado"] == "validada" and motores["brotes"]["valor"] is not None:
-        motores["brotes"]["en_pronostico"] = True
-        motores["brotes"]["e"] = v["elasticidad"]
+    for nombre, m in motores.items():
+        # Busca, entre las variables del motor, una con serie anual (la OMS o los eventos de GDELT).
+        fuente = next((k for k in m["componentes"] if extras.get(k, {}).get("anuales")), None)
+        if not fuente:
+            continue
+        ex = extras[fuente]
+        if fuente == "brotes_oms":
+            predictor = {int(a): math.log1p(n) for a, n in ex["anuales"].items()
+                         if int(a) < hoy.year and f"{a}-01-15" >= ex.get("primera_fecha", "9999")}
+            texto = "Notas de la OMS del año anterior"
+        else:
+            predictor = {int(a): v for a, v in ex["anuales"].items() if int(a) < hoy.year}
+            texto = f"{reglas['variables'][fuente]['etiqueta']} del año anterior"
+        v = validacion.validar(predictor, resultado, **kw) if predictor else {
+            "estado": "historial_insuficiente", "n": 0, "mensaje": "Sin serie anual esta vez."}
+        if v["estado"] == "historial_insuficiente" and fuente != "brotes_oms":
+            v["mensaje"] = (f"La historia de GDELT se está rellenando hacia atrás en cada ejecución: hay "
+                            f"{len(predictor)} años completos y la regla pide {kw['minimo_anios']}.")
+        m["validacion"] = {"predictor": texto, **v}
+        if v["estado"] == "validada" and m["valor"] is not None:
+            m["en_pronostico"] = True
+            m["e"] = v["elasticidad"]
 
     for nombre, m in motores.items():
         if m["validacion"] is None:
-            m["validacion"] = {"estado": "historial_insuficiente",
-                               "mensaje": m["pendiente"] or "Aún no hay historial anual para compararlo con las emergencias."}
+            de_gdelt = any(reglas["variables"][k]["fuente"] == "gdelt_eventos" for k in m["componentes"])
+            m["validacion"] = {"estado": "historial_insuficiente", "mensaje": (
+                "La historia de GDELT desde 2015 se está rellenando hacia atrás en cada ejecución; "
+                "cuando cubra 10 años completos, este motor se pondrá a prueba." if de_gdelt else
+                m["pendiente"] or "Aún no hay historial anual para compararlo con las emergencias.")}
 
 
 def validar_hipotesis(s, reglas: dict, hoy: dt.date) -> dict:

@@ -4,7 +4,7 @@ from __future__ import annotations
 import collections
 import datetime as dt
 
-from .comun import FuenteError, resumen
+from .comun import FuenteError, es, resumen
 
 URL = "https://www.who.int/api/news/diseaseoutbreaknews"
 CAMPOS_FECHA = ("PublicationDateAndTime", "PublicationDate", "DatePublished", "Date")
@@ -62,6 +62,6 @@ def leer(s, regla: dict, hoy: dt.date) -> dict:
         "media": media,
         "desviacion": desv,
         "fecha_dato": fechas[-1].isoformat(),
-        "detalle": f"{actual} notas en 12 semanas; media histórica {media:.1f} ({len(base)} años)",
+        "detalle": f"{actual} notas en 12 semanas; media histórica {es(media)} ({len(base)} años)",
         "extra": {"anuales": {str(a): n for a, n in sorted(anuales.items())}, "primera_fecha": fechas[0].isoformat()},
     }

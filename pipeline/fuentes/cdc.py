@@ -3,7 +3,7 @@ from __future__ import annotations
 
 import datetime as dt
 
-from .comun import FuenteError, distancia_semanas, resumen, semana_iso
+from .comun import FuenteError, distancia_semanas, es, resumen, semana_iso
 
 URL = "https://api.delphi.cmu.edu/epidata/fluview/"
 
@@ -31,5 +31,5 @@ def leer(s, regla: dict, hoy: dt.date) -> dict:
         "media": media,
         "desviacion": desv,
         "fecha_dato": fecha.isoformat(),
-        "detalle": f"wILI {valor:.2f} % en {anio}-S{semana:02d}; media de 5 temporadas {media:.2f} %",
+        "detalle": f"wILI {es(valor, 2)} % en {anio}-S{semana:02d}; media de 5 temporadas {es(media, 2)} %",
     }
