@@ -100,6 +100,25 @@ def combinar_motores(reglas: dict, vars_: dict) -> dict:
     return motores
 
 
+MESES = ("ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic")
+
+
+def _avance_gdelt(extras: dict, minimo: int) -> str:
+    """Mensaje de avance de la historia de GDELT hacia 2015."""
+    primera = min((e["primera_fecha"] for k, e in extras.items() if k != "brotes_oms" and "primera_fecha" in e),
+                  default=None)
+    if not primera:
+        return "La historia de GDELT se está rellenando hacia atrás en cada ejecución."
+    d = dt.date.fromisoformat(primera)
+    faltan = max(0, (d - gdelt_eventos.INICIO_HISTORIA).days)
+    ejecuciones = math.ceil(faltan / gdelt_eventos.DIAS_HISTORIA_POR_EJECUCION)
+    texto = f"La historia de GDELT ya cubre desde el {d.day} {MESES[d.month - 1]} {d.year}. "
+    if ejecuciones:
+        texto += (f"Cada ejecución añade unos {gdelt_eventos.DIAS_HISTORIA_POR_EJECUCION} días hacia atrás: llegará a 2015 "
+                  f"en unas {ejecuciones} ejecuciones, cerca de {ejecuciones * 2} días. ")
+    return texto + f"Cuando cubra {minimo} años completos, este motor se pondrá a prueba."
+
+
 def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> None:
     emerg = _yaml(RAIZ / reglas["validacion"]["archivo"])
     anios_con = {int(d["fecha"][:4]) for d in emerg["declaradas"]}
@@ -125,8 +144,7 @@ def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> 
         v = validacion.validar(predictor, resultado, **kw) if predictor else {
             "estado": "historial_insuficiente", "n": 0, "mensaje": "Sin serie anual esta vez."}
         if v["estado"] == "historial_insuficiente" and reglas["variables"][fuente]["fuente"] == "gdelt_eventos":
-            v["mensaje"] = (f"La historia de GDELT se está rellenando hacia atrás en cada ejecución: hay "
-                            f"{len(predictor)} años completos y la regla pide {kw['minimo_anios']}.")
+            v["mensaje"] = _avance_gdelt(extras, kw["minimo_anios"])
         m["validacion"] = {"predictor": texto, **v}
         if v["estado"] == "validada" and m["valor"] is not None:
             m["en_pronostico"] = True
@@ -140,8 +158,7 @@ def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> 
                                    "Entra por el juego. Su historia comparable empieza en 2022, cuando RSF cambió su método."}
                 continue
             m["validacion"] = {"estado": "historial_insuficiente", "mensaje": (
-                "La historia de GDELT desde 2015 se está rellenando hacia atrás en cada ejecución; "
-                "cuando cubra 10 años completos, este motor se pondrá a prueba." if de_gdelt else
+                _avance_gdelt(extras, kw["minimo_anios"]) if de_gdelt else
                 m["pendiente"] or "Aún no hay historial anual para compararlo con las emergencias.")}
 
 
@@ -173,6 +190,21 @@ def validar_hipotesis(s, reglas: dict, hoy: dt.date) -> dict:
             tregua["mensaje"] = f"No se pudo probar en esta ejecución: {_mensaje(e)}"
     salida["tregua"] = tregua
     return salida
+
+
+def _series(vars_: dict, maximo: int = 60) -> dict:
+    """Últimas lecturas de cada variable, para dibujar su evolución en la página."""
+    series: dict[str, dict[str, float]] = {}
+    if not LECTURAS.exists():
+        return {}
+    with LECTURAS.open(encoding="utf-8") as f:
+        for fila in csv.DictReader(f):
+            if fila.get("variable") in vars_ and fila.get("valor") not in (None, "", "None") and fila.get("estado") == "ok":
+                try:
+                    series.setdefault(fila["variable"], {})[fila["fecha"]] = round(float(fila["valor"]), 3)
+                except ValueError:
+                    continue
+    return {k: [[f, v[f]] for f in sorted(v)][-maximo:] for k, v in series.items()}
 
 
 def main() -> None:
@@ -230,6 +262,9 @@ def main() -> None:
             w.writerow(["fecha", "variable", "estado", "lectura", "z", "valor", "fecha_dato"])
         for k, v in vars_.items():
             w.writerow([hoy.isoformat(), k, v["estado"], v.get("lectura"), v.get("z"), v.get("valor"), v.get("fecha_dato")])
+
+    datos["series"] = _series(vars_)
+    SALIDA.write_text(json.dumps(datos, ensure_ascii=False, indent=1), encoding="utf-8")
 
     c = pron["cualquiera"]
     print(f"Pronóstico: 50 % en {c['anio_50']}, {c['p_2027_2036']:.0%} entre 2027 y 2036. Escrito en {SALIDA.relative_to(RAIZ)}")

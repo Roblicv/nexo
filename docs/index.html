@@ -11,7 +11,7 @@
 <style>
 :root{
   --void:#03070d; --deep:#071420; --glass:rgba(9,28,42,.72); --line:rgba(95,212,255,.2); --line-strong:rgba(95,212,255,.55);
-  --cyan:#5fd4ff; --teal:#2fe0b5; --amber:#ffb84d; --red:#ff5a6e; --ink:#d9f1fb; --muted:#86a6b8; --dim:#4b6678;
+  --cyan:#5fd4ff; --teal:#2fe0b5; --amber:#ffb84d; --red:#ff5a6e; --ink:#d9f1fb; --muted:#86a6b8; --dim:#6f899b;
   --display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
   --body:"Barlow","Segoe UI",system-ui,-apple-system,sans-serif;
   --mono:"Share Tech Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
@@ -87,6 +87,16 @@ p{margin:0 0 10px;max-width:68ch}
 .radar-ley{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-size:.78rem;color:var(--muted);margin:2px 0 0;max-width:none}
 .radar-ley .pt{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
 .pt.am{background:var(--amber);box-shadow:0 0 6px var(--amber)} .pt.az{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.anom{margin:12px 0 0;padding:10px 12px;border:1px solid var(--line);background:rgba(7,20,32,.7)}
+.anom .cab{display:flex;align-items:center;gap:8px;font-family:var(--display);font-weight:600}
+.anom .cab b{font-size:1.25rem;color:var(--amber);white-space:nowrap}
+.anom .lista{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.anom .lista button{background:transparent;border:1px solid rgba(255,184,77,.45);color:var(--ink);padding:5px 9px;font-size:.82rem;cursor:pointer;min-height:34px}
+.anom .lista button.bajo{border-color:rgba(95,212,255,.45)}
+.anom .lista button:hover{background:rgba(255,184,77,.1)}
+.spark{margin:4px 0 0}
+.spark svg{display:block;width:100%;height:auto}
+.spark text{font-family:var(--mono);font-size:9px;fill:var(--muted)}
 .aviso{border:1px solid var(--amber);color:var(--amber);padding:8px 12px;margin:10px 0 0;font-size:.88rem;max-width:none}
 .resumen{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
 .ecu{font-family:var(--display);font-size:1rem;line-height:1.9;background:rgba(3,7,13,.7);border:1px solid var(--line);border-left:2px solid var(--cyan);padding:10px 14px;margin:8px 0 12px;overflow-x:auto;overflow-wrap:break-word}
@@ -300,6 +310,7 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
       </div>
       <p class="verdict" id="verdict" aria-live="polite">Cargando datos…</p>
       <p class="stamp" id="stamp"></p>
+      <div class="anom" id="anomalias"></div>
       <p class="aviso" id="aviso" hidden></p>
     </div>
   </div>
@@ -307,6 +318,7 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
     <svg id="chart" viewBox="0 0 360 200" role="img" aria-label="Probabilidad acumulada de pandemia por año, 2027 a 2075"></svg>
     <div class="cross-read" id="cross-read" hidden></div>
     <div class="legend"><span><i></i>Probabilidad acumulada</span><span><i class="band"></i>Rango del 80 % de las simulaciones</span><span>Toca la curva para leer cada año</span></div>
+    <p class="small" id="curva-nota" style="margin:8px 0 0"></p>
   </div>
 </section>
 
@@ -481,7 +493,7 @@ var ETIQUETA_CORTA = {'Agencias sanitarias':'Salud', 'Conflicto y cooperación':
 /* ---------- núcleo: radar ---------- */
 function renderRadar(){
   var svg = document.getElementById('radar'); svg.innerHTML = '';
-  var C = 200, R0 = 34, R1 = 150;
+  var C = 200, R0 = 44, R1 = 150;
   var defs = el('defs', {});
   var lg = el('linearGradient', {id:'cono', x1:'0', y1:'0', x2:'1', y2:'0'});
   lg.appendChild(el('stop', {offset:'0', 'stop-color':'#5fd4ff', 'stop-opacity':'0'}));
@@ -523,12 +535,13 @@ function renderRadar(){
       var dist = R0 + 8 + Math.min(1, Math.abs(v.valor)) * (R1 - R0 - 8);
       var x = C + dist*Math.sin(rad), yy = C - dist*Math.cos(rad);
       var col = v.valor >= 0 ? '#ffb84d' : '#5fd4ff', vieja = v.estado !== 'ok';
-      var grp = el('g', {'class':'blip' + (Math.abs(v.valor) >= 0.6 && !vieja ? ' alerta' : '') + (SEL === k ? ' sel' : ''), tabindex:'0', role:'button', 'data-k':k, 'aria-label':v.etiqueta + ', ' + signed(v.valor)});
+      var grp = el('g', {'class':'blip' + (Math.abs(v.valor) >= 0.6 && !vieja ? ' alerta' : '') + (SEL === k ? ' sel' : ''), 'data-k':k});
+      grp.appendChild(el('title', {}, v.etiqueta + ', ' + signed(v.valor)));
       var halo = el('circle', {'class':'halo', cx:x, cy:yy, r:5, fill:'none', stroke:col, 'stroke-width':1.5});
       halo.style.animationDelay = ((((ang - 45) % 360 + 360) % 360) / 360 * 6).toFixed(2) + 's';
       grp.appendChild(halo);
       grp.appendChild(el('circle', {'class':'core', cx:x, cy:yy, r:5, fill:col, opacity: vieja ? .4 : 1, style:'filter:drop-shadow(0 0 4px ' + col + ')'}));
-      grp.appendChild(el('circle', {cx:x, cy:yy, r:14, fill:'transparent'}));
+      grp.appendChild(el('circle', {cx:x, cy:yy, r:30, fill:'transparent'}));
       svg.appendChild(grp);
     });
   });
@@ -593,6 +606,20 @@ function leerCurva(ev){
 }
 document.getElementById('chart').addEventListener('pointermove', leerCurva);
 document.getElementById('chart').addEventListener('pointerdown', leerCurva);
+
+function renderFuera(){
+  var vars = DATA.variables, claves = Object.keys(vars).filter(function(k){ var v = vars[k]; return v.estado === 'ok' && v.valor !== null && v.valor !== undefined; });
+  var fuera = claves.filter(function(k){ return Math.abs(vars[k].valor) >= 0.6; }).sort(function(a, b){ return Math.abs(vars[b].valor) - Math.abs(vars[a].valor); });
+  document.getElementById('anomalias').innerHTML = '<div class="cab"><span class="led' + (fuera.length ? ' warn vivo' : ' vivo') + '"></span><b>' + fuera.length + ' de ' + claves.length + '</b> señales fuera de lo normal</div>' +
+    (fuera.length ? '<div class="lista">' + fuera.map(function(k){ var v = vars[k];
+      return '<button type="button" data-k="' + k + '" class="' + (v.valor < 0 ? 'bajo' : '') + '">' + esc(v.etiqueta) + ' ' + signed(v.valor) + '</button>'; }).join('') + '</div>'
+      : '<p class="small" style="margin:6px 0 0">Todas las señales están dentro de lo normal.</p>') +
+    '<p class="small" style="margin:8px 0 0">Cambia en cada ejecución, aunque el pronóstico no se mueva. Se cuenta una señal cuando se aleja 0,6 o más de lo normal.</p>';
+  var validados = Object.keys(DATA.motores).filter(function(k){ return DATA.motores[k].en_pronostico; }).length + (DATA.juego && DATA.juego.en_pronostico ? 1 : 0);
+  document.getElementById('curva-nota').textContent = validados
+    ? 'La curva incluye ' + validados + (validados === 1 ? ' motor validado.' : ' motores validados.') + ' Los demás no la mueven hasta superar la prueba de El norte.'
+    : 'El pronóstico solo cambia cuando un motor supera la validación de El norte. Ninguno lo ha hecho todavía, por eso la curva se mantiene en la tasa histórica con su tendencia, aunque las señales cambien.';
+}
 
 function renderVeredicto(){
   document.querySelectorAll('[data-type]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.type === TIPO)); });
@@ -664,11 +691,27 @@ function abrirRuta(k){
   pasos.push([entra ? 'si' : 'no', 'Curva', entra ? 'Mueve la curva con elasticidad ' + nf(m.e, 2) + '.' : 'Todavía no mueve la curva de pandemias.']);
   document.getElementById('ruta').innerHTML = pasos.map(function(p, i){
     return '<li class="' + p[0] + '" style="animation-delay:' + (i * 110) + 'ms"><div class="paso">' + p[1] + '</div><div>' + esc(p[2]) + '</div></li>';
-  }).join('');
+  }).join('') + '<li class="si" style="animation-delay:' + (pasos.length * 110) + 'ms"><div class="paso">Evolución</div>' + evolucion(k) + '</li>';
   sheet.classList.add('open'); sheetBg.classList.add('open'); sheet.setAttribute('aria-hidden', 'false');
   document.getElementById('sheet-close').focus();
   document.querySelectorAll('.motor-sel').forEach(function(e){ e.classList.remove('motor-sel'); });
   if (v.motor) document.querySelectorAll('[data-motor="' + v.motor + '"]').forEach(function(e){ e.classList.add('motor-sel'); });
+}
+function evolucion(k){
+  var serie = (DATA.series || {})[k] || [];
+  if (serie.length < 2) return '<div class="small">La gráfica aparecerá cuando haya al menos dos lecturas guardadas de esta señal.</div>';
+  var W = 300, H = 74, l = 26, r = 8, t = 8, b = 16, n = serie.length;
+  function X(i){ return l + (n === 1 ? 0 : i / (n - 1)) * (W - l - r); }
+  function Y(v){ return t + (1 - (Math.max(-1, Math.min(1, v)) + 1) / 2) * (H - t - b); }
+  var d = serie.map(function(p, i){ return (i ? 'L' : 'M') + X(i).toFixed(1) + ' ' + Y(p[1]).toFixed(1); }).join('');
+  var ult = serie[n - 1][1];
+  return '<div class="spark"><svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="Evolución de la señal en sus últimas ' + n + ' lecturas">' +
+    '<line x1="' + l + '" x2="' + (W - r) + '" y1="' + Y(0) + '" y2="' + Y(0) + '" stroke="rgba(95,212,255,.35)" stroke-dasharray="3 3"/>' +
+    '<text x="' + (l - 4) + '" y="' + (Y(1) + 3) + '" text-anchor="end">+1</text><text x="' + (l - 4) + '" y="' + (Y(0) + 3) + '" text-anchor="end">0</text><text x="' + (l - 4) + '" y="' + (Y(-1) + 3) + '" text-anchor="end">−1</text>' +
+    '<path d="' + d + '" fill="none" stroke="' + (ult >= 0 ? '#ffb84d' : '#5fd4ff') + '" stroke-width="2"/>' +
+    '<circle cx="' + X(n - 1).toFixed(1) + '" cy="' + Y(ult).toFixed(1) + '" r="3.5" fill="' + (ult >= 0 ? '#ffb84d' : '#5fd4ff') + '"/>' +
+    '<text x="' + l + '" y="' + (H - 3) + '">' + fecha(serie[0][0]) + '</text><text x="' + (W - r) + '" y="' + (H - 3) + '" text-anchor="end">' + fecha(serie[n - 1][0]) + '</text></svg></div>' +
+    '<div class="small">' + n + ' lecturas guardadas, la última ' + signed(ult) + '.</div>';
 }
 function cerrarRuta(){
   sheet.classList.remove('open'); sheetBg.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true');
@@ -678,7 +721,6 @@ document.getElementById('sheet-close').addEventListener('click', cerrarRuta);
 sheetBg.addEventListener('click', cerrarRuta);
 document.addEventListener('keydown', function(e){
   if (e.key === 'Escape' && sheet.classList.contains('open')) cerrarRuta();
-  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('blip')){ e.preventDefault(); abrirRuta(e.target.getAttribute('data-k')); }
 });
 document.addEventListener('click', function(e){
   var t = e.target.closest && e.target.closest('[data-k]');
@@ -884,6 +926,8 @@ function renderTicker(){
   var cv = DATA.pronostico.cualquiera.curva, y50 = cross(cv.media, 0.5), items = [];
   items.push('<b>Año del 50 %</b> ' + (y50 || '>2075'));
   items.push('<b>2027 a 2036</b> ' + pct(cv.media[YEARS.indexOf(2036)]));
+  var fueraN = Object.keys(DATA.variables).filter(function(k){ var v = DATA.variables[k]; return v.estado === 'ok' && v.valor != null && Math.abs(v.valor) >= 0.6; }).length;
+  items.push('<b>Señales fuera de lo normal</b> ' + fueraN);
   Object.keys(DATA.variables).forEach(function(k){
     var v = DATA.variables[k];
     if (v.valor === null || v.valor === undefined || v.estado !== 'ok') return;
@@ -927,7 +971,7 @@ function arranque(){
 }
 
 function renderTodo(){
-  renderCabecera(); renderVeredicto(); renderRadar(); renderCurva(); renderSenales(); renderJuego(); renderNorte();
+  renderCabecera(); renderVeredicto(); renderFuera(); renderRadar(); renderCurva(); renderSenales(); renderJuego(); renderNorte();
   renderContraste(); renderTipo(); renderEventos(); renderTicker();
 }
 document.querySelectorAll('[data-type]').forEach(function(b){
