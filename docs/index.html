@@ -122,7 +122,19 @@ p{margin:0 0 10px;max-width:68ch}
 .grupo{margin-top:14px}
 .grupo h3{color:var(--muted);font-size:.92rem;margin:0 0 6px}
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
-.sig{position:relative;text-align:left;background:rgba(7,20,32,.82);border:1px solid var(--line);padding:10px 12px 11px;cursor:pointer;display:grid;gap:6px;transition:border-color .15s,background .15s}
+.cards{align-items:start}
+.sig{position:relative;text-align:left;background:rgba(7,20,32,.82);border:1px solid var(--line);padding:10px 12px;display:grid;transition:border-color .15s,background .15s}
+.sig-top{cursor:pointer;min-height:32px}
+.sig-abrir{flex:none;width:34px;height:34px;margin:-4px -6px -4px 2px;background:transparent;border:1px solid transparent;cursor:pointer;position:relative}
+.sig-abrir::before{content:"";position:absolute;left:50%;top:45%;width:8px;height:8px;border-right:2px solid var(--cyan);border-bottom:2px solid var(--cyan);transform:translate(-50%,-50%) rotate(45deg);transition:transform .3s ease}
+.sig.abierta .sig-abrir::before{top:58%;transform:translate(-50%,-50%) rotate(-135deg)}
+.sig-abrir:hover{border-color:var(--line-strong)}
+.sig-cuerpo{display:grid;grid-template-rows:0fr;transition:grid-template-rows .38s cubic-bezier(.2,.8,.2,1)}
+.sig.abierta .sig-cuerpo{grid-template-rows:1fr}
+.sig-in{overflow:hidden;min-height:0;display:grid;gap:7px;opacity:0;transform:translateY(-6px);transition:opacity .3s ease .06s,transform .3s ease .06s}
+.sig.abierta .sig-in{opacity:1;transform:none;padding-top:9px}
+.sig-ruta{justify-self:start;background:transparent;border:1px solid var(--line-strong);color:var(--cyan);font-family:var(--display);font-weight:600;font-size:.82rem;padding:6px 10px;cursor:pointer;min-height:34px}
+.sig-ruta:hover{background:rgba(95,212,255,.1)}
 .sig:hover{border-color:var(--line-strong);background:rgba(12,34,50,.9)}
 .sig.sel{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 18px rgba(95,212,255,.22)}
 .sig-top{display:flex;align-items:center;gap:8px}
@@ -255,12 +267,6 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
   .h-titulo{grid-area:titulo;align-self:end} .h-texto{grid-area:texto;align-self:start} .nucleo{grid-area:radar}
   .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
 }
-@media (max-width:879px){
-  .cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;padding-bottom:2px}
-  .cards::-webkit-scrollbar{display:none}
-  .sig{flex:0 0 82%;scroll-snap-align:start}
-  .grupo h3::after{content:" (desliza)";font-weight:500;color:var(--dim)}
-}
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none!important;transition:none!important}
   .ticker-track{padding-left:16px;white-space:normal;flex-wrap:wrap;row-gap:4px}
@@ -324,7 +330,7 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
 
 <section id="senales">
   <h2>Señales</h2>
-  <p class="small">Cada lectura se compara con su propia historia: 0 es lo normal, +1 claramente más y −1 claramente menos. En ámbar lo que está por encima de lo normal; en azul, lo que está por debajo.</p>
+  <p class="small">Cada lectura se compara con su propia historia: 0 es lo normal, +1 claramente más y −1 claramente menos. En ámbar lo que está por encima de lo normal; en azul, lo que está por debajo. Toca la flecha para ver el detalle.</p>
   <div id="senales-panel"></div>
 </section>
 
@@ -648,11 +654,14 @@ function renderSenales(){
       var tiene = v.valor !== null && v.valor !== undefined;
       var w = tiene ? Math.min(1, Math.abs(v.valor)) * 50 : 0;
       var led = v.estado === 'ok' ? 'led vivo' : v.estado === 'desactualizado' ? 'led warn' : 'led off';
-      cards += '<button type="button" class="sig' + (SEL === k ? ' sel' : '') + '" data-k="' + k + '">' +
-        '<span class="sig-top"><span class="' + led + '"></span><span class="sig-name">' + esc(v.etiqueta) + '</span>' +
-        (tiene ? '<span class="sig-val ' + (v.valor >= 0 ? 'up' : 'down') + '">' + signed(v.valor) + '</span>' : '<span class="sig-val">–</span>') + '</span>' +
+      cards += '<div class="sig' + (SEL === k ? ' sel' : '') + '" data-sig="' + k + '">' +
+        '<div class="sig-top"><span class="' + led + '"></span><span class="sig-name">' + esc(v.etiqueta) + '</span>' +
+        (tiene ? '<span class="sig-val ' + (v.valor >= 0 ? 'up' : 'down') + '">' + signed(v.valor) + '</span>' : '<span class="sig-val">–</span>') +
+        '<button type="button" class="sig-abrir" aria-expanded="false" aria-controls="det-' + k + '" aria-label="Ver el detalle de ' + esc(v.etiqueta) + '"></button></div>' +
+        '<div class="sig-cuerpo" id="det-' + k + '"><div class="sig-in">' +
         '<span class="meter">' + (tiene ? '<span class="' + (v.valor >= 0 ? 'pos' : 'neg') + '" style="width:' + w.toFixed(1) + '%"></span>' : '') + '</span>' +
-        '<span class="sig-det">' + esc(v.detalle) + '</span></button>';
+        '<span class="sig-det">' + esc(v.detalle) + (v.fecha_dato ? '. Dato del ' + fecha(v.fecha_dato) : '') + '.</span>' +
+        '<button type="button" class="sig-ruta" data-k="' + k + '" tabindex="-1">Ver su ruta en el modelo</button></div></div></div>';
     });
     if (!cards && !apagadas.length) return;
     html += '<div class="grupo"><h3>' + g[0] + '</h3><div class="cards">' + cards + '</div>' +
@@ -667,7 +676,7 @@ function abrirRuta(k){
   var v = DATA.variables[k]; if (!v) return;
   SEL = k; ultimoFoco = document.activeElement;
   document.querySelectorAll('.sig.sel, .blip.sel').forEach(function(e){ e.classList.remove('sel'); });
-  document.querySelectorAll('[data-k="' + k + '"]').forEach(function(e){ e.classList.add('sel'); });
+  document.querySelectorAll('[data-k="' + k + '"], [data-sig="' + k + '"]').forEach(function(e){ e.classList.add('sel'); });
   document.getElementById('sheet-title').textContent = v.etiqueta;
   document.getElementById('sheet-led').className = 'led' + (v.estado === 'ok' ? ' vivo' : v.estado === 'desactualizado' ? ' warn' : ' off');
   var pasos = [];
@@ -722,8 +731,17 @@ sheetBg.addEventListener('click', cerrarRuta);
 document.addEventListener('keydown', function(e){
   if (e.key === 'Escape' && sheet.classList.contains('open')) cerrarRuta();
 });
+function alternarTarjeta(card){
+  var abrir = !card.classList.contains('abierta');
+  card.classList.toggle('abierta', abrir);
+  card.querySelector('.sig-abrir').setAttribute('aria-expanded', String(abrir));
+  card.querySelector('.sig-ruta').tabIndex = abrir ? 0 : -1;
+}
 document.addEventListener('click', function(e){
-  var t = e.target.closest && e.target.closest('[data-k]');
+  if (!e.target.closest) return;
+  var top = e.target.closest('.sig-top');
+  if (top){ alternarTarjeta(top.closest('.sig')); return; }
+  var t = e.target.closest('[data-k]');
   if (t && DATA) abrirRuta(t.getAttribute('data-k'));
 });
 
