@@ -3,196 +3,271 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#03070d">
 <title>Nexo: pronóstico de pandemias</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500;6..72,600&family=Public+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700&family=Barlow:wght@400;500;600&family=Share+Tech+Mono&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#f7f9f5; --glass:rgba(247,249,245,.9); --surface:#ffffff; --ink:#1f2a25; --muted:#5d6862; --line:#dde5da;
-  --forest:#225e4a; --forest-soft:#e3eee7; --blue:#4a6a94; --blue-soft:#e7edf5;
-  --ochre:#86641a; --ochre-soft:#f5eedb; --band:rgba(34,94,74,.15); --on-accent:#ffffff;
-  color-scheme:light;
+  --void:#03070d; --deep:#071420; --glass:rgba(9,28,42,.72); --line:rgba(95,212,255,.2); --line-strong:rgba(95,212,255,.55);
+  --cyan:#5fd4ff; --teal:#2fe0b5; --amber:#ffb84d; --red:#ff5a6e; --ink:#d9f1fb; --muted:#86a6b8; --dim:#4b6678;
+  --display:"Chakra Petch","Segoe UI",system-ui,sans-serif;
+  --body:"Barlow","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"Share Tech Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+  color-scheme:dark;
   box-sizing:border-box;
   padding-top:env(safe-area-inset-top,0px);
   padding-bottom:env(safe-area-inset-bottom,0px);
 }
-@media (prefers-color-scheme:dark){
-  :root:not([data-theme="light"]){
-    --bg:#111714; --glass:rgba(17,23,20,.9); --surface:#18201c; --ink:#e3eae5; --muted:#9ba7a0; --line:#2b3631;
-    --forest:#76c29f; --forest-soft:#1c2f27; --blue:#94b4dd; --blue-soft:#1d2836;
-    --ochre:#d9b562; --ochre-soft:#2d2717; --band:rgba(118,194,159,.18); --on-accent:#0f1512;
-    color-scheme:dark;
-  }
-}
-:root[data-theme="dark"]{
-  --bg:#111714; --glass:rgba(17,23,20,.9); --surface:#18201c; --ink:#e3eae5; --muted:#9ba7a0; --line:#2b3631;
-  --forest:#76c29f; --forest-soft:#1c2f27; --blue:#94b4dd; --blue-soft:#1d2836;
-  --ochre:#d9b562; --ochre-soft:#2d2717; --band:rgba(118,194,159,.18); --on-accent:#0f1512;
-  color-scheme:dark;
-}
 *,*::before,*::after{box-sizing:border-box}
-html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 104px);-webkit-text-size-adjust:100%}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Public Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;padding-bottom:88px}
-body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
-a{color:var(--blue)}
-:focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:4px}
+html{scroll-padding-top:calc(env(safe-area-inset-top,0px) + 96px);-webkit-text-size-adjust:100%;background:var(--void)}
+body{margin:0;color:var(--ink);font:16px/1.55 var(--body);padding-bottom:64px;
+  background:
+    radial-gradient(1200px 700px at 50% -10%, rgba(95,212,255,.09), transparent 60%),
+    linear-gradient(rgba(95,212,255,.035) 1px, transparent 1px) 0 0/32px 32px,
+    linear-gradient(90deg, rgba(95,212,255,.035) 1px, transparent 1px) 0 0/32px 32px,
+    var(--void);
+  min-height:100vh}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:30;background:rgba(3,7,13,.92)}
+body::after{content:"";position:fixed;inset:0;pointer-events:none;z-index:60;
+  background:repeating-linear-gradient(0deg, rgba(255,255,255,.018) 0 1px, transparent 1px 3px)}
+a{color:var(--cyan)}
+:focus-visible{outline:2px solid var(--cyan);outline-offset:3px}
+button{font:inherit;color:inherit}
 
-.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:9;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-.top-inner{max-width:780px;margin:0 auto;padding:10px 18px 0}
-.brand{display:flex;align-items:baseline;gap:10px}
-.word{font-family:"Newsreader",Georgia,serif;font-size:1.55rem;font-weight:600;letter-spacing:-.01em}
-.word span{color:var(--forest)}
-.tag{font-size:.78rem;color:var(--muted)}
-nav.sections{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;margin:6px -6px 0;padding:0 0 8px}
+/* ---------- cabecera ---------- */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:rgba(3,7,13,.86);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);border-bottom:1px solid var(--line)}
+.top-inner{max-width:1120px;margin:0 auto;padding:10px 16px 0}
+.bar{display:flex;align-items:center;gap:14px}
+.word{font-family:var(--display);font-weight:700;font-size:1.45rem;letter-spacing:.14em;color:var(--ink)}
+.word i{font-style:normal;color:var(--cyan)}
+.link{display:flex;align-items:center;gap:8px;font-family:var(--mono);font-size:.74rem;color:var(--muted);margin-left:auto;white-space:nowrap}
+.led{width:8px;height:8px;border-radius:50%;background:var(--teal);box-shadow:0 0 8px var(--teal);flex:none}
+.led.vivo{animation:latido 2.4s ease-in-out infinite}
+.led.warn{background:var(--amber);box-shadow:0 0 8px var(--amber)}
+.led.off{background:var(--red);box-shadow:0 0 8px var(--red)}
+@keyframes latido{0%,100%{opacity:1}50%{opacity:.25}}
+nav.sections{display:flex;gap:2px;overflow-x:auto;scrollbar-width:none;margin:6px -8px 0;padding-bottom:6px}
 nav.sections::-webkit-scrollbar{display:none}
-nav.sections a{flex:none;padding:6px 10px;border-radius:999px;color:var(--ink);text-decoration:none;font-size:.88rem}
-nav.sections a:hover{background:var(--forest-soft)}
+nav.sections a{flex:none;padding:6px 10px;color:var(--muted);text-decoration:none;font-family:var(--display);font-weight:500;font-size:.88rem;letter-spacing:.04em;border-bottom:2px solid transparent}
+nav.sections a:hover{color:var(--ink);border-color:var(--cyan)}
 
-main{max-width:780px;margin:0 auto;padding:0 18px}
-section{padding:40px 0 12px;border-top:1px solid var(--line)}
-section.hero{border-top:0;padding-top:28px}
-h1,h2{font-family:"Newsreader",Georgia,serif;font-weight:500;letter-spacing:-.012em;margin:0 0 12px}
-h1{font-size:clamp(2.1rem,7.5vw,3.1rem);line-height:1.06}
-h2{font-size:clamp(1.5rem,5vw,1.9rem);line-height:1.15}
-h3{font-size:1rem;font-weight:600;margin:22px 0 6px}
-p{margin:0 0 12px;max-width:64ch}
-.lede{font-size:1.06rem;color:var(--muted)}
-.small{font-size:.86rem;color:var(--muted)}
+main{max-width:1120px;margin:0 auto;padding:0 16px}
+section{padding:26px 0 4px}
+h1,h2,h3{font-family:var(--display);margin:0}
+h1{font-weight:600;font-size:clamp(1.75rem,6vw,2.6rem);line-height:1.08;letter-spacing:.01em}
+h2{font-weight:600;font-size:clamp(1.25rem,4.2vw,1.55rem);letter-spacing:.02em;display:flex;align-items:center;gap:12px;margin-bottom:10px}
+h2::after{content:"";flex:1;height:1px;background:linear-gradient(90deg,var(--line-strong),transparent)}
+h3{font-weight:600;font-size:1rem;letter-spacing:.03em;margin:16px 0 6px}
+p{margin:0 0 10px;max-width:68ch}
+.small{font-size:.9rem;color:var(--muted)}
+.mono{font-family:var(--mono)}
 
-.seg{display:flex;flex-wrap:wrap;gap:8px;margin:14px 0}
-.seg button{font:inherit;font-size:.9rem;padding:8px 13px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer;min-height:40px}
-.seg button[aria-pressed="true"]{background:var(--forest);border-color:var(--forest);color:var(--on-accent)}
+/* ---------- paneles ---------- */
+.panel{position:relative;background:var(--glass);border:1px solid var(--line);padding:14px 16px;margin:12px 0}
+.panel::before,.panel::after{content:"";position:absolute;width:14px;height:14px;pointer-events:none}
+.panel::before{top:-1px;left:-1px;border-top:2px solid var(--cyan);border-left:2px solid var(--cyan)}
+.panel::after{bottom:-1px;right:-1px;border-bottom:2px solid var(--cyan);border-right:2px solid var(--cyan)}
 
-.verdict{font-family:"Newsreader",Georgia,serif;font-size:clamp(1.18rem,4vw,1.4rem);line-height:1.35;margin:18px 0 6px;max-width:34em}
-.verdict strong{font-weight:600;color:var(--forest)}
+/* ---------- núcleo ---------- */
+.hero{display:grid;gap:8px;padding-top:18px}
+.hero-grid{display:grid;gap:14px}
+.nucleo{position:relative;max-width:440px;width:100%;margin:0 auto}
+.nucleo svg{display:block;width:100%;height:auto;overflow:visible}
+.nucleo text{font-family:var(--display);fill:var(--muted)}
+.sweep{transform-origin:200px 200px;animation:barrido 6s linear infinite}
+@keyframes barrido{to{transform:rotate(360deg)}}
+.blip{cursor:pointer}
+.blip circle.core{transition:r .2s}
+.blip .halo{opacity:0;transform-box:fill-box;transform-origin:center;animation:destello 6s linear infinite}
+@keyframes destello{0%{opacity:.9;transform:scale(1)}12%{opacity:0;transform:scale(3.2)}100%{opacity:0}}
+.blip.alerta .core{animation:latido 1.2s ease-in-out infinite}
+.blip.sel .core{stroke:#fff;stroke-width:2}
+.verdict{font-family:var(--display);font-weight:500;font-size:clamp(1.08rem,3.6vw,1.3rem);line-height:1.4;margin:4px 0 0}
+.verdict b{color:var(--cyan);font-weight:700}
+.seg{display:inline-flex;border:1px solid var(--line-strong);margin:10px 0 4px}
+.seg button{background:transparent;border:0;padding:8px 14px;color:var(--muted);cursor:pointer;font-family:var(--display);font-weight:600;letter-spacing:.03em;min-height:40px}
+.seg button[aria-pressed="true"]{background:rgba(95,212,255,.16);color:var(--ink);box-shadow:inset 0 -2px 0 var(--cyan)}
+.stamp{font-family:var(--mono);font-size:.76rem;color:var(--muted);margin-top:6px}
 
-figure{margin:14px 0 6px}
-svg{display:block;width:100%;height:auto}
-svg text{font-family:"Public Sans",system-ui,sans-serif;font-size:10px;fill:var(--muted)}
-.legend{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.82rem;color:var(--muted);margin:4px 0 0}
-.legend i{display:inline-block;width:18px;height:0;border-top:2.5px solid var(--forest);vertical-align:middle;margin-right:6px}
-.legend i.band{height:10px;border:0;background:var(--band)}
+/* ---------- curva ---------- */
+.chart{position:relative}
+.chart svg{display:block;width:100%;height:auto;touch-action:pan-y}
+.chart text{font-family:var(--mono);font-size:9.5px;fill:var(--muted)}
+.cross-read{position:absolute;top:6px;right:8px;font-family:var(--mono);font-size:.8rem;color:var(--ink);background:rgba(3,7,13,.85);border:1px solid var(--line);padding:3px 8px;pointer-events:none}
+.legend{display:flex;flex-wrap:wrap;gap:4px 16px;font-size:.82rem;color:var(--muted);margin-top:6px}
+.legend i{display:inline-block;width:16px;height:0;border-top:2px solid var(--cyan);vertical-align:middle;margin-right:6px;box-shadow:0 0 6px var(--cyan)}
+.legend i.band{height:9px;border:0;background:rgba(95,212,255,.18);box-shadow:none}
 
+/* ---------- señales ---------- */
+.grupo{margin-top:14px}
+.grupo h3{color:var(--muted);font-size:.92rem;margin:0 0 6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:8px}
+.sig{position:relative;text-align:left;background:rgba(7,20,32,.82);border:1px solid var(--line);padding:10px 12px 11px;cursor:pointer;display:grid;gap:6px;transition:border-color .15s,background .15s}
+.sig:hover{border-color:var(--line-strong);background:rgba(12,34,50,.9)}
+.sig.sel{border-color:var(--cyan);box-shadow:0 0 0 1px var(--cyan),0 0 18px rgba(95,212,255,.22)}
+.sig-top{display:flex;align-items:center;gap:8px}
+.sig-name{font-weight:600;font-size:.93rem;line-height:1.25}
+.sig-val{margin-left:auto;font-family:var(--display);font-weight:700;font-size:1.15rem;font-variant-numeric:tabular-nums}
+.up{color:var(--amber)} .down{color:var(--cyan)}
+.meter{position:relative;height:6px;background:rgba(95,212,255,.08);border:1px solid rgba(95,212,255,.15)}
+.meter::before{content:"";position:absolute;left:50%;top:-3px;bottom:-3px;width:1px;background:var(--line-strong)}
+.meter span{position:absolute;top:0;bottom:0}
+.meter .pos{left:50%;background:linear-gradient(90deg,rgba(255,184,77,.35),var(--amber))}
+.meter .neg{right:50%;background:linear-gradient(270deg,rgba(95,212,255,.35),var(--cyan))}
+.sig-det{font-size:.8rem;color:var(--muted);line-height:1.35}
+.tag{display:inline-block;font-family:var(--mono);font-size:.7rem;padding:1px 6px;border:1px solid currentColor;line-height:1.5;white-space:nowrap}
+.t-ok{color:var(--teal)} .t-warn{color:var(--amber)} .t-off{color:var(--dim)} .t-alert{color:var(--red)}
+.off-line{font-size:.82rem;color:var(--dim);margin:8px 0 0}
 
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:16px 0}
-.stat{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px}
-.stat b{display:block;font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.65rem;line-height:1.1;font-variant-numeric:tabular-nums}
-.stat span{font-size:.82rem;color:var(--muted)}
+/* ---------- ruta de la señal (hoja inferior) ---------- */
+.sheet-bg{position:fixed;inset:0;background:rgba(1,4,8,.55);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
+.sheet-bg.open{opacity:1;pointer-events:auto}
+.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:78vh;overflow:auto;background:linear-gradient(180deg,#0a1d2b,#06121c);border-top:1px solid var(--cyan);box-shadow:0 -10px 40px rgba(95,212,255,.15);transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding:14px 18px calc(env(safe-area-inset-bottom,0px) + 18px)}
+.sheet.open{transform:none}
+.sheet-inner{max-width:760px;margin:0 auto}
+.sheet-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+.sheet-head h3{margin:0;font-size:1.15rem}
+.close{margin-left:auto;width:40px;height:40px;background:transparent;border:1px solid var(--line-strong);color:var(--ink);cursor:pointer;font-size:1.2rem;line-height:1}
+ol.ruta{list-style:none;margin:6px 0 0;padding:0 0 0 22px;position:relative}
+ol.ruta::before{content:"";position:absolute;left:6px;top:8px;bottom:8px;width:2px;background:linear-gradient(var(--cyan),rgba(95,212,255,.1));transform-origin:top;animation:trazo .6s ease-out both}
+@keyframes trazo{from{transform:scaleY(0)}to{transform:scaleY(1)}}
+ol.ruta li{position:relative;padding:4px 0 12px;opacity:0;animation:aparece .35s ease-out forwards}
+ol.ruta li::before{content:"";position:absolute;left:-21px;top:10px;width:10px;height:10px;border:2px solid var(--cyan);background:var(--void);transform:rotate(45deg)}
+ol.ruta li.no::before{border-color:var(--dim)}
+ol.ruta li.si::before{background:var(--cyan)}
+@keyframes aparece{from{opacity:0;transform:translateX(-6px)}to{opacity:1;transform:none}}
+.ruta .paso{font-family:var(--display);font-weight:600;font-size:.82rem;color:var(--cyan);letter-spacing:.06em}
+.ruta li.no .paso{color:var(--dim)}
 
-.panel{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:4px 16px 8px;margin:18px 0}
-.doc{border-left:3px solid var(--forest);background:var(--forest-soft);border-radius:0 8px 8px 0;padding:12px 16px;margin:14px 0}
-.doc p:last-child{margin-bottom:0}
+/* ---------- juego ---------- */
+.duelo{display:grid;gap:8px;margin:8px 0 12px}
+.duelo .fila{display:grid;grid-template-columns:7.5em 1fr 3.5em;align-items:center;gap:10px;font-family:var(--display);font-weight:600}
+.duelo .riel{height:12px;background:rgba(95,212,255,.08);border:1px solid var(--line);overflow:hidden}
+.duelo .riel span{display:block;height:100%;width:0;transition:width 1s cubic-bezier(.2,.8,.2,1)}
+.duelo .a .riel span{background:linear-gradient(90deg,rgba(47,224,181,.4),var(--teal))}
+.duelo .r .riel span{background:linear-gradient(90deg,rgba(255,90,110,.4),var(--red))}
+.duelo .n{text-align:right;font-variant-numeric:tabular-nums}
+.stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:8px 0}
+.stat b{display:block;font-family:var(--display);font-weight:700;font-size:1.5rem;line-height:1.1;font-variant-numeric:tabular-nums}
+.stat span{font-size:.8rem;color:var(--muted)}
+.fila-dato{display:flex;align-items:baseline;gap:10px;padding:8px 0;border-top:1px solid rgba(95,212,255,.1)}
+.fila-dato:first-child{border-top:0}
+.fila-dato .lbl{font-weight:600}
+.fila-dato .val{margin-left:auto;font-family:var(--display);font-weight:700;font-variant-numeric:tabular-nums}
+.det{font-size:.84rem;color:var(--muted);margin:0 0 2px}
+.motor-sel{background:rgba(95,212,255,.1);outline:1px solid var(--cyan);outline-offset:4px;transition:background .3s}
 
-.bars{margin:12px 0}
-.bar{margin:10px 0}
-.bar .row{display:flex;justify-content:space-between;gap:12px;font-size:.9rem}
-.bar .row span:last-child{font-variant-numeric:tabular-nums;color:var(--muted)}
-.bar .track{height:10px;background:var(--forest-soft);border-radius:5px;overflow:hidden;margin-top:4px}
-.bar .fill{height:100%;background:var(--forest);opacity:.55;border-radius:5px}
-.bar.top .fill{opacity:1}
+/* ---------- contraste ---------- */
+.contraste{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.lente{border:1px solid var(--line);padding:10px;background:rgba(7,20,32,.6)}
+.lente h4{margin:0 0 8px;font-family:var(--display);font-weight:600;font-size:.9rem}
+.lente .k{font-size:.74rem;color:var(--muted);margin-top:6px}
+.lente .v{font-family:var(--display);font-weight:700;font-size:1.2rem;font-variant-numeric:tabular-nums}
+.vbar{height:5px;background:rgba(95,212,255,.08);margin-top:3px;position:relative}
+.vbar span{position:absolute;top:0;bottom:0;left:0;background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.vbar.c span{background:var(--red);box-shadow:0 0 6px var(--red)}
 
-.src-group{margin:22px 0 4px}
-.src{padding:12px 0;border-bottom:1px solid var(--line)}
-.src:last-child{border-bottom:0}
-.src .name{font-weight:600}
-.src .what{margin:2px 0;font-size:.93rem}
-.src .meta{font-size:.82rem;color:var(--muted)}
-.feeds{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
-.feeds span{font-size:.74rem;padding:2px 8px;border-radius:999px;background:var(--blue-soft);color:var(--blue)}
+/* ---------- tipo ---------- */
+.tb{margin:9px 0}
+.tb .row{display:flex;justify-content:space-between;gap:12px;font-size:.92rem}
+.tb .row span:last-child{font-family:var(--display);font-weight:700}
+.tb .track{height:8px;background:rgba(95,212,255,.08);margin-top:4px}
+.tb .fill{height:100%;background:linear-gradient(90deg,rgba(95,212,255,.3),var(--cyan))}
+.tb.top .fill{box-shadow:0 0 10px var(--cyan)}
 
-.formula{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:12px 14px;overflow-x:auto;white-space:nowrap;margin:12px 0}
-ol.method{padding-left:1.2em;max-width:64ch}
-ol.method li{margin:0 0 10px}
-footer{max-width:780px;margin:28px auto 0;padding:18px;border-top:1px solid var(--line);font-size:.82rem;color:var(--muted)}
-
-.readout{position:fixed;left:0;right:0;bottom:0;z-index:9;background:var(--glass);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);border-top:1px solid var(--line);padding:8px 18px calc(env(safe-area-inset-bottom,0px) + 8px)}
-.readout-inner{max-width:780px;margin:0 auto;display:flex;gap:22px;align-items:baseline}
-.readout b{font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.3rem;font-variant-numeric:tabular-nums;color:var(--forest)}
-.readout span{font-size:.78rem;color:var(--muted);display:block}
-.readout[hidden]{display:none}
-
-.badge{display:inline-block;font-size:.72rem;font-weight:600;padding:2px 8px;border-radius:999px;white-space:nowrap}
-.b-ok{background:var(--forest-soft);color:var(--forest)}
-.b-warn{background:var(--ochre-soft);color:var(--ochre)}
-.b-off{background:var(--line);color:var(--muted)}
-.vrow{padding:12px 0;border-bottom:1px solid var(--line)}
-.vrow:last-child{border-bottom:0}
-.vhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
-.vhead span:first-child{font-weight:600;font-size:.95rem}
-.vval{font-family:"Newsreader",Georgia,serif;font-size:1.25rem;font-variant-numeric:tabular-nums;color:var(--forest)}
-.vdet{font-size:.85rem;color:var(--muted);margin-top:2px;overflow-wrap:anywhere}
-ol.timeline{list-style:none;padding:0;margin:18px 0;border-left:2px solid var(--line)}
-ol.timeline li{position:relative;padding:0 0 18px 18px}
-ol.timeline li::before{content:"";position:absolute;left:-6px;top:6px;width:10px;height:10px;border-radius:50%;background:var(--surface);border:2px solid var(--forest)}
-ol.timeline .when{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums}
-ol.timeline .pill{font-size:.72rem;padding:1px 8px;border-radius:999px;margin-left:8px}
-.p-juego{background:var(--blue-soft);color:var(--blue)}
-.p-agencias{background:var(--forest-soft);color:var(--forest)}
-.p-movilizacion{background:var(--line);color:var(--ink)}
-table.hist{border-collapse:collapse;font-size:.88rem;font-variant-numeric:tabular-nums;margin:8px 0}
-table.hist td,table.hist th{padding:4px 14px 4px 0;text-align:left;border-bottom:1px solid var(--line)}
-table.hist th{font-weight:600;color:var(--muted)}
-
-details.fold>summary{display:flex;align-items:center;justify-content:space-between;gap:16px;cursor:pointer;list-style:none;padding:4px 0;min-height:44px}
-details.fold>summary::-webkit-details-marker{display:none}
-details.fold>summary h2{margin:0}
-.chev{flex:none;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);position:relative}
-.chev::before{content:"";position:absolute;left:50%;top:44%;width:9px;height:9px;border-right:2px solid var(--forest);border-bottom:2px solid var(--forest);transform:translate(-50%,-50%) rotate(45deg);transition:transform .2s ease}
-details.fold[open] .chev::before{top:56%;transform:translate(-50%,-50%) rotate(-135deg)}
-details.fold[open]>summary{margin-bottom:12px}
-details.fold>summary:hover .chev{background:var(--forest-soft)}
-@media (prefers-reduced-motion:reduce){.chev::before{transition:none}}
-
-@media (min-width:700px){
-}
-
-.stamp{font-size:.84rem;color:var(--muted);margin:2px 0 0}
-.group{margin:20px 0 0}
-.group h3{margin:0 0 2px}
-.vrow{padding:10px 0}
-.vval{font-family:"Newsreader",Georgia,serif;font-size:1.15rem;font-variant-numeric:tabular-nums;color:var(--forest);margin-left:auto;padding-right:10px}
-.vhead{display:flex;align-items:baseline;gap:10px}
-.vhead .lbl{font-weight:600;font-size:.93rem}
-.b-yes{background:var(--forest-soft);color:var(--forest)}
-.b-no{background:var(--ochre-soft);color:var(--ochre)}
-.off-line{font-size:.82rem;color:var(--muted);margin:8px 0 0}
-.inline-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px;margin:12px 0}
-.inline-stats div b{display:block;font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.45rem;font-variant-numeric:tabular-nums}
-.inline-stats div span{font-size:.76rem;line-height:1.35;color:var(--muted);display:block}
-.p-conflicto{background:var(--ochre-soft);color:var(--ochre)}
-.err{padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
-section.fold-sec{padding:18px 0 6px}
-.track{position:relative;display:flex;align-items:flex-start;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 2px 6px;overscroll-behavior-x:contain;margin-top:8px}
-.track::-webkit-scrollbar{display:none}
-.card{flex:0 0 86%;max-width:430px;scroll-snap-align:start;background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
-.card .when{font-size:.82rem;color:var(--muted);font-variant-numeric:tabular-nums;margin-bottom:6px}
-.card .pill{font-size:.72rem;padding:1px 8px;border-radius:999px;margin-left:8px}
-.card.leccion{background:var(--forest-soft);border-color:transparent}
-.card.leccion h3{margin:0 0 6px;color:var(--forest)}
-.car-ctl{display:flex;align-items:center;justify-content:center;gap:16px;margin:8px 0 4px}
-.arrow{width:44px;height:44px;border-radius:50%;border:1px solid var(--line);background:var(--surface);position:relative;cursor:pointer}
-.arrow::before{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;border-right:2px solid var(--forest);border-bottom:2px solid var(--forest)}
+/* ---------- casos ---------- */
+.track{position:relative}
+.carrusel{display:flex;align-items:flex-start;gap:10px;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;padding:4px 1px 6px;overscroll-behavior-x:contain}
+.carrusel::-webkit-scrollbar{display:none}
+.card{flex:0 0 86%;max-width:430px;scroll-snap-align:start;border:1px solid var(--line);background:rgba(7,20,32,.85);padding:14px 16px}
+.card .when{font-family:var(--mono);font-size:.8rem;color:var(--cyan);margin-bottom:6px;display:flex;gap:8px;align-items:center}
+.card.leccion{border-color:var(--teal)}
+.card.leccion h3{margin:0 0 6px;color:var(--teal)}
+.card.viva{border-color:var(--amber);box-shadow:0 0 20px rgba(255,184,77,.12)}
+.card.viva h3{margin:0 0 6px;color:var(--amber)}
+.card ul{margin:6px 0 8px;padding-left:1.1em}
+.car-ctl{display:flex;align-items:center;justify-content:center;gap:16px;margin:8px 0}
+.arrow{width:44px;height:44px;border:1px solid var(--line-strong);background:transparent;position:relative;cursor:pointer}
+.arrow::before{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;border-right:2px solid var(--cyan);border-bottom:2px solid var(--cyan)}
 .arrow.next::before{transform:translate(-70%,-50%) rotate(-45deg)}
 .arrow.prev::before{transform:translate(-30%,-50%) rotate(135deg)}
-.arrow:disabled{opacity:.35;cursor:default}
-.arrow:not(:disabled):hover{background:var(--forest-soft)}
-#caso-pos{font-size:.85rem;color:var(--muted);font-variant-numeric:tabular-nums;min-width:6em;text-align:center}
-.p-economia{background:var(--blue-soft);color:var(--ink)}
+.arrow:disabled{opacity:.3;cursor:default}
+#caso-pos{font-family:var(--mono);font-size:.85rem;color:var(--muted);min-width:6em;text-align:center}
+.tabs{display:flex;gap:6px;margin:8px 0}
+.tabs button{background:transparent;border:1px solid var(--line);padding:6px 12px;cursor:pointer;font-family:var(--display);font-weight:600;color:var(--muted);min-height:38px}
+.tabs button[aria-pressed="true"]{border-color:var(--cyan);color:var(--ink);background:rgba(95,212,255,.12)}
+
+/* ---------- plegables ---------- */
+details.fold{border:1px solid var(--line);background:rgba(7,20,32,.6);margin:10px 0}
+details.fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:12px;padding:12px 14px;font-family:var(--display);font-weight:600;font-size:1.08rem;letter-spacing:.02em}
+details.fold>summary::-webkit-details-marker{display:none}
+details.fold>summary::after{content:"";margin-left:auto;width:9px;height:9px;border-right:2px solid var(--cyan);border-bottom:2px solid var(--cyan);transform:rotate(45deg);transition:transform .2s}
+details.fold[open]>summary::after{transform:rotate(-135deg)}
+details.fold>.in{padding:0 14px 14px}
+.doc{border-left:2px solid var(--teal);padding:4px 0 4px 12px;margin:10px 0;color:var(--ink)}
+table.hist{border-collapse:collapse;font-family:var(--mono);font-size:.84rem;margin:6px 0}
+table.hist td,table.hist th{padding:4px 14px 4px 0;text-align:left;border-bottom:1px solid rgba(95,212,255,.1)}
+table.hist th{color:var(--muted);font-weight:400}
+.src{padding:9px 0;border-top:1px solid rgba(95,212,255,.1)}
+.src .name{font-weight:600}
+.src .what{font-size:.88rem;color:var(--muted)}
+ol.method{padding-left:1.2em}
+ol.method li{margin:0 0 9px}
+
+/* ---------- teletipo ---------- */
+.ticker{position:fixed;left:0;right:0;bottom:0;z-index:25;background:rgba(3,7,13,.94);border-top:1px solid var(--line-strong);overflow:hidden;padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px)}
+.ticker-track{display:inline-flex;gap:34px;white-space:nowrap;padding-left:100%;animation:teletipo 70s linear infinite;font-family:var(--mono);font-size:.8rem}
+.ticker:hover .ticker-track{animation-play-state:paused}
+@keyframes teletipo{to{transform:translateX(-100%)}}
+.ticker b{color:var(--cyan);font-weight:400}
+
+/* ---------- arranque ---------- */
+.boot{position:fixed;inset:0;z-index:80;background:var(--void);display:flex;align-items:center;justify-content:center;transition:opacity .45s;cursor:pointer}
+.boot.fuera{opacity:0;pointer-events:none}
+.boot pre{font-family:var(--mono);font-size:.86rem;color:var(--cyan);line-height:1.7;margin:0;padding:24px;max-width:92vw;white-space:pre-wrap}
+.boot .ok{color:var(--teal)} .boot .warn{color:var(--amber)}
+
+footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var(--line);font-size:.82rem;color:var(--dim)}
+.err{color:var(--amber)}
+
+@media (min-width:880px){
+  .hero-grid{grid-template-columns:minmax(0,1fr) minmax(0,1fr);grid-template-areas:"titulo radar" "texto radar";align-items:center;column-gap:32px}
+  .h-titulo{grid-area:titulo;align-self:end} .h-texto{grid-area:texto;align-self:start} .nucleo{grid-area:radar}
+  .stats{grid-template-columns:repeat(3,minmax(0,1fr))}
+}
+@media (max-width:879px){
+  .cards{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;overscroll-behavior-x:contain;padding-bottom:2px}
+  .cards::-webkit-scrollbar{display:none}
+  .sig{flex:0 0 82%;scroll-snap-align:start}
+  .grupo h3::after{content:" (desliza)";font-weight:500;color:var(--dim)}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  .ticker-track{padding-left:16px;white-space:normal;flex-wrap:wrap;row-gap:4px}
+  ol.ruta li{opacity:1}
+}
 </style>
 </head>
 <body>
+<div class="boot" id="boot" aria-hidden="true"><pre id="boot-txt"></pre></div>
+
 <header class="top">
   <div class="top-inner">
-    <div class="brand"><span class="word">nexo<span>.</span></span><span class="tag">Pronóstico de pandemias</span></div>
+    <div class="bar">
+      <span class="word">NEX<i>O</i></span>
+      <span class="link"><span class="led vivo" id="led"></span><span id="link-txt">Conectando…</span></span>
+    </div>
     <nav class="sections" aria-label="Secciones">
-      <a href="#pronostico">Pronóstico</a>
-      <a href="#lecturas">Lecturas</a>
+      <a href="#nucleo">Núcleo</a>
+      <a href="#senales">Señales</a>
       <a href="#juego">Juego</a>
       <a href="#norte">El norte</a>
+      <a href="#contraste">Medios</a>
       <a href="#tipo">Tipo</a>
-      <a href="#contexto">Contexto</a>
       <a href="#casos">Casos</a>
+      <a href="#contexto">Contexto</a>
       <a href="#fuentes">Fuentes</a>
       <a href="#metodo">Método</a>
     </nav>
@@ -200,114 +275,123 @@ section.fold-sec{padding:18px 0 6px}
 </header>
 
 <main>
-<section class="hero" id="pronostico">
-  <h1>¿Cuándo llega la próxima pandemia?</h1>
-  <p class="lede">Probabilidad acumulada, año por año, calculada solo con datos públicos y reglas fijas. Nadie mueve los valores a mano.</p>
-  <div class="seg" role="group" aria-label="Qué cuenta como pandemia">
-    <button type="button" data-type="cualquiera" aria-pressed="true">Cualquier pandemia</button>
-    <button type="button" data-type="severa" aria-pressed="false">Severa, como 2020</button>
+<section class="hero" id="nucleo">
+  <div class="hero-grid">
+    <div class="h-titulo">
+      <h1>¿Cuándo llega la próxima pandemia?</h1>
+      <p class="small" style="margin-top:8px">Calculado solo con datos públicos y reglas fijas. Toca un punto del radar o una señal para ver su recorrido.</p>
+    </div>
+    <div class="nucleo" id="nucleo-wrap">
+      <svg id="radar" viewBox="-30 -30 460 460" role="img" aria-label="Radar de señales: cuanto más lejos del centro, más se aleja de lo normal"></svg>
+    </div>
+    <div class="h-texto">
+      <div class="seg" role="group" aria-label="Qué cuenta como pandemia">
+        <button type="button" data-type="cualquiera" aria-pressed="true">Cualquiera</button>
+        <button type="button" data-type="severa" aria-pressed="false">Severa, como 2020</button>
+      </div>
+      <p class="verdict" id="verdict" aria-live="polite">Cargando datos…</p>
+      <p class="stamp" id="stamp"></p>
+    </div>
   </div>
-  <p class="small">Severas: 1918 y 2020. «Cualquier pandemia» suma también las de 1957, 1968 y 2009, que fueron más leves.</p>
-  <p class="verdict" id="verdict" aria-live="polite">Cargando datos…</p>
-  <figure>
-    <svg id="chart" viewBox="0 0 360 230" role="img" aria-label="Probabilidad acumulada de pandemia por año, 2027 a 2075"></svg>
-    <figcaption class="legend">
-      <span><i></i>Probabilidad acumulada</span>
-      <span><i class="band"></i>Rango del 80 % de las simulaciones</span>
-    </figcaption>
-  </figure>
-  <p class="stamp" id="stamp"></p>
+  <div class="panel chart">
+    <svg id="chart" viewBox="0 0 360 200" role="img" aria-label="Probabilidad acumulada de pandemia por año, 2027 a 2075"></svg>
+    <div class="cross-read" id="cross-read" hidden></div>
+    <div class="legend"><span><i></i>Probabilidad acumulada</span><span><i class="band"></i>Rango del 80 % de las simulaciones</span><span>Toca la curva para leer cada año</span></div>
+  </div>
 </section>
 
-<section id="lecturas">
-  <h2>Lecturas</h2>
-  <p class="small">Cada lectura se compara con su propia historia: 0 es lo normal, +1 claramente más de lo normal y −1 claramente menos.</p>
-  <div id="lecturas-panel"></div>
+<section id="senales">
+  <h2>Señales</h2>
+  <p class="small">Cada lectura se compara con su propia historia: 0 es lo normal, +1 claramente más y −1 claramente menos. En ámbar lo que está por encima de lo normal; en azul, lo que está por debajo.</p>
+  <div id="senales-panel"></div>
 </section>
 
 <section id="juego">
   <h2>El juego de hoy</h2>
-  <p class="small">El pilar 1 convierte las lecturas de conflicto, cooperación y movilización en los incentivos que tiene un país para anunciar un brote nuevo. Se recalcula en cada ejecución.</p>
-  <div class="inline-stats" id="juego-stats"></div>
-  <div id="juego-entradas"></div>
-  <details class="fold">
-    <summary><h3>Cómo funciona el juego</h3><span class="chev" aria-hidden="true"></span></summary>
-    <p>Un país que detecta un brote elige entre anunciarlo pronto o retrasarlo. Anunciar trae costos internos y, a veces, sanciones de otros países; retrasar arriesga que se descubra y que el brote crezca. El equilibrio fija cuántas semanas tarda el mundo en enterarse, y esas semanas deciden si el brote se contiene o escapa.</p>
-    <p>Con más conflicto suben las sanciones esperadas; con más cooperación sube el apoyo al país que anuncia y el costo de ocultar; con más movilización social sube el costo político interno de dar la noticia. Cada efecto está escrito en las reglas.</p>
-    <div class="doc"><p>Precedente: en noviembre de 2021 Sudáfrica compartió rápido la secuencia de ómicron y decenas de países respondieron con prohibiciones de viaje. Científicos advirtieron que castigar la transparencia incentiva el silencio.</p></div>
-  </details>
+  <p class="small">Las señales de conflicto, cooperación, movilización y prensa ajustan los incentivos de un país para anunciar un brote nuevo. Se recalcula en cada ejecución.</p>
+  <div class="panel">
+    <div class="duelo" id="duelo"></div>
+    <div class="stats" id="juego-stats"></div>
+    <div id="juego-entradas"></div>
+    <p class="small" id="juego-mult" style="margin-top:8px"></p>
+  </div>
+  <details class="fold"><summary>Cómo funciona el juego</summary><div class="in">
+    <p>Un país que detecta un brote elige entre anunciarlo pronto o retrasarlo. Anunciar trae costos internos y, a veces, sanciones; retrasar arriesga que se descubra y que el brote crezca. El equilibrio fija cuántas semanas tarda el mundo en enterarse, y esas semanas deciden si el brote se contiene o escapa.</p>
+    <div class="doc">Precedente: en noviembre de 2021 Sudáfrica compartió rápido la secuencia de ómicron y decenas de países respondieron con prohibiciones de viaje. Castigar la transparencia incentiva el silencio.</div>
+  </div></details>
 </section>
 
 <section id="norte">
-  <h2>El norte: solo entra lo que acierta</h2>
-  <p class="small">Cada motor se prueba hacia atrás contra los años con emergencias sanitarias internacionales. Si no anticipa mejor que la tasa base, su peso es 0. Lo mismo vale para las hipótesis.</p>
-  <div id="norte-panel"></div>
+  <h2>El norte</h2>
+  <p class="small">Solo entra al pronóstico lo que acierta. Cada motor se prueba hacia atrás contra los años con emergencias sanitarias internacionales; si no anticipa mejor que la tasa base, su peso es 0.</p>
+  <div class="panel" id="norte-panel"></div>
+</section>
+
+<section id="contraste">
+  <h2>Contraste de medios</h2>
+  <p class="small">El mismo tipo de hecho visto por distintas lentes. GDELT es un proyecto estadounidense, pero lee medios de todo el mundo, incluidos los estatales rusos y chinos; aquí se separan por el dominio de cada noticia.</p>
+  <div class="contraste" id="contraste-panel"></div>
+  <p class="off-line">Clima: promedio de la escala de Goldstein, de −10 (conflicto) a +10 (cooperación). Conflicto: porcentaje de eventos que son agresiones, combates o violencia masiva.</p>
 </section>
 
 <section id="tipo">
   <h2>Qué tipo de pandemia</h2>
   <p class="small">Si llega una pandemia, ¿de qué familia de virus es más probable que sea? Los porcentajes reparten el 100 % entre familias; no son la probabilidad de que cada una ocurra este año.</p>
-  <p class="small" id="tipo-nota"></p>
-  <div class="bars" id="bars"></div>
-  <p class="small" id="tipo-conjunta"></p>
+  <div class="panel"><div id="bars"></div><p class="small" id="tipo-conjunta" style="margin:8px 0 0"></p></div>
 </section>
 
-<section id="contexto" class="fold-sec">
- <details class="fold">
-  <summary><h2>Movilización, conflicto y poder</h2><span class="chev" aria-hidden="true"></span></summary>
-  <div class="doc">
-    <p>Lo documentado: en 2020, según Freedom House, 158 de 192 países pusieron nuevos límites a las protestas, aunque hubo protestas significativas en al menos 90. La democracia empeoró en 80 países.</p>
-    <p>Sobre la tregua: la ONU pidió un alto el fuego mundial en marzo de 2020. ACLED encontró que, de 43 países con violencia organizada relevante, solo en 10 hubo actores que acogieron el llamado o declararon un alto el fuego, y en varios la violencia aumentó.</p>
-  </div>
-  <h3>Eventos registrados</h3>
-  <p class="small">Se guardan como datos medibles, no como interpretación. Los bloques políticos se clasificarán con una fuente externa y la misma regla aplica gane quien gane.</p>
-  <div id="eventos"></div>
- </details>
-</section>
-
-<section id="casos" class="fold-sec">
- <details class="fold">
-  <summary><h2>Casos históricos</h2><span class="chev" aria-hidden="true"></span></summary>
+<section id="casos">
+  <h2>Casos históricos</h2>
   <p class="small">Ejemplos reales de los pilares funcionando a la vez. Un caso muestra cómo interactuaron las variables, pero no prueba hacia dónde apunta la flecha causal. Desliza para recorrerlo.</p>
-  <div class="seg" id="caso-tabs" role="group" aria-label="Caso histórico"></div>
+  <div class="tabs" id="caso-tabs" role="group" aria-label="Caso histórico"></div>
   <p class="small" id="caso-nota"></p>
-  <div class="track" id="caso-track" tabindex="0" aria-label="Eventos del caso, deslizables"></div>
+  <div class="carrusel" id="caso-track" tabindex="0" aria-label="Eventos del caso, deslizables"></div>
   <div class="car-ctl">
     <button type="button" class="arrow prev" id="caso-prev" aria-label="Evento anterior"></button>
     <span id="caso-pos" aria-live="polite"></span>
     <button type="button" class="arrow next" id="caso-next" aria-label="Evento siguiente"></button>
   </div>
- </details>
 </section>
 
-<section id="fuentes" class="fold-sec">
- <details class="fold">
-  <summary><h2>Fuentes</h2><span class="chev" aria-hidden="true"></span></summary>
-  <p class="small">«Conectada» significa que la tarea automática la descarga cada 2 días. Las demás están en cola.</p>
-  <div id="sources"></div>
- </details>
+<section id="contexto">
+  <details class="fold"><summary>Movilización, conflicto y poder</summary><div class="in">
+    <div class="doc">En 2020, según Freedom House, 158 de 192 países pusieron nuevos límites a las protestas, aunque hubo protestas significativas en al menos 90. La democracia empeoró en 80 países.</div>
+    <div class="doc">La ONU pidió un alto el fuego mundial en marzo de 2020. ACLED encontró que, de 43 países con violencia organizada relevante, solo en 10 hubo actores que acogieron el llamado o declararon un alto el fuego.</div>
+    <h3>Eventos registrados</h3>
+    <p class="small">Se guardan como datos medibles, no como interpretación. La misma regla aplica gane quien gane.</p>
+    <div id="eventos"></div>
+  </div></details>
 </section>
 
-<section id="metodo" class="fold-sec">
- <details class="fold">
-  <summary><h2>Método</h2><span class="chev" aria-hidden="true"></span></summary>
-  <ol class="method">
-    <li><strong>Datos.</strong> Cada 2 días se descargan las fuentes conectadas y cada lectura se compara con su propia historia: x = tanh(z / 2), entre −1 y +1.</li>
-    <li><strong>Juego.</strong> Las lecturas de conflicto, cooperación y movilización ajustan los incentivos del dilema de reportar; su equilibrio da la demora de detección y la probabilidad de que un brote escape.</li>
-    <li><strong>Probabilidad.</strong> La tasa histórica de pandemias (5 desde 1900; 2 severas) crece 1,5 % al año y se multiplica por los motores validados: λ(año) = λ₀ · 1,015<sup>año − 2026</sup> · ∏ e<sup>eᵢ·xᵢ</sup>. La curva es P = 1 − e<sup>−Σλ</sup>, con 1 500 simulaciones para la banda de incertidumbre.</li>
-    <li><strong>Validación.</strong> Un motor, incluido el juego, solo entra si mejora los aciertos frente a la tasa base al probarlo hacia atrás. Si no, su peso es 0.</li>
-  </ol>
-  <p class="small">Contraste externo: Airfinity estimó en 2023 un 27,5 % de probabilidad de una pandemia tan mortal como la COVID-19 en la década siguiente; aquí, la de una severa entre 2027 y 2036 sale del mismo orden. Es una herramienta para ordenar evidencia, no un pronóstico oficial ni asesoramiento sanitario.</p>
- </details>
+<section id="fuentes">
+  <details class="fold"><summary>Fuentes</summary><div class="in">
+    <p class="small">«Conectada» significa que la tarea automática la descarga cada 2 días. Las demás están en cola.</p>
+    <div id="sources"></div>
+  </div></details>
+</section>
+
+<section id="metodo">
+  <details class="fold"><summary>Método</summary><div class="in">
+    <ol class="method">
+      <li><strong>Datos.</strong> Cada 2 días se descargan las fuentes conectadas y cada lectura se compara con su propia historia: x = tanh(z / 2), entre −1 y +1.</li>
+      <li><strong>Juego.</strong> Las señales de conflicto, cooperación, movilización y prensa ajustan los incentivos del dilema de reportar; su equilibrio da la demora de detección y la probabilidad de que un brote escape.</li>
+      <li><strong>Probabilidad.</strong> La tasa histórica de pandemias (5 desde 1900; 2 severas) crece 1,5 % al año y se multiplica por los motores validados: λ(año) = λ₀ · 1,015<sup>año − 2026</sup> · ∏ e<sup>eᵢ·xᵢ</sup>. La curva es P = 1 − e<sup>−Σλ</sup>, con 1 500 simulaciones para la banda.</li>
+      <li><strong>Validación.</strong> Un motor, incluido el juego, solo entra si mejora los aciertos frente a la tasa base al probarlo hacia atrás. Si no, su peso es 0.</li>
+    </ol>
+    <p class="small">El radar muestra cada señal a una distancia del centro proporcional a cuánto se aleja de lo normal; el barrido es decorativo. Es una herramienta para ordenar evidencia, no un pronóstico oficial ni asesoramiento sanitario.</p>
+  </div></details>
 </section>
 </main>
 
 <footer>Nexo. Datos públicos, reglas fijas y cada cambio registrado en el historial del repositorio.</footer>
 
-<div class="readout" id="readout" hidden>
-  <div class="readout-inner">
-    <div><b id="ro-y50">–</b><span>Año del 50 %</span></div>
-    <div><b id="ro-dec">–</b><span>De 2027 a 2036</span></div>
+<div class="ticker" aria-label="Resumen en movimiento"><div class="ticker-track" id="ticker"></div></div>
+
+<div class="sheet-bg" id="sheet-bg"></div>
+<div class="sheet" id="sheet" role="dialog" aria-modal="true" aria-labelledby="sheet-title" aria-hidden="true">
+  <div class="sheet-inner">
+    <div class="sheet-head"><span class="led" id="sheet-led"></span><h3 id="sheet-title">Ruta de la señal</h3><button type="button" class="close" id="sheet-close" aria-label="Cerrar">×</button></div>
+    <ol class="ruta" id="ruta"></ol>
   </div>
 </div>
 
@@ -316,7 +400,8 @@ section.fold-sec{padding:18px 0 6px}
 'use strict';
 var Y0 = 2027, Y1 = 2075, YEARS = [];
 for (var y = Y0; y <= Y1; y++) YEARS.push(y);
-var DATA = null, TIPO = 'cualquiera';
+var DATA = null, CASOS = [], CASO_I = 0, TIPO = 'cualquiera', SEL = null;
+var QUIETO = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
 function nf(v, d){ if (d === undefined) d = 1; return v.toLocaleString('es-ES', {minimumFractionDigits:d, maximumFractionDigits:d}); }
 function pct(p, d){ return nf(p * 100, d || 0) + '\u00a0%'; }
@@ -331,148 +416,311 @@ function fecha(iso){
   return (+p[2]) + ' ' + MESES[+p[1] - 1] + ' ' + p[0];
 }
 function cross(arr, q){ for (var j = 0; j < arr.length; j++) if (arr[j] >= q) return YEARS[j]; return null; }
-
-var ESTADOS = {ok:['Al día','b-ok'], desactualizado:['Desactualizada','b-warn'], error:['Sin dato','b-off'], desactivada:['Desactivada','b-off'],
-  validada:['Validada','b-ok'], no_mejora:['No mejora: peso 0','b-warn'], historial_insuficiente:['Falta historial','b-off'],
-  apoya:['Los datos la apoyan','b-yes'], no_apoya:['Los datos no la apoyan','b-no'], sin_fuente:['Falta fuente','b-off']};
-function badge(k){ var e = ESTADOS[k] || [k || 'Sin estado', 'b-off']; return '<span class="badge ' + e[1] + '">' + e[0] + '</span>'; }
-
-/* ---------- gráfico ---------- */
 function el(tag, attrs, text){
   var e = document.createElementNS('http://www.w3.org/2000/svg', tag);
   for (var k in attrs) e.setAttribute(k, attrs[k]);
   if (text !== undefined) e.textContent = text;
   return e;
 }
-function drawForecast(cv, y50){
+
+var ESTADOS = {ok:['Al día','t-ok'], desactualizado:['Desactualizada','t-warn'], error:['Sin dato','t-off'], desactivada:['Desactivada','t-off'],
+  validada:['Validada','t-ok'], no_mejora:['No mejora: peso 0','t-warn'], historial_insuficiente:['Falta historial','t-off'],
+  apoya:['Los datos la apoyan','t-ok'], no_apoya:['Los datos no la apoyan','t-warn'], sin_fuente:['Falta fuente','t-off']};
+function tag(k){ var e = ESTADOS[k] || [k || 'Sin estado', 't-off']; return '<span class="tag ' + e[1] + '">' + e[0] + '</span>'; }
+var NOMBRE_MOTOR = {brotes:'Brotes inusuales', prot:'Movilización social', conflicto:'Conflicto armado', cooperacion:'Cooperación entre países',
+  alimentos:'Precio de los alimentos', desplazamiento:'Personas desplazadas', prensa:'Libertad de prensa',
+  ganado:'gripe aviar y ganado', suelo:'uso del suelo', fauna:'fauna silvestre', clima:'clima', aereo:'tráfico aéreo', urbano:'urbanización', conf:'confianza institucional'};
+var NOMBRE_PARAM = {pi:'probabilidad de sanciones', a:'apoyo internacional', g:'costo de ocultar', c:'costo interno de anunciar', s:'probabilidad de descubrir un ocultamiento'};
+var GRUPOS = [
+  ['Agencias sanitarias', ['brotes_oms', 'resp_europa', 'ili_eeuu']],
+  ['Conflicto y cooperación', ['conflicto_global', 'eeuu_iran', 'cooperacion_global', 'conflicto_acled']],
+  ['Movilización social', ['movilizacion_global', 'movilizacion_latam', 'movilizacion_europa_oeste', 'movilizacion_europa_este', 'protestas_acled']],
+  ['Economía y sociedad', ['alimentos_fao', 'desplazados_acnur', 'prensa_rsf']],
+  ['Lentes de medios', ['goldstein_rusos', 'goldstein_chinos', 'goldstein_otros', 'conflicto_rusos', 'conflicto_chinos', 'conflicto_otros']]
+];
+var ETIQUETA_CORTA = {'Agencias sanitarias':'Salud', 'Conflicto y cooperación':'Conflicto', 'Movilización social':'Movilización', 'Economía y sociedad':'Economía', 'Lentes de medios':'Medios'};
+
+/* ---------- núcleo: radar ---------- */
+function renderRadar(){
+  var svg = document.getElementById('radar'); svg.innerHTML = '';
+  var C = 200, R0 = 34, R1 = 150;
+  var defs = el('defs', {});
+  var lg = el('linearGradient', {id:'cono', x1:'0', y1:'0', x2:'1', y2:'0'});
+  lg.appendChild(el('stop', {offset:'0', 'stop-color':'#5fd4ff', 'stop-opacity':'0'}));
+  lg.appendChild(el('stop', {offset:'1', 'stop-color':'#5fd4ff', 'stop-opacity':'.35'}));
+  defs.appendChild(lg);
+  svg.appendChild(defs);
+  [0.25, 0.5, 0.75, 1].forEach(function(f){
+    svg.appendChild(el('circle', {cx:C, cy:C, r:R0 + f*(R1 - R0), fill:'none', stroke:'rgba(95,212,255,' + (f === 1 ? .35 : .14) + ')', 'stroke-dasharray': f === 1 ? '' : '2 4'}));
+  });
+  // anillo exterior: probabilidad 2027-2036
+  var dec = DATA.pronostico[TIPO].curva.media[YEARS.indexOf(2036)];
+  var RA = 172, circ = 2 * Math.PI * RA;
+  svg.appendChild(el('circle', {cx:C, cy:C, r:RA, fill:'none', stroke:'rgba(95,212,255,.12)', 'stroke-width':6}));
+  var arco = el('circle', {cx:C, cy:C, r:RA, fill:'none', stroke:'#5fd4ff', 'stroke-width':6, 'stroke-linecap':'butt',
+    'stroke-dasharray':circ.toFixed(1), 'stroke-dashoffset':circ.toFixed(1), transform:'rotate(-90 200 200)', style:'filter:drop-shadow(0 0 6px #5fd4ff);transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)'});
+  svg.appendChild(arco);
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){ arco.setAttribute('stroke-dashoffset', (circ * (1 - dec)).toFixed(1)); }); });
+  for (var t = 0; t < 60; t++){
+    var a = t / 60 * 2 * Math.PI, r1 = 182, r2 = t % 5 ? 185 : 189;
+    svg.appendChild(el('line', {x1:C + r1*Math.sin(a), y1:C - r1*Math.cos(a), x2:C + r2*Math.sin(a), y2:C - r2*Math.cos(a), stroke:'rgba(95,212,255,.35)', 'stroke-width':1}));
+  }
+  // barrido
+  var sw = el('g', {'class':'sweep'});
+  sw.appendChild(el('path', {d:'M200 200 L200 50 A150 150 0 0 1 306 94 Z', fill:'url(#cono)', opacity:.55}));
+  sw.appendChild(el('line', {x1:200, y1:200, x2:306, y2:94, stroke:'#5fd4ff', 'stroke-width':1.2, opacity:.8}));
+  svg.appendChild(sw);
+  // sectores y puntos
+  var vars = DATA.variables, n = GRUPOS.length;
+  GRUPOS.forEach(function(gr, gi){
+    var a0 = gi / n * 360, a1 = (gi + 1) / n * 360;
+    var ra = a0 * Math.PI / 180;
+    svg.appendChild(el('line', {x1:C + R0*Math.sin(ra), y1:C - R0*Math.cos(ra), x2:C + R1*Math.sin(ra), y2:C - R1*Math.cos(ra), stroke:'rgba(95,212,255,.18)'}));
+    var am = (a0 + a1) / 2 * Math.PI / 180, rl = 204;
+    var tx = el('text', {x:C + rl*Math.sin(am), y:C - rl*Math.cos(am) + 4, 'text-anchor':'middle', 'font-size':'11', 'font-weight':'600', fill:'#86a6b8'}, ETIQUETA_CORTA[gr[0]]);
+    svg.appendChild(tx);
+    var claves = gr[1].filter(function(k){ return vars[k] && vars[k].valor !== null && vars[k].valor !== undefined; });
+    claves.forEach(function(k, i){
+      var v = vars[k], ang = a0 + (i + 1) / (claves.length + 1) * (a1 - a0), rad = ang * Math.PI / 180;
+      var dist = R0 + 8 + Math.min(1, Math.abs(v.valor)) * (R1 - R0 - 8);
+      var x = C + dist*Math.sin(rad), yy = C - dist*Math.cos(rad);
+      var col = v.valor >= 0 ? '#ffb84d' : '#5fd4ff', vieja = v.estado !== 'ok';
+      var grp = el('g', {'class':'blip' + (Math.abs(v.valor) >= 0.6 && !vieja ? ' alerta' : '') + (SEL === k ? ' sel' : ''), tabindex:'0', role:'button', 'data-k':k, 'aria-label':v.etiqueta + ', ' + signed(v.valor)});
+      var halo = el('circle', {'class':'halo', cx:x, cy:yy, r:5, fill:'none', stroke:col, 'stroke-width':1.5});
+      halo.style.animationDelay = ((((ang - 45) % 360 + 360) % 360) / 360 * 6).toFixed(2) + 's';
+      grp.appendChild(halo);
+      grp.appendChild(el('circle', {'class':'core', cx:x, cy:yy, r:5, fill:col, opacity: vieja ? .4 : 1, style:'filter:drop-shadow(0 0 4px ' + col + ')'}));
+      grp.appendChild(el('circle', {cx:x, cy:yy, r:14, fill:'transparent'}));
+      svg.appendChild(grp);
+    });
+  });
+  // centro
+  svg.appendChild(el('circle', {cx:C, cy:C, r:R0, fill:'rgba(3,7,13,.94)', stroke:'rgba(95,212,255,.4)'}));
+  var cv = DATA.pronostico[TIPO].curva, y50 = cross(cv.media, 0.5);
+  svg.appendChild(el('text', {x:C, y:C - 6, 'text-anchor':'middle', 'font-size':'26', 'font-weight':'700', fill:'#d9f1fb'}, y50 ? String(y50) : '>2075'));
+  svg.appendChild(el('text', {x:C, y:C + 13, 'text-anchor':'middle', 'font-size':'9.5', fill:'#86a6b8'}, 'año del 50 %'));
+  svg.appendChild(el('text', {x:C, y:C - 203, 'text-anchor':'middle', 'font-size':'11.5', 'font-weight':'600', fill:'#5fd4ff'}, pct(dec) + ' de probabilidad entre 2027 y 2036'));
+}
+
+/* ---------- curva ---------- */
+var CURVA = null;
+function renderCurva(){
   var svg = document.getElementById('chart'); svg.innerHTML = '';
-  var W = 360, H = 230, l = 40, r = 12, t = 14, b = 26;
+  var cv = DATA.pronostico[TIPO].curva;
+  var ancho = svg.parentNode.clientWidth > 640;
+  var W = ancho ? 760 : 360, H = ancho ? 230 : 200, l = 34, r = 10, t = 12, b = 22;
+  svg.setAttribute('viewBox', '0 0 ' + W + ' ' + H);
   function X(y){ return l + (y - Y0)/(Y1 - Y0)*(W - l - r); }
   function Y(p){ return t + (1 - p)*(H - t - b); }
+  CURVA = {X:X, Y:Y, l:l, r:r, W:W, cv:cv};
   [0, 0.25, 0.5, 0.75, 1].forEach(function(p){
-    svg.appendChild(el('line', {x1:l, x2:W - r, y1:Y(p), y2:Y(p), stroke:'var(--line)', 'stroke-width':1, 'stroke-dasharray': p === 0.5 ? '3 3' : ''}));
-    if (p === 0 || p === 0.5 || p === 1) svg.appendChild(el('text', {x:l - 6, y:Y(p) + 3.5, 'text-anchor':'end'}, (p*100) + ' %'));
+    svg.appendChild(el('line', {x1:l, x2:W - r, y1:Y(p), y2:Y(p), stroke:'rgba(95,212,255,' + (p === 0.5 ? .3 : .1) + ')', 'stroke-dasharray': p === 0.5 ? '3 3' : ''}));
+    if (p % 0.5 === 0) svg.appendChild(el('text', {x:l - 5, y:Y(p) + 3, 'text-anchor':'end'}, (p*100) + '%'));
   });
-  [2030, 2040, 2050, 2060, 2070].forEach(function(y){ svg.appendChild(el('text', {x:X(y), y:H - 8, 'text-anchor':'middle'}, String(y))); });
+  [2030, 2040, 2050, 2060, 2070].forEach(function(y){ svg.appendChild(el('text', {x:X(y), y:H - 6, 'text-anchor':'middle'}, String(y))); });
   var band = '';
   YEARS.forEach(function(y, j){ band += (j ? 'L' : 'M') + X(y).toFixed(1) + ' ' + Y(cv.p90[j]).toFixed(1); });
   for (var j = YEARS.length - 1; j >= 0; j--) band += 'L' + X(YEARS[j]).toFixed(1) + ' ' + Y(cv.p10[j]).toFixed(1);
-  svg.appendChild(el('path', {d:band + 'Z', fill:'var(--band)'}));
+  svg.appendChild(el('path', {d:band + 'Z', fill:'rgba(95,212,255,.13)'}));
   var d = ''; YEARS.forEach(function(y, j){ d += (j ? 'L' : 'M') + X(y).toFixed(1) + ' ' + Y(cv.media[j]).toFixed(1); });
-  svg.appendChild(el('path', {d:d, fill:'none', stroke:'var(--forest)', 'stroke-width':2.6, 'stroke-linejoin':'round'}));
-  if (y50){
-    svg.appendChild(el('line', {x1:X(y50), x2:X(y50), y1:Y(0.5), y2:Y(0), stroke:'var(--forest)', 'stroke-width':1, opacity:0.5}));
-    svg.appendChild(el('circle', {cx:X(y50), cy:Y(0.5), r:4.5, fill:'var(--surface)', stroke:'var(--forest)', 'stroke-width':2.2}));
-    svg.appendChild(el('text', {x:X(y50) + 7, y:Y(0.5) + 17, style:'font-size:12px;font-weight:600;fill:var(--forest)'}, String(y50)));
+  var linea = el('path', {d:d, fill:'none', stroke:'#5fd4ff', 'stroke-width':2.2, style:'filter:drop-shadow(0 0 4px #5fd4ff)'});
+  svg.appendChild(linea);
+  if (!QUIETO){
+    var len = linea.getTotalLength();
+    linea.style.strokeDasharray = len; linea.style.strokeDashoffset = len;
+    linea.getBoundingClientRect();
+    linea.style.transition = 'stroke-dashoffset 1.4s ease-out'; linea.style.strokeDashoffset = '0';
   }
+  var y50 = cross(cv.media, 0.5);
+  if (y50){
+    svg.appendChild(el('line', {x1:X(y50), x2:X(y50), y1:Y(0.5), y2:Y(0), stroke:'rgba(95,212,255,.4)'}));
+    svg.appendChild(el('circle', {cx:X(y50), cy:Y(0.5), r:4, fill:'#03070d', stroke:'#5fd4ff', 'stroke-width':2}));
+  }
+  var guia = el('line', {id:'guia', x1:0, x2:0, y1:t, y2:H - b, stroke:'#ffb84d', 'stroke-width':1, opacity:0});
+  var punto = el('circle', {id:'punto', cx:0, cy:0, r:3.5, fill:'#ffb84d', opacity:0});
+  svg.appendChild(guia); svg.appendChild(punto);
 }
+function leerCurva(ev){
+  if (!CURVA) return;
+  var svg = document.getElementById('chart'), rect = svg.getBoundingClientRect();
+  var x = (ev.clientX - rect.left) / rect.width * CURVA.W;
+  var yr = Math.round(Y0 + (x - CURVA.l) / (CURVA.W - CURVA.l - CURVA.r) * (Y1 - Y0));
+  yr = Math.max(Y0, Math.min(Y1, yr));
+  var j = YEARS.indexOf(yr), p = CURVA.cv.media[j];
+  var guia = document.getElementById('guia'), punto = document.getElementById('punto');
+  guia.setAttribute('x1', CURVA.X(yr)); guia.setAttribute('x2', CURVA.X(yr)); guia.setAttribute('opacity', .8);
+  punto.setAttribute('cx', CURVA.X(yr)); punto.setAttribute('cy', CURVA.Y(p)); punto.setAttribute('opacity', 1);
+  var cr = document.getElementById('cross-read'); cr.hidden = false;
+  cr.textContent = yr + ': ' + pct(p) + ' (' + pct(CURVA.cv.p10[j]) + ' a ' + pct(CURVA.cv.p90[j]) + ')';
+}
+document.getElementById('chart').addEventListener('pointermove', leerCurva);
+document.getElementById('chart').addEventListener('pointerdown', leerCurva);
 
-/* ---------- pronóstico ---------- */
-function renderPronostico(){
+function renderVeredicto(){
   document.querySelectorAll('[data-type]').forEach(function(b){ b.setAttribute('aria-pressed', String(b.dataset.type === TIPO)); });
-  var pr = DATA.pronostico[TIPO], cv = pr.curva;
+  var cv = DATA.pronostico[TIPO].curva;
   var y50 = cross(cv.media, 0.5), early = cross(cv.p90, 0.5), late = cross(cv.p10, 0.5);
   var dec = cv.media[YEARS.indexOf(2036)], first = cv.media[0];
   var what = TIPO === 'cualquiera' ? 'al menos una pandemia' : 'al menos una pandemia severa';
   var v = document.getElementById('verdict');
   if (y50){
     var range = late ? (early || y50) + ' a ' + late : 'desde ' + (early || y50) + ' hasta más allá de 2075';
-    v.innerHTML = 'Con los datos y las reglas actuales, la probabilidad de ' + what + ' llega al 50 % en <strong>' + y50 + '</strong> (rango del 80 %: ' + range +
-      '). Entre 2027 y 2036 es del <strong>' + pct(dec) + '</strong>; solo en 2027, del ' + pct(first, 1) + '.';
+    v.innerHTML = 'La probabilidad de ' + what + ' llega al 50 % en <b>' + y50 + '</b> (rango del 80 %: ' + range + '). Entre 2027 y 2036 es del <b>' + pct(dec) + '</b>; solo en 2027, del ' + pct(first, 1) + '.';
   } else {
-    v.innerHTML = 'Con los datos y las reglas actuales, la probabilidad de ' + what + ' no llega al 50 % antes de 2075. Entre 2027 y 2036 es del <strong>' + pct(dec) + '</strong>.';
+    v.innerHTML = 'La probabilidad de ' + what + ' no llega al 50 % antes de 2075. Entre 2027 y 2036 es del <b>' + pct(dec) + '</b>.';
   }
-  drawForecast(cv, y50);
-  document.getElementById('ro-y50').textContent = y50 || '>2075';
-  document.getElementById('ro-dec').textContent = pct(dec);
 }
 
-/* ---------- lecturas ---------- */
-var GRUPOS = [
-  ['Agencias sanitarias', ['brotes_oms', 'resp_europa', 'ili_eeuu']],
-  ['Conflicto y cooperación', ['conflicto_global', 'eeuu_iran', 'cooperacion_global', 'conflicto_acled']],
-  ['Movilización social', ['movilizacion_global', 'movilizacion_latam', 'movilizacion_europa_oeste', 'movilizacion_europa_este', 'protestas_acled']],
-  ['Economía y sociedad', ['alimentos_fao', 'desplazados_acnur', 'prensa_rsf']]
-];
-function renderLecturas(){
-  var vars = DATA.variables, usadas = {}, html = '';
-  function grupo(titulo, claves){
-    var filas = '', apagadas = [];
-    claves.forEach(function(k){
-      var v = vars[k]; if (!v) return; usadas[k] = true;
+/* ---------- señales ---------- */
+function renderSenales(){
+  var vars = DATA.variables, html = '';
+  GRUPOS.forEach(function(g){
+    if (g[0] === 'Lentes de medios') return;  // se ven en Contraste de medios
+    var cards = '', apagadas = [];
+    g[1].forEach(function(k){
+      var v = vars[k]; if (!v) return;
       if (v.estado === 'desactivada'){ apagadas.push(v.etiqueta); return; }
-      var val = (v.valor !== null && v.valor !== undefined) ? '<span class="vval">' + signed(v.valor) + '</span>' : '<span class="vval"></span>';
-      filas += '<div class="vrow"><div class="vhead"><span class="lbl">' + esc(v.etiqueta) + '</span>' + val + badge(v.estado) + '</div>' +
-        '<div class="vdet">' + esc(v.detalle) + (v.fecha_dato ? '. Dato del ' + fecha(v.fecha_dato) : '') + '.</div></div>';
+      var tiene = v.valor !== null && v.valor !== undefined;
+      var w = tiene ? Math.min(1, Math.abs(v.valor)) * 50 : 0;
+      var led = v.estado === 'ok' ? 'led vivo' : v.estado === 'desactualizado' ? 'led warn' : 'led off';
+      cards += '<button type="button" class="sig' + (SEL === k ? ' sel' : '') + '" data-k="' + k + '">' +
+        '<span class="sig-top"><span class="' + led + '"></span><span class="sig-name">' + esc(v.etiqueta) + '</span>' +
+        (tiene ? '<span class="sig-val ' + (v.valor >= 0 ? 'up' : 'down') + '">' + signed(v.valor) + '</span>' : '<span class="sig-val">–</span>') + '</span>' +
+        '<span class="meter">' + (tiene ? '<span class="' + (v.valor >= 0 ? 'pos' : 'neg') + '" style="width:' + w.toFixed(1) + '%"></span>' : '') + '</span>' +
+        '<span class="sig-det">' + esc(v.detalle) + '</span></button>';
     });
-    if (!filas && !apagadas.length) return '';
-    return '<div class="group"><h3>' + titulo + '</h3>' + filas +
-      (apagadas.length ? '<p class="off-line">Opcional sin activar: ' + apagadas.map(esc).join(', ') + '. Necesita una cuenta gratuita de ACLED.</p>' : '') + '</div>';
-  }
-  GRUPOS.forEach(function(g){ html += grupo(g[0], g[1]); });
-  html += contraste(vars, usadas);
-  var otras = Object.keys(vars).filter(function(k){ return !usadas[k]; });
-  if (otras.length) html += grupo('Otras', otras);
-  document.getElementById('lecturas-panel').innerHTML = html;
+    if (!cards && !apagadas.length) return;
+    html += '<div class="grupo"><h3>' + g[0] + '</h3><div class="cards">' + cards + '</div>' +
+      (apagadas.length ? '<p class="off-line">Opcional sin activar: ' + apagadas.map(esc).join(', ') + '.</p>' : '') + '</div>';
+  });
+  document.getElementById('senales-panel').innerHTML = html;
 }
 
-function contraste(vars, usadas){
-  var filas = [['Medios rusos', 'goldstein_rusos', 'conflicto_rusos'], ['Medios chinos', 'goldstein_chinos', 'conflicto_chinos'],
-               ['Resto de medios', 'goldstein_otros', 'conflicto_otros']];
-  var hay = false;
-  var cuerpo = filas.map(function(f){
-    var g = vars[f[1]], c = vars[f[2]];
-    if (g) usadas[f[1]] = true; if (c) usadas[f[2]] = true;
-    function celda(v, esPct){
-      if (!v || v.estado !== 'ok' || v.lectura == null) return '<td>–</td>';
-      hay = true;
-      return '<td>' + (esPct ? nf(v.lectura, 1) + '\u00a0%' : signed(v.lectura, 2)) + '</td>';
+/* ---------- ruta de la señal ---------- */
+var sheet = document.getElementById('sheet'), sheetBg = document.getElementById('sheet-bg'), ultimoFoco = null;
+function abrirRuta(k){
+  var v = DATA.variables[k]; if (!v) return;
+  SEL = k; ultimoFoco = document.activeElement;
+  document.querySelectorAll('.sig.sel, .blip.sel').forEach(function(e){ e.classList.remove('sel'); });
+  document.querySelectorAll('[data-k="' + k + '"]').forEach(function(e){ e.classList.add('sel'); });
+  document.getElementById('sheet-title').textContent = v.etiqueta;
+  document.getElementById('sheet-led').className = 'led' + (v.estado === 'ok' ? ' vivo' : v.estado === 'desactualizado' ? ' warn' : ' off');
+  var pasos = [];
+  pasos.push(['si', 'Lectura', (v.valor !== null && v.valor !== undefined ? signed(v.valor) + ' frente a lo normal. ' : '') + v.detalle + (v.fecha_dato ? '. Dato del ' + fecha(v.fecha_dato) + '.' : '.')]);
+  var m = v.motor ? DATA.motores[v.motor] : null;
+  if (!m){
+    pasos.push(['no', 'Motor', 'Es una señal de contexto: se muestra, pero no alimenta ningún motor.']);
+  } else {
+    pasos.push(['si', 'Motor', mayus(NOMBRE_MOTOR[v.motor] || v.motor) + (m.valor !== null ? ', con valor ' + signed(m.valor) + '.' : '.')]);
+    var ent = (DATA.juego && DATA.juego.entradas || []).filter(function(e){ return e.motor === v.motor; });
+    if (ent.length){
+      pasos.push(['si', 'Juego', ent.map(function(e){ return mayus(NOMBRE_PARAM[e.parametro] || e.parametro) + ' ×' + nf(e.factor !== undefined ? e.factor : 1, 2); }).join('; ') +
+        '. Probabilidad de que un brote escape: ' + pct(DATA.juego.hoy.escape) + ' (base ' + pct(DATA.juego.base.escape) + ').']);
+    } else {
+      pasos.push(['no', 'Juego', 'Este motor no mueve el juego.']);
     }
-    return '<tr><td>' + f[0] + '</td>' + celda(g, false) + celda(c, true) + '</tr>';
+    var val = m.validacion || {};
+    pasos.push([val.estado === 'validada' ? 'si' : 'no', 'Validación', (ESTADOS[val.estado] ? ESTADOS[val.estado][0] + '. ' : '') + (val.mensaje || '')]);
+  }
+  var entra = m && m.en_pronostico;
+  pasos.push([entra ? 'si' : 'no', 'Curva', entra ? 'Mueve la curva con elasticidad ' + nf(m.e, 2) + '.' : 'Todavía no mueve la curva de pandemias.']);
+  document.getElementById('ruta').innerHTML = pasos.map(function(p, i){
+    return '<li class="' + p[0] + '" style="animation-delay:' + (i * 110) + 'ms"><div class="paso">' + p[1] + '</div><div>' + esc(p[2]) + '</div></li>';
   }).join('');
-  if (!vars.goldstein_rusos && !vars.conflicto_rusos) return '';
-  return '<div class="group"><h3>Contraste de medios</h3>' +
-    '<p class="off-line">El mismo tipo de hecho visto por distintas lentes. GDELT es un proyecto estadounidense, pero lee medios de todo el mundo, incluidos los estatales rusos y chinos; aquí se separan por el dominio de cada noticia.</p>' +
-    '<div style="overflow-x:auto"><table class="hist"><tr><th></th><th>Clima entre países</th><th>Conflicto armado</th></tr>' + cuerpo + '</table></div>' +
-    '<p class="off-line">Clima: promedio de la escala de Goldstein, de −10 (conflicto) a +10 (cooperación). Conflicto: porcentaje de eventos que son agresiones, combates o violencia masiva.' +
-    (hay ? '' : ' Sin datos todavía: aparecerán tras la próxima ejecución.') + '</p></div>';
+  sheet.classList.add('open'); sheetBg.classList.add('open'); sheet.setAttribute('aria-hidden', 'false');
+  document.getElementById('sheet-close').focus();
+  document.querySelectorAll('.motor-sel').forEach(function(e){ e.classList.remove('motor-sel'); });
+  if (v.motor) document.querySelectorAll('[data-motor="' + v.motor + '"]').forEach(function(e){ e.classList.add('motor-sel'); });
+}
+function cerrarRuta(){
+  sheet.classList.remove('open'); sheetBg.classList.remove('open'); sheet.setAttribute('aria-hidden', 'true');
+  if (ultimoFoco && ultimoFoco.focus) ultimoFoco.focus();
+}
+document.getElementById('sheet-close').addEventListener('click', cerrarRuta);
+sheetBg.addEventListener('click', cerrarRuta);
+document.addEventListener('keydown', function(e){
+  if (e.key === 'Escape' && sheet.classList.contains('open')) cerrarRuta();
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.classList && e.target.classList.contains('blip')){ e.preventDefault(); abrirRuta(e.target.getAttribute('data-k')); }
+});
+document.addEventListener('click', function(e){
+  var t = e.target.closest && e.target.closest('[data-k]');
+  if (t && DATA) abrirRuta(t.getAttribute('data-k'));
+});
+
+/* ---------- juego ---------- */
+function renderJuego(){
+  var j = DATA.juego; if (!j) return;
+  var hoy = j.hoy || j, base = j.base || j;
+  document.getElementById('duelo').innerHTML =
+    '<div class="fila a"><span>Anunciar pronto</span><div class="riel"><span data-w="' + (hoy.p_anuncio * 100).toFixed(1) + '"></span></div><span class="n">' + pct(hoy.p_anuncio) + '</span></div>' +
+    '<div class="fila r"><span>Retrasar</span><div class="riel"><span data-w="' + ((1 - hoy.p_anuncio) * 100).toFixed(1) + '"></span></div><span class="n">' + pct(1 - hoy.p_anuncio) + '</span></div>';
+  requestAnimationFrame(function(){ requestAnimationFrame(function(){
+    document.querySelectorAll('#duelo .riel span').forEach(function(s){ s.style.width = s.dataset.w + '%'; });
+  }); });
+  function cmp(v, b, f){ return f(v) === f(b) ? 'igual que la base' : 'base: ' + f(b); }
+  var fp = function(v){ return pct(v); }, fs = function(v){ return nf(v, 1) + ' sem.'; };
+  document.getElementById('juego-stats').innerHTML =
+    '<div class="stat"><b>' + fs(hoy.demora_semanas) + '</b><span>Demora de detección, ' + cmp(hoy.demora_semanas, base.demora_semanas, fs) + '</span></div>' +
+    '<div class="stat"><b>' + pct(hoy.escape) + '</b><span>Probabilidad de que un brote escape, ' + cmp(hoy.escape, base.escape, fp) + '</span></div>' +
+    (j.multiplicador !== undefined ? '<div class="stat"><b>×' + nf(j.multiplicador, 2) + '</b><span>Efecto sobre la tasa de pandemias</span></div>' : '');
+  var html = '';
+  if (j.entradas && j.entradas.length){
+    var por = {}, orden = [];
+    j.entradas.forEach(function(e){
+      if (!por[e.motor]){ por[e.motor] = {valor:e.valor, ef:[]}; orden.push(e.motor); }
+      var f = e.factor !== undefined ? e.factor : Math.exp((e.k || 0) * e.valor);
+      por[e.motor].ef.push((NOMBRE_PARAM[e.parametro] || e.parametro) + (f > 1.0005 ? ' sube' : f < 0.9995 ? ' baja' : ' igual') + ' (×' + nf(f, 2) + ')');
+    });
+    html = orden.map(function(m){
+      return '<div class="fila-dato" data-motor="' + m + '"><span class="lbl">' + esc(mayus(NOMBRE_MOTOR[m] || m)) + '</span><span class="val ' + (por[m].valor >= 0 ? 'up' : 'down') + '">' + signed(por[m].valor) + '</span></div>' +
+        '<p class="det">' + mayus(por[m].ef.join(', ')) + '.</p>';
+    }).join('');
+  }
+  document.getElementById('juego-entradas').innerHTML = html;
+  document.getElementById('juego-mult').textContent = j.en_pronostico ? 'El juego ya entra a la curva.' : 'Entrará a la curva cuando el motor del juego se valide.';
 }
 
 /* ---------- el norte ---------- */
-var NOMBRE_MOTOR = {brotes:'Brotes inusuales', prot:'Movilización social', conflicto:'Conflicto armado', cooperacion:'Cooperación entre países',
-  alimentos:'Precio de los alimentos', desplazamiento:'Personas desplazadas', prensa:'Libertad de prensa',
-  ganado:'gripe aviar y ganado', suelo:'uso del suelo', fauna:'fauna silvestre', clima:'clima', aereo:'tráfico aéreo', urbano:'urbanización', conf:'confianza institucional'};
 function renderNorte(){
   var html = '', sinFuente = [];
   Object.keys(DATA.motores).forEach(function(k){
     var m = DATA.motores[k], val = m.validacion || {};
     if (!m.componentes || !m.componentes.length){ sinFuente.push(NOMBRE_MOTOR[k] || k); return; }
-    html += '<div class="vrow"><div class="vhead"><span class="lbl">' + esc(NOMBRE_MOTOR[k] || k) + '</span><span class="vval"></span>' + badge(val.estado) + '</div><div class="vdet">' +
-      esc(val.mensaje || '') +
-      (val.brier_base !== undefined ? ' Brier con la tasa base: ' + nf(val.brier_base, 3) + '; con la variable: ' + nf(val.brier_con_variable, 3) + ' (' + val.n + ' años).' : '') +
-      (m.en_pronostico ? ' Entra al pronóstico con elasticidad ' + nf(m.e, 2) + '.' : '') + '</div></div>';
+    html += '<div class="fila-dato" data-motor="' + k + '"><span class="lbl">' + esc(mayus(NOMBRE_MOTOR[k] || k)) + '</span><span class="val">' + tag(val.estado) + '</span></div>' +
+      '<p class="det">' + esc(val.mensaje || '') + (val.brier_base !== undefined ? ' Brier con la tasa base: ' + nf(val.brier_base, 3) + '; con la variable: ' + nf(val.brier_con_variable, 3) + ' (' + val.n + ' años).' : '') + '</p>';
   });
   if (DATA.juego && DATA.juego.validacion){
-    var vj = DATA.juego.validacion;
-    html += '<div class="vrow"><div class="vhead"><span class="lbl">Juego (pilar 1)</span><span class="vval"></span>' + badge(vj.estado) + '</div><div class="vdet">' + esc(vj.mensaje || '') + '</div></div>';
+    html += '<div class="fila-dato"><span class="lbl">Juego</span><span class="val">' + tag(DATA.juego.validacion.estado) + '</span></div><p class="det">' + esc(DATA.juego.validacion.mensaje || '') + '</p>';
   }
-  var hip = DATA.hipotesis || (DATA.hipotesis_autor ? {autor: DATA.hipotesis_autor} : {});
-  var NOMBRES_H = {autor:'Hipótesis del autor', tregua:'Hipótesis de la tregua'};
+  var hip = DATA.hipotesis || {}, NH = {autor:'Hipótesis del autor', tregua:'Hipótesis de la tregua'};
   Object.keys(hip).forEach(function(k){
     var h = hip[k];
-    html += '<div class="vrow"><div class="vhead"><span class="lbl">' + esc(NOMBRES_H[k] || h.nombre || k) + '</span><span class="vval"></span>' + badge(h.estado) + '</div>' +
-      (h.nombre ? '<div class="vdet">' + esc(mayus(h.nombre.replace(/^Hipótesis[^:]*:\s*/, ''))) + '.</div>' : '') +
-      '<div class="vdet">' + esc(h.mensaje || '') + '</div>' +
-      (h.eventos && h.eventos.length ? '<div class="vdet">' + h.eventos.map(function(e){ return fecha(e.fecha) + ': ' + (e.cociente !== null ? '×' + nf(e.cociente, 2) : 'sin dato'); }).join('; ') + '.</div>' : '') + '</div>';
+    html += '<div class="fila-dato"><span class="lbl">' + (NH[k] || k) + '</span><span class="val">' + tag(h.estado) + '</span></div>' +
+      '<p class="det">' + (h.nombre ? esc(mayus(h.nombre.replace(/^Hipótesis[^:]*:\s*/, ''))) + '. ' : '') + esc(h.mensaje || '') + '</p>';
   });
   if (sinFuente.length) html += '<p class="off-line">Sin fuente automática todavía: ' + sinFuente.join(', ') + '.</p>';
   var hist = (DATA.historial || []).slice(-10).reverse();
   if (hist.length > 1){
-    html += '<details class="fold"><summary><h3>Cómo se ha movido el pronóstico</h3><span class="chev" aria-hidden="true"></span></summary>' +
-      '<div style="overflow-x:auto"><table class="hist"><tr><th>Fecha</th><th>Año del 50 %</th><th>De 2027 a 2036</th></tr>' +
-      hist.map(function(h){ return '<tr><td>' + fecha(h.fecha) + '</td><td>' + (h.anio_50 || '>2075') + '</td><td>' + pct(h.p_2027_2036) + '</td></tr>'; }).join('') + '</table></div></details>';
+    html += '<details class="fold"><summary>Cómo se ha movido el pronóstico</summary><div class="in"><div style="overflow-x:auto"><table class="hist"><tr><th>Fecha</th><th>Año del 50 %</th><th>2027 a 2036</th></tr>' +
+      hist.map(function(h){ return '<tr><td>' + fecha(h.fecha) + '</td><td>' + (h.anio_50 || '>2075') + '</td><td>' + pct(h.p_2027_2036) + '</td></tr>'; }).join('') + '</table></div></div></details>';
   }
-  document.getElementById('norte-panel').innerHTML = '<div class="panel">' + html + '</div>';
+  document.getElementById('norte-panel').innerHTML = html;
+}
+
+/* ---------- contraste ---------- */
+function renderContraste(){
+  var v = DATA.variables;
+  var lentes = [['Medios rusos', 'goldstein_rusos', 'conflicto_rusos'], ['Medios chinos', 'goldstein_chinos', 'conflicto_chinos'], ['Resto de medios', 'goldstein_otros', 'conflicto_otros']];
+  var maxC = 0; lentes.forEach(function(l){ if (v[l[2]] && v[l[2]].lectura) maxC = Math.max(maxC, v[l[2]].lectura); });
+  document.getElementById('contraste-panel').innerHTML = lentes.map(function(l){
+    var g = v[l[1]], c = v[l[2]];
+    var gv = g && g.lectura != null ? g.lectura : null, cv = c && c.lectura != null ? c.lectura : null;
+    return '<div class="lente"><h4>' + l[0] + '</h4>' +
+      '<div class="k">Clima entre países</div><div class="v">' + (gv !== null ? signed(gv, 2) : '–') + '</div>' +
+      '<div class="vbar"><span style="width:' + (gv !== null ? Math.max(0, Math.min(100, (gv + 3) / 6 * 100)) : 0).toFixed(1) + '%"></span></div>' +
+      '<div class="k">Conflicto armado</div><div class="v">' + (cv !== null ? nf(cv, 1) + '\u00a0%' : '–') + '</div>' +
+      '<div class="vbar c"><span style="width:' + (cv !== null && maxC ? cv / maxC * 100 : 0).toFixed(1) + '%"></span></div></div>';
+  }).join('');
 }
 
 /* ---------- tipo ---------- */
@@ -490,52 +738,66 @@ function renderTipo(){
   var w = n ? Math.exp(-(2030 - 2026)/6) : 0, tp = 0, tt = 0;
   var tilt = FAM.map(function(f){ tp += f.prior; var l = 0; for (var key in f.k) l += f.k[key]*(validos[key] || 0); var v = f.prior*Math.exp(l); tt += v; return v; });
   var p = FAM.map(function(f, i){ return w*tilt[i]/tt + (1 - w)*f.prior/tp; });
-  document.getElementById('tipo-nota').textContent = n
-    ? 'Reparto para los próximos años: historial de pandemias más las señales de los motores validados.'
-    : 'De las cinco pandemias desde 1900, cuatro fueron de gripe A y una de coronavirus. Las señales actuales inclinarán este reparto solo cuando sus motores se validen.';
   var order = p.map(function(_, i){ return i; }).sort(function(a, b){ return p[b] - p[a]; }), maxp = p[order[0]];
-  var dec = DATA.pronostico.cualquiera.curva.media[YEARS.indexOf(2036)];
-  document.getElementById('tipo-conjunta').textContent = 'Combinado con el pronóstico: la probabilidad de una pandemia de ' +
-    FAM[order[0]].corto + ' entre 2027 y 2036 es del ' + pct(dec * p[order[0]]) +
-    '; de ' + FAM[order[1]].corto + ', del ' + pct(dec * p[order[1]]) + '.';
   document.getElementById('bars').innerHTML = order.map(function(i, rank){
-    return '<div class="bar' + (rank === 0 ? ' top' : '') + '"><div class="row"><span>' + FAM[i].name + '</span><span>' + pct(p[i]) + '</span></div>' +
-      '<div class="track"><div class="fill" style="width:' + (p[i]/maxp*100).toFixed(1) + '%"></div></div></div>';
+    return '<div class="tb' + (rank === 0 ? ' top' : '') + '"><div class="row"><span>' + FAM[i].name + '</span><span>' + pct(p[i]) + '</span></div><div class="track"><div class="fill" style="width:' + (p[i]/maxp*100).toFixed(1) + '%"></div></div></div>';
   }).join('');
+  var dec = DATA.pronostico.cualquiera.curva.media[YEARS.indexOf(2036)];
+  document.getElementById('tipo-conjunta').textContent = 'Combinado con el pronóstico: la probabilidad de una pandemia de ' + FAM[order[0]].corto + ' entre 2027 y 2036 es del ' + pct(dec * p[order[0]]) + '; de ' + FAM[order[1]].corto + ', del ' + pct(dec * p[order[1]]) + '.';
 }
 
-/* ---------- secciones plegadas ---------- */
-var NOMBRE_PARAM = {pi:'probabilidad de sanciones', a:'apoyo internacional', g:'costo de ocultar', c:'costo interno de anunciar', s:'probabilidad de descubrir un ocultamiento'};
-function renderJuego(){
-  var j = DATA.juego; if (!j) return;
-  var hoy = j.hoy || j, base = j.base || j;
-  function cmp(v, b, f){ return f(v) === f(b) ? 'igual que la base' : 'base: ' + f(b); }
-  var fp = function(v){ return pct(v); }, fs = function(v){ return nf(v, 1) + ' sem.'; };
-  document.getElementById('juego-stats').innerHTML =
-    '<div><b>' + pct(hoy.p_anuncio) + '</b><span>Anuncio temprano, ' + cmp(hoy.p_anuncio, base.p_anuncio, fp) + '</span></div>' +
-    '<div><b>' + fs(hoy.demora_semanas) + '</b><span>Demora de detección, ' + cmp(hoy.demora_semanas, base.demora_semanas, fs) + '</span></div>' +
-    '<div><b>' + pct(hoy.escape) + '</b><span>Probabilidad de que un brote escape, ' + cmp(hoy.escape, base.escape, fp) + '</span></div>';
-  var html = '';
-  if (j.entradas && j.entradas.length){
-    var porMotor = {}, orden = [];
-    j.entradas.forEach(function(e){ if (!porMotor[e.motor]){ porMotor[e.motor] = {valor:e.valor, efectos:[]}; orden.push(e.motor); }
-      var f = e.factor !== undefined ? e.factor : Math.exp((e.k || 0) * e.valor);
-      porMotor[e.motor].efectos.push((NOMBRE_PARAM[e.parametro] || e.parametro) + (f > 1.0005 ? ' sube' : f < 0.9995 ? ' baja' : ' igual') + (e.factor !== undefined || e.k ? ' (×' + nf(f, 2) + ')' : ''));
-    });
-    html += '<div class="panel">' + orden.map(function(m){
-      var e = porMotor[m];
-      return '<div class="vrow"><div class="vhead"><span class="lbl">' + esc(mayus(NOMBRE_MOTOR[m] || m)) + '</span><span class="vval">' + signed(e.valor) + '</span></div>' +
-        '<div class="vdet">' + mayus(e.efectos.join(', ')) + '.</div></div>';
-    }).join('') + '</div>';
-  } else if (j.hoy) {
-    html += '<p class="off-line">Sin lecturas al día de conflicto, cooperación ni movilización: el juego usa sus valores base.</p>';
-  }
-  if (j.multiplicador !== undefined){
-    html += '<p class="small">Efecto sobre la tasa de pandemias: ×' + nf(j.multiplicador, 2) + '. ' +
-      (j.en_pronostico ? 'Ya entra a la curva.' : 'Entrará a la curva cuando el motor del juego se valide.') + '</p>';
-  }
-  document.getElementById('juego-entradas').innerHTML = html;
+/* ---------- casos ---------- */
+var PIL = {juego:'Juego', agencias:'Agencias', movilizacion:'Movilización', conflicto:'Conflicto', economia:'Economía'};
+var track = document.getElementById('caso-track'), prevB = document.getElementById('caso-prev'), nextB = document.getElementById('caso-next');
+function tarjetaViva(){
+  var v = DATA ? DATA.variables : null, lineas = [];
+  function dato(k, unidad){ var x = v && v[k]; if (!x || x.estado !== 'ok' || x.lectura == null) return null; return (unidad ? nf(x.lectura, 2) + '\u00a0%' : signed(x.lectura, 2)) + ' (' + signed(x.valor) + ')'; }
+  var c = dato('conflicto_global', true); if (c) lineas.push('Conflicto armado mundial: ' + c + '.');
+  var ei = dato('eeuu_iran', true); if (ei) lineas.push('EE. UU.-Irán: ' + ei + '.');
+  if (v && v.goldstein_rusos && v.goldstein_chinos && v.goldstein_otros && v.goldstein_rusos.lectura != null)
+    lineas.push('Clima entre países: ' + signed(v.goldstein_rusos.lectura, 2) + ' en medios rusos, ' + signed(v.goldstein_chinos.lectura, 2) + ' en chinos y ' + signed(v.goldstein_otros.lectura, 2) + ' en el resto.');
+  var reg = [['movilizacion_latam', 'Latinoamérica'], ['movilizacion_europa_oeste', 'Europa occidental'], ['movilizacion_europa_este', 'Europa del Este']]
+    .filter(function(r){ return v && v[r[0]] && v[r[0]].valor != null; }).sort(function(a, b){ return v[b[0]].valor - v[a[0]].valor; });
+  if (reg.length) lineas.push('Movilización más por encima de lo normal: ' + reg[0][1] + ' (' + signed(v[reg[0][0]].valor) + ').');
+  if (v && v.alimentos_fao && v.alimentos_fao.lectura != null) lineas.push('Alimentos: índice FAO ' + nf(v.alimentos_fao.lectura, 1) + ' (' + signed(v.alimentos_fao.valor) + ').');
+  if (v && v.desplazados_acnur && v.desplazados_acnur.lectura != null) lineas.push('Personas desplazadas: ' + nf(v.desplazados_acnur.lectura, 1) + ' millones.');
+  return '<div class="card viva"><div class="when"><span class="led vivo"></span>¿20??</div><h3>¿Próxima guerra?</h3><div>Nexo no fija una fecha: muestra hacia dónde se mueven las señales de hoy.</div>' +
+    (lineas.length ? '<ul>' + lineas.map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>' : '<p>Las señales aparecerán cuando carguen los datos.</p>') +
+    '<div class="small">Se actualiza en cada ejecución' + (DATA ? '; datos del ' + fecha(DATA.generado.slice(0, 10)) : '') + '.</div></div>';
 }
+function renderCasos(){
+  if (!CASOS.length) return;
+  document.getElementById('caso-tabs').innerHTML = CASOS.map(function(c, i){ return '<button type="button" data-caso="' + i + '" aria-pressed="' + (i === CASO_I) + '">' + esc(c.titulo) + '</button>'; }).join('');
+  var c = CASOS[CASO_I];
+  document.getElementById('caso-nota').textContent = c.nota || '';
+  track.innerHTML = c.eventos.map(function(e){
+    return '<div class="card"><div class="when">' + fecha(e.fecha) + '<span class="tag t-ok">' + (PIL[e.pilar] || e.pilar) + '</span></div><div>' + esc(e.texto) + '</div></div>';
+  }).join('') + (c.leccion ? '<div class="card leccion"><h3>Qué enseña</h3><div>' + esc(c.leccion) + '</div></div>' : '') + (c.id === '2008-2026' ? tarjetaViva() : '');
+  track.scrollLeft = 0; posicion();
+}
+function indiceActual(){
+  var cards = track.children, x = track.scrollLeft, best = 0, d = Infinity;
+  if (!cards.length) return 0;
+  for (var i = 0; i < cards.length; i++){ var dd = Math.abs(cards[i].offsetLeft - cards[0].offsetLeft - x); if (dd < d){ d = dd; best = i; } }
+  return best;
+}
+function posicion(){
+  var n = track.children.length, i = indiceActual();
+  if (track.scrollLeft + track.clientWidth >= track.scrollWidth - 4) i = n - 1;
+  document.getElementById('caso-pos').textContent = n ? (i + 1) + ' de ' + n : '';
+  prevB.disabled = i === 0; nextB.disabled = i >= n - 1;
+}
+function irA(i){
+  var cards = track.children; if (!cards.length) return; i = Math.max(0, Math.min(cards.length - 1, i));
+  track.scrollTo({left: cards[i].offsetLeft - cards[0].offsetLeft, behavior: QUIETO ? 'auto' : 'smooth'});
+}
+prevB.addEventListener('click', function(){ irA(indiceActual() - 1); });
+nextB.addEventListener('click', function(){ irA(indiceActual() + 1); });
+var esperando = false;
+track.addEventListener('scroll', function(){ if (esperando) return; esperando = true; requestAnimationFrame(function(){ esperando = false; posicion(); }); });
+document.getElementById('caso-tabs').addEventListener('click', function(ev){ var b = ev.target.closest('[data-caso]'); if (!b) return; CASO_I = +b.dataset.caso; renderCasos(); });
+
+/* ---------- eventos y fuentes ---------- */
 var TIPO_EVENTO = {eleccion:'Elección', protesta:'Protesta', conflicto:'Conflicto'};
 function renderEventos(){
   var ev = (DATA.eventos || []).slice().sort(function(a, b){ return a.fecha < b.fecha ? 1 : -1; });
@@ -543,120 +805,77 @@ function renderEventos(){
     var d = e.datos || {}, extra = '';
     if (d.participantes_oficial && d.participantes_organizadores){
       var gm = Math.round(Math.sqrt(d.participantes_oficial * d.participantes_organizadores) / 1000) * 1000;
-      extra = '<div class="vdet">Participantes: ' + d.participantes_oficial.toLocaleString('es-ES') + ' según el Gobierno y ' + d.participantes_organizadores.toLocaleString('es-ES') +
-        ' según los organizadores. Valor que usa el modelo: ' + gm.toLocaleString('es-ES') + '.</div>';
+      extra = ' Participantes: ' + d.participantes_oficial.toLocaleString('es-ES') + ' según el Gobierno y ' + d.participantes_organizadores.toLocaleString('es-ES') + ' según los organizadores; el modelo usa ' + gm.toLocaleString('es-ES') + '.';
     }
-    return '<div class="vrow"><div class="vhead"><span class="lbl">' + esc(e.pais) + ', ' + fecha(e.fecha) + '</span><span class="vval"></span><span class="badge b-off">' + (TIPO_EVENTO[e.tipo] || e.tipo) + '</span></div>' +
-      '<div class="vdet">' + esc(e.resumen) + (e.contexto ? ' ' + esc(e.contexto) : '') + '</div>' + extra + '<div class="vdet">Fuente: ' + esc(e.fuente) + '.</div></div>';
+    return '<div class="fila-dato"><span class="lbl">' + esc(e.pais) + ', ' + fecha(e.fecha) + '</span><span class="val">' + '<span class="tag t-off">' + (TIPO_EVENTO[e.tipo] || e.tipo) + '</span></span></div>' +
+      '<p class="det">' + esc(e.resumen) + (e.contexto ? ' ' + esc(e.contexto) : '') + extra + ' Fuente: ' + esc(e.fuente) + '.</p>';
   }).join('');
 }
-var CASOS = [], CASO_I = 0;
-var PIL = {juego:'Juego', agencias:'Agencias', movilizacion:'Movilización', conflicto:'Conflicto', economia:'Economía'};
-var track = document.getElementById('caso-track'), prevB = document.getElementById('caso-prev'), nextB = document.getElementById('caso-next');
-var suave = !(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
-function renderCasos(){
-  if (!CASOS.length) return;
-  document.getElementById('caso-tabs').innerHTML = CASOS.map(function(c, i){
-    return '<button type="button" data-caso="' + i + '" aria-pressed="' + (i === CASO_I) + '">' + esc(c.titulo) + '</button>';
-  }).join('');
-  var c = CASOS[CASO_I];
-  document.getElementById('caso-nota').textContent = c.nota || '';
-  track.innerHTML = c.eventos.map(function(e){
-    return '<div class="card"><div class="when">' + fecha(e.fecha) + '<span class="pill p-' + e.pilar + '">' + (PIL[e.pilar] || e.pilar) + '</span></div><div>' + esc(e.texto) + '</div></div>';
-  }).join('') + (c.leccion ? '<div class="card leccion"><h3>Qué enseña</h3><div>' + esc(c.leccion) + '</div></div>' : '') +
-    (c.id === '2008-2026' ? tarjetaViva() : '');
-  track.scrollLeft = 0;
-  posicion();
-}
-function tarjetaViva(){
-  var v = DATA ? DATA.variables : null;
-  function dato(k, pctUnidad){
-    var x = v && v[k];
-    if (!x || x.estado !== 'ok' || x.lectura == null) return null;
-    return (pctUnidad ? nf(x.lectura, 2) + '\u00a0%' : signed(x.lectura, 2)) + ' (' + signed(x.valor) + ' frente a lo normal)';
-  }
-  var lineas = [];
-  var c = dato('conflicto_global', true); if (c) lineas.push('Conflicto armado mundial: ' + c + '.');
-  var ei = dato('eeuu_iran', true); if (ei) lineas.push('EE. UU.-Irán: ' + ei + '.');
-  if (v && v.goldstein_rusos && v.goldstein_chinos && v.goldstein_otros && v.goldstein_rusos.lectura != null)
-    lineas.push('Clima entre países: ' + signed(v.goldstein_rusos.lectura, 2) + ' en medios rusos, ' + signed(v.goldstein_chinos.lectura, 2) + ' en chinos y ' + signed(v.goldstein_otros.lectura, 2) + ' en el resto.');
-  var regiones = [['movilizacion_latam', 'Latinoamérica'], ['movilizacion_europa_oeste', 'Europa occidental'], ['movilizacion_europa_este', 'Europa del Este']]
-    .filter(function(r){ return v && v[r[0]] && v[r[0]].valor != null; })
-    .sort(function(a, b){ return v[b[0]].valor - v[a[0]].valor; });
-  if (regiones.length) lineas.push('Movilización más por encima de lo normal: ' + regiones[0][1] + ' (' + signed(v[regiones[0][0]].valor) + ').');
-  if (v && v.alimentos_fao && v.alimentos_fao.lectura != null) lineas.push('Alimentos: índice FAO ' + nf(v.alimentos_fao.lectura, 1) + ' (' + signed(v.alimentos_fao.valor) + ').');
-  if (v && v.desplazados_acnur && v.desplazados_acnur.lectura != null) lineas.push('Personas desplazadas: ' + nf(v.desplazados_acnur.lectura, 1) + ' millones.');
-  var cuerpo = lineas.length ? '<ul style="margin:6px 0 8px;padding-left:1.1em">' + lineas.map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>'
-    : '<p>Las señales aparecerán cuando carguen los datos.</p>';
-  return '<div class="card"><div class="when">¿20??<span class="pill p-conflicto">Conflicto</span></div><h3 style="margin:0 0 4px">¿Próxima guerra?</h3>' +
-    '<div>Nexo no fija una fecha: muestra hacia dónde se mueven las señales de hoy.</div>' + cuerpo +
-    '<div class="vdet">Se actualiza en cada ejecución' + (DATA ? '; datos del ' + fecha(DATA.generado.slice(0, 10)) : '') + '.</div></div>';
-}
-function indiceActual(){
-  var cards = track.children, x = track.scrollLeft, best = 0, d = Infinity;
-  for (var i = 0; i < cards.length; i++){ var dd = Math.abs(cards[i].offsetLeft - track.firstElementChild.offsetLeft - x); if (dd < d){ d = dd; best = i; } }
-  return best;
-}
-function posicion(){
-  var n = track.children.length, i = indiceActual();
-  var finDelTodo = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-  if (finDelTodo) i = n - 1;
-  document.getElementById('caso-pos').textContent = (i + 1) + ' de ' + n;
-  prevB.disabled = i === 0; nextB.disabled = i >= n - 1;
-}
-function irA(i){
-  var cards = track.children; i = Math.max(0, Math.min(cards.length - 1, i));
-  track.scrollTo({left: cards[i].offsetLeft - track.firstElementChild.offsetLeft, behavior: suave ? 'smooth' : 'auto'});
-}
-prevB.addEventListener('click', function(){ irA(indiceActual() - 1); });
-nextB.addEventListener('click', function(){ irA(indiceActual() + 1); });
-var esperando = false;
-track.addEventListener('scroll', function(){ if (esperando) return; esperando = true; requestAnimationFrame(function(){ esperando = false; posicion(); }); });
-document.getElementById('caso-tabs').addEventListener('click', function(ev){
-  var b = ev.target.closest('[data-caso]'); if (!b) return;
-  CASO_I = +b.dataset.caso; renderCasos();
-});
-document.querySelector('#casos details').addEventListener('toggle', posicion);
-
 var SOURCES = [
-  {group:'Agencias sanitarias', items:[
-    {n:'OMS', w:'Noticias de brotes (Disease Outbreak News).', on:true},
-    {n:'ECDC (Europa)', w:'Positividad semanal de gripe en atención primaria centinela.', on:true},
-    {n:'CDC de EE. UU.', w:'Síndrome gripal semanal (FluView), vía la API Delphi de Carnegie Mellon.', on:true},
-    {n:'China CDC (中国疾病预防控制中心)', w:'China CDC Weekly e informes mensuales. Publica en PDF, sin API.', on:false},
-    {n:'Africa CDC, OPS, UKHSA, JIHS, KDCA, NCDC, Brasil', w:'Informes semanales nacionales y regionales.', on:false}
-  ]},
-  {group:'Conflicto, cooperación y movilización', items:[
-    {n:'GDELT, archivos de eventos', w:'Eventos de las noticias del mundo cada 15 minutos, en inglés y traducidos de otros idiomas: protestas, conflicto, cooperación y escala de Goldstein, por país del evento y por medio, incluidos los rusos y chinos. Descarga directa, sin límite de consultas.', on:true},
-    {n:'ACLED', w:'Protestas, combates y bombardeos evento por evento. Opcional: necesita cuenta gratuita.', on:true},
-    {n:'Freedom House, V-Dem, OxCGRT', w:'Restricciones políticas y sanitarias durante la COVID-19. Calibran el contexto.', on:false}
-  ]},
-  {group:'Economía y sociedad', items:[
-    {n:'FAO', w:'Índice mensual de precios de los alimentos, desde 1990. Sus picos anticipan estallidos sociales.', on:true},
-    {n:'ACNUR', w:'Personas desplazadas por la fuerza en el mundo, cada año.', on:true},
-    {n:'Reporteros sin Fronteras', w:'Índice anual de libertad de prensa. Alimenta el juego: con menos libertad es más fácil ocultar un brote.', on:true}
-  ]},
-  {group:'Vigilancia animal, genómica y poder económico', items:[
-    {n:'WOAH-WAHIS', w:'Brotes en animales, incluida la gripe aviar. Sin API pública.', on:false},
-    {n:'GISAID y Pathoplexus', w:'Secuencias genómicas compartidas.', on:false},
-    {n:'World Inequality Database', w:'Concentración de riqueza durante emergencias.', on:false}
-  ]}
+  ['Agencias sanitarias', [['OMS', 'Noticias de brotes (Disease Outbreak News).', 1], ['ECDC (Europa)', 'Positividad semanal de gripe en atención primaria centinela.', 1],
+    ['CDC de EE. UU.', 'Síndrome gripal semanal (FluView), vía la API Delphi de Carnegie Mellon.', 1],
+    ['China CDC (中国疾病预防控制中心)', 'China CDC Weekly e informes mensuales. Publica en PDF, sin API.', 0], ['Africa CDC, OPS, UKHSA, JIHS, KDCA, NCDC, Brasil', 'Informes semanales nacionales y regionales.', 0]]],
+  ['Conflicto, cooperación y movilización', [['GDELT, archivos de eventos', 'Eventos de las noticias del mundo cada 15 minutos, en inglés y traducidos: protestas, conflicto, cooperación y escala de Goldstein, por país y por medio.', 1],
+    ['ACLED', 'Protestas, combates y bombardeos evento por evento. Opcional: necesita cuenta gratuita.', 1], ['Freedom House, V-Dem, OxCGRT', 'Restricciones políticas y sanitarias durante la COVID-19.', 0]]],
+  ['Economía y sociedad', [['FAO', 'Índice mensual de precios de los alimentos, desde 1990.', 1], ['ACNUR', 'Personas desplazadas por la fuerza en el mundo, cada año.', 1],
+    ['Reporteros sin Fronteras', 'Índice anual de libertad de prensa. Alimenta el juego.', 1]]],
+  ['Vigilancia animal y genómica', [['WOAH-WAHIS', 'Brotes en animales, incluida la gripe aviar. Sin API pública.', 0], ['GISAID y Pathoplexus', 'Secuencias genómicas compartidas.', 0], ['World Inequality Database', 'Concentración de riqueza durante emergencias.', 0]]]
 ];
 function renderFuentes(){
   document.getElementById('sources').innerHTML = SOURCES.map(function(g){
-    return '<div class="src-group"><h3>' + g.group + '</h3>' + g.items.map(function(s){
-      return '<div class="src"><div class="vhead"><span class="name">' + s.n + '</span><span class="vval"></span><span class="badge ' + (s.on ? 'b-ok' : 'b-off') + '">' + (s.on ? 'Conectada' : 'En cola') + '</span></div><div class="what">' + s.w + '</div></div>';
-    }).join('') + '</div>';
+    return '<h3>' + g[0] + '</h3>' + g[1].map(function(s){
+      return '<div class="src"><div class="fila-dato" style="padding:0;border:0"><span class="name">' + s[0] + '</span><span class="val"><span class="tag ' + (s[2] ? 't-ok' : 't-off') + '">' + (s[2] ? 'Conectada' : 'En cola') + '</span></span></div><div class="what">' + s[1] + '</div></div>';
+    }).join('');
   }).join('');
 }
 
-/* ---------- arranque ---------- */
-function renderTodo(){
-  renderPronostico(); renderLecturas(); renderNorte(); renderTipo(); renderJuego(); renderEventos();
+/* ---------- teletipo y cabecera ---------- */
+function renderTicker(){
+  var cv = DATA.pronostico.cualquiera.curva, y50 = cross(cv.media, 0.5), items = [];
+  items.push('<b>Año del 50 %</b> ' + (y50 || '>2075'));
+  items.push('<b>2027 a 2036</b> ' + pct(cv.media[YEARS.indexOf(2036)]));
+  Object.keys(DATA.variables).forEach(function(k){
+    var v = DATA.variables[k];
+    if (v.valor === null || v.valor === undefined || v.estado !== 'ok') return;
+    items.push('<b>' + esc(v.etiqueta) + '</b> ' + signed(v.valor) + (v.valor >= 0 ? ' ▲' : ' ▼'));
+  });
+  var html = items.map(function(i){ return '<span>' + i + '</span>'; }).join('');
+  document.getElementById('ticker').innerHTML = html;
+}
+function renderCabecera(){
+  var vars = Object.keys(DATA.variables).map(function(k){ return DATA.variables[k]; });
+  var ok = vars.filter(function(v){ return v.estado === 'ok'; }).length, activas = vars.filter(function(v){ return v.estado !== 'desactivada'; }).length;
+  document.getElementById('link-txt').textContent = ok + '/' + activas + ' fuentes al día, ' + fecha(DATA.generado.slice(0, 10));
+  document.getElementById('led').className = 'led vivo' + (ok < activas * 0.6 ? ' warn' : '');
   document.getElementById('stamp').textContent = 'Datos del ' + fecha(DATA.generado.slice(0, 10)) + '. Reglas versión ' + DATA.version_reglas + '. Se actualiza cada 2 días.';
 }
+
+/* ---------- arranque ---------- */
+function arranque(){
+  var boot = document.getElementById('boot'), txt = document.getElementById('boot-txt');
+  var visto = false; try { visto = sessionStorage.getItem('nexo-arranque') === '1'; sessionStorage.setItem('nexo-arranque', '1'); } catch(e) {}
+  if (QUIETO || visto || !DATA){ boot.classList.add('fuera'); return; }
+  var lineas = ['NEXO, reglas versión ' + DATA.version_reglas];
+  Object.keys(DATA.variables).forEach(function(k){
+    var v = DATA.variables[k]; if (v.estado === 'desactivada') return;
+    lineas.push((v.estado === 'ok' ? '<span class="ok">[ ok ]</span> ' : '<span class="warn">[ -- ]</span> ') + esc(v.etiqueta));
+  });
+  lineas.push('Calculando 1 500 simulaciones…');
+  var i = 0, salir = function(){ boot.classList.add('fuera'); };
+  boot.addEventListener('click', salir);
+  (function paso(){
+    if (i >= lineas.length){ setTimeout(salir, 350); return; }
+    txt.innerHTML += lineas[i++] + '\n';
+    setTimeout(paso, 55);
+  })();
+}
+
+function renderTodo(){
+  renderCabecera(); renderVeredicto(); renderRadar(); renderCurva(); renderSenales(); renderJuego(); renderNorte();
+  renderContraste(); renderTipo(); renderEventos(); renderTicker();
+}
 document.querySelectorAll('[data-type]').forEach(function(b){
-  b.addEventListener('click', function(){ TIPO = b.dataset.type; if (DATA) renderPronostico(); });
+  b.addEventListener('click', function(){ TIPO = b.dataset.type; if (DATA){ renderVeredicto(); renderRadar(); renderCurva(); } });
 });
 function abrirDesdeHash(){
   var sec = location.hash && document.getElementById(location.hash.slice(1));
@@ -674,15 +893,13 @@ Promise.all([cargar('data/nexo-data.json'), cargar('data/casos.json')]).then(fun
   renderCasos();
   if (!DATA){
     document.getElementById('verdict').innerHTML = '<span class="err">No se pudieron cargar los datos. Recarga la página en unos minutos.</span>';
+    document.getElementById('led').className = 'led off';
+    document.getElementById('link-txt').textContent = 'Sin enlace';
+    document.getElementById('boot').classList.add('fuera');
     return;
   }
-  renderTodo();
+  renderTodo(); arranque();
 });
-
-var ro = document.getElementById('readout');
-if ('IntersectionObserver' in window){
-  new IntersectionObserver(function(entries){ ro.hidden = entries[0].isIntersecting || !DATA; }, {threshold:0.15}).observe(document.getElementById('chart'));
-}
 })();
 </script>
 </body>
