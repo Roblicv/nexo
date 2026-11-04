@@ -1,6 +1,6 @@
 {
- "version_reglas": 4,
- "generado": "2026-11-04T00:42:28+00:00",
+ "version_reglas": 5,
+ "generado": "2026-11-04T01:15:55+00:00",
  "reglas": {
   "tendencia": 0.015,
   "justificacion_tendencia": "Un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023).",
@@ -249,6 +249,51 @@
    "detalle": "Conflicto armado sobre el total de eventos: 7,42 % en las últimas 4 semanas; 7,79 % en las 8 semanas anteriores",
    "detalle_lectura": "Conflicto armado sobre el total de eventos: 7,42 % en las últimas 4 semanas; 7,79 % en las 8 semanas anteriores"
   },
+  "alimentos_fao": {
+   "etiqueta": "Precio de los alimentos (FAO)",
+   "motor": "alimentos",
+   "fuente": "fao",
+   "regla": "Índice mensual de precios de los alimentos de la FAO, último mes publicado. Línea base: Los 36 meses anteriores.",
+   "estado": "ok",
+   "lectura": 136.0,
+   "media": 125.2278,
+   "desviacion": 6.2614,
+   "z": 1.72,
+   "valor": 0.696,
+   "fecha_dato": "2026-09-30",
+   "detalle": "Índice 136,0 en 09/2026; media de los 36 meses anteriores 125,2",
+   "detalle_lectura": "Índice 136,0 en 09/2026; media de los 36 meses anteriores 125,2"
+  },
+  "desplazados_acnur": {
+   "etiqueta": "Personas desplazadas por la fuerza (ACNUR)",
+   "motor": "desplazamiento",
+   "fuente": "acnur",
+   "regla": "Refugiados, solicitantes de asilo, desplazados internos y otras personas que necesitan protección, al cierre del último año, en millones. Línea base: Los 5 años anteriores.",
+   "estado": "ok",
+   "lectura": 108.8762,
+   "media": 95.4339,
+   "desviacion": 14.063,
+   "z": 0.956,
+   "valor": 0.445,
+   "fecha_dato": "2025-12-31",
+   "detalle": "108,9 millones de personas desplazadas por la fuerza al cierre de 2025; media de los 5 años anteriores 95,4 millones",
+   "detalle_lectura": "108,9 millones de personas desplazadas por la fuerza al cierre de 2025; media de los 5 años anteriores 95,4 millones"
+  },
+  "prensa_rsf": {
+   "etiqueta": "Libertad de prensa (RSF)",
+   "motor": "prensa",
+   "fuente": "rsf",
+   "regla": "Puntuación media mundial del índice de Reporteros sin Fronteras, de 0 a 100. Línea base: Los años anteriores desde 2022, cuando RSF cambió su método.",
+   "estado": "ok",
+   "lectura": 54.3048,
+   "media": 56.8118,
+   "desviacion": 2.8406,
+   "z": -0.883,
+   "valor": -0.415,
+   "fecha_dato": "2026-05-01",
+   "detalle": "Puntuación media mundial 54,3 de 100 en 2026; media 2022-2025: 56,8",
+   "detalle_lectura": "Puntuación media mundial 54,3 de 100 en 2026; media 2022-2025: 56,8"
+  },
   "conflicto_acled": {
    "etiqueta": "Eventos de combate y bombardeo (ACLED)",
    "motor": "conflicto",
@@ -354,6 +399,67 @@
     "mensaje": "La historia de GDELT se está rellenando hacia atrás en cada ejecución: hay 0 años completos y la regla pide 10."
    }
   },
+  "alimentos": {
+   "valor": 0.696,
+   "componentes": [
+    "alimentos_fao"
+   ],
+   "usadas": [
+    "alimentos_fao"
+   ],
+   "e_previa": 0.05,
+   "pendiente": null,
+   "en_pronostico": false,
+   "e": 0.0,
+   "validacion": {
+    "predictor": "Precio de los alimentos (FAO) del año anterior",
+    "estado": "no_mejora",
+    "n": 13,
+    "brier_base": 0.2867,
+    "brier_con_variable": 0.3357,
+    "elasticidad": 0.0,
+    "mensaje": "La variable no mejora los aciertos: su peso queda en 0."
+   }
+  },
+  "desplazamiento": {
+   "valor": 0.445,
+   "componentes": [
+    "desplazados_acnur"
+   ],
+   "usadas": [
+    "desplazados_acnur"
+   ],
+   "e_previa": 0.1,
+   "pendiente": null,
+   "en_pronostico": false,
+   "e": 0.0,
+   "validacion": {
+    "predictor": "Personas desplazadas por la fuerza (ACNUR) del año anterior",
+    "estado": "no_mejora",
+    "n": 13,
+    "brier_base": 0.2867,
+    "brier_con_variable": 0.4597,
+    "elasticidad": 0.0,
+    "mensaje": "La variable no mejora los aciertos: su peso queda en 0."
+   }
+  },
+  "prensa": {
+   "valor": -0.415,
+   "componentes": [
+    "prensa_rsf"
+   ],
+   "usadas": [
+    "prensa_rsf"
+   ],
+   "e_previa": 0.0,
+   "pendiente": null,
+   "en_pronostico": false,
+   "e": 0.0,
+   "validacion": {
+    "estado": "historial_insuficiente",
+    "mensaje": "Entra por el juego. Su historia comparable empieza en 2022, cuando RSF cambió su método."
+   }
+  },
   "ganado": {
    "valor": null,
    "componentes": [],
@@ -453,9 +559,9 @@
    "escape": 0.3856
   },
   "hoy": {
-   "p_anuncio": 0.9564,
-   "demora_semanas": 2.7837,
-   "escape": 0.3712
+   "p_anuncio": 0.9428,
+   "demora_semanas": 2.9819,
+   "escape": 0.3916
   },
   "parametros_hoy": {
    "c": 3.948,
@@ -463,7 +569,7 @@
    "b": 5,
    "a": 2.271,
    "g": 5.396,
-   "s": 0.5
+   "s": 0.441
   },
   "entradas": [
    {
@@ -505,9 +611,17 @@
     "k": 0.3,
     "factor": 1.316,
     "efecto": "Más movilización, más costo político interno de anunciar"
+   },
+   {
+    "parametro": "s",
+    "motor": "prensa",
+    "valor": -0.415,
+    "k": 0.3,
+    "factor": 0.883,
+    "efecto": "Más libertad de prensa, más fácil que se descubra un ocultamiento"
    }
   ],
-  "multiplicador": 0.9627,
+  "multiplicador": 1.0157,
   "en_pronostico": false,
   "validacion": {
    "estado": "historial_insuficiente",
