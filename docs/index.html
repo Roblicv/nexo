@@ -246,8 +246,10 @@ section.fold-sec{padding:18px 0 6px}
 
 <section id="tipo">
   <h2>Qué tipo de pandemia</h2>
+  <p class="small">Si llega una pandemia, ¿de qué familia de virus es más probable que sea? Los porcentajes reparten el 100 % entre familias; no son la probabilidad de que cada una ocurra este año.</p>
   <p class="small" id="tipo-nota"></p>
   <div class="bars" id="bars"></div>
+  <p class="small" id="tipo-conjunta"></p>
 </section>
 
 <section id="contexto" class="fold-sec">
@@ -389,7 +391,8 @@ function renderPronostico(){
 var GRUPOS = [
   ['Agencias sanitarias', ['brotes_oms', 'resp_europa', 'ili_eeuu']],
   ['Conflicto y cooperación', ['conflicto_global', 'eeuu_iran', 'cooperacion_global', 'conflicto_acled']],
-  ['Movilización social', ['movilizacion_global', 'movilizacion_latam', 'movilizacion_europa_oeste', 'movilizacion_europa_este', 'protestas_acled']]
+  ['Movilización social', ['movilizacion_global', 'movilizacion_latam', 'movilizacion_europa_oeste', 'movilizacion_europa_este', 'protestas_acled']],
+  ['Economía y sociedad', ['alimentos_fao', 'desplazados_acnur', 'prensa_rsf']]
 ];
 function renderLecturas(){
   var vars = DATA.variables, usadas = {}, html = '';
@@ -437,6 +440,7 @@ function contraste(vars, usadas){
 
 /* ---------- el norte ---------- */
 var NOMBRE_MOTOR = {brotes:'Brotes inusuales', prot:'Movilización social', conflicto:'Conflicto armado', cooperacion:'Cooperación entre países',
+  alimentos:'Precio de los alimentos', desplazamiento:'Personas desplazadas', prensa:'Libertad de prensa',
   ganado:'gripe aviar y ganado', suelo:'uso del suelo', fauna:'fauna silvestre', clima:'clima', aereo:'tráfico aéreo', urbano:'urbanización', conf:'confianza institucional'};
 function renderNorte(){
   var html = '', sinFuente = [];
@@ -473,12 +477,12 @@ function renderNorte(){
 
 /* ---------- tipo ---------- */
 var FAM = [
-  {name:'Gripe A (influenza)', prior:4.5, k:{ganado:0.8, aereo:0.1, brotes:0.1}},
-  {name:'Coronavirus', prior:1.5, k:{fauna:0.7, suelo:0.2, urbano:0.2, brotes:0.1}},
-  {name:'Patógeno desconocido, «enfermedad X»', prior:0.6, k:{suelo:0.3, fauna:0.3, clima:0.2, brotes:0.3}},
-  {name:'Paramixovirus, como Nipah', prior:0.4, k:{suelo:0.5, fauna:0.4}},
-  {name:'Arbovirus transmitidos por mosquitos', prior:0.3, k:{clima:0.9, urbano:0.3}},
-  {name:'Filovirus, como ébola o Marburgo', prior:0.15, k:{suelo:0.6, brotes:0.2}}
+  {name:'Gripe A (influenza)', corto:'gripe A', prior:4.5, k:{ganado:0.8, aereo:0.1, brotes:0.1}},
+  {name:'Coronavirus', corto:'coronavirus', prior:1.5, k:{fauna:0.7, suelo:0.2, urbano:0.2, brotes:0.1}},
+  {name:'Patógeno desconocido, «enfermedad X»', corto:'un patógeno desconocido', prior:0.6, k:{suelo:0.3, fauna:0.3, clima:0.2, brotes:0.3}},
+  {name:'Paramixovirus, como Nipah', corto:'paramixovirus', prior:0.4, k:{suelo:0.5, fauna:0.4}},
+  {name:'Arbovirus transmitidos por mosquitos', corto:'arbovirus', prior:0.3, k:{clima:0.9, urbano:0.3}},
+  {name:'Filovirus, como ébola o Marburgo', corto:'filovirus', prior:0.15, k:{suelo:0.6, brotes:0.2}}
 ];
 function renderTipo(){
   var validos = {}, n = 0;
@@ -490,6 +494,10 @@ function renderTipo(){
     ? 'Reparto para los próximos años: historial de pandemias más las señales de los motores validados.'
     : 'De las cinco pandemias desde 1900, cuatro fueron de gripe A y una de coronavirus. Las señales actuales inclinarán este reparto solo cuando sus motores se validen.';
   var order = p.map(function(_, i){ return i; }).sort(function(a, b){ return p[b] - p[a]; }), maxp = p[order[0]];
+  var dec = DATA.pronostico.cualquiera.curva.media[YEARS.indexOf(2036)];
+  document.getElementById('tipo-conjunta').textContent = 'Combinado con el pronóstico: la probabilidad de una pandemia de ' +
+    FAM[order[0]].corto + ' entre 2027 y 2036 es del ' + pct(dec * p[order[0]]) +
+    '; de ' + FAM[order[1]].corto + ', del ' + pct(dec * p[order[1]]) + '.';
   document.getElementById('bars').innerHTML = order.map(function(i, rank){
     return '<div class="bar' + (rank === 0 ? ' top' : '') + '"><div class="row"><span>' + FAM[i].name + '</span><span>' + pct(p[i]) + '</span></div>' +
       '<div class="track"><div class="fill" style="width:' + (p[i]/maxp*100).toFixed(1) + '%"></div></div></div>';
@@ -497,7 +505,7 @@ function renderTipo(){
 }
 
 /* ---------- secciones plegadas ---------- */
-var NOMBRE_PARAM = {pi:'probabilidad de sanciones', a:'apoyo internacional', g:'costo de ocultar', c:'costo interno de anunciar'};
+var NOMBRE_PARAM = {pi:'probabilidad de sanciones', a:'apoyo internacional', g:'costo de ocultar', c:'costo interno de anunciar', s:'probabilidad de descubrir un ocultamiento'};
 function renderJuego(){
   var j = DATA.juego; if (!j) return;
   var hoy = j.hoy || j, base = j.base || j;
@@ -555,9 +563,34 @@ function renderCasos(){
   document.getElementById('caso-nota').textContent = c.nota || '';
   track.innerHTML = c.eventos.map(function(e){
     return '<div class="card"><div class="when">' + fecha(e.fecha) + '<span class="pill p-' + e.pilar + '">' + (PIL[e.pilar] || e.pilar) + '</span></div><div>' + esc(e.texto) + '</div></div>';
-  }).join('') + (c.leccion ? '<div class="card leccion"><h3>Qué enseña</h3><div>' + esc(c.leccion) + '</div></div>' : '');
+  }).join('') + (c.leccion ? '<div class="card leccion"><h3>Qué enseña</h3><div>' + esc(c.leccion) + '</div></div>' : '') +
+    (c.id === '2008-2026' ? tarjetaViva() : '');
   track.scrollLeft = 0;
   posicion();
+}
+function tarjetaViva(){
+  var v = DATA ? DATA.variables : null;
+  function dato(k, pctUnidad){
+    var x = v && v[k];
+    if (!x || x.estado !== 'ok' || x.lectura == null) return null;
+    return (pctUnidad ? nf(x.lectura, 2) + '\u00a0%' : signed(x.lectura, 2)) + ' (' + signed(x.valor) + ' frente a lo normal)';
+  }
+  var lineas = [];
+  var c = dato('conflicto_global', true); if (c) lineas.push('Conflicto armado mundial: ' + c + '.');
+  var ei = dato('eeuu_iran', true); if (ei) lineas.push('EE. UU.-Irán: ' + ei + '.');
+  if (v && v.goldstein_rusos && v.goldstein_chinos && v.goldstein_otros && v.goldstein_rusos.lectura != null)
+    lineas.push('Clima entre países: ' + signed(v.goldstein_rusos.lectura, 2) + ' en medios rusos, ' + signed(v.goldstein_chinos.lectura, 2) + ' en chinos y ' + signed(v.goldstein_otros.lectura, 2) + ' en el resto.');
+  var regiones = [['movilizacion_latam', 'Latinoamérica'], ['movilizacion_europa_oeste', 'Europa occidental'], ['movilizacion_europa_este', 'Europa del Este']]
+    .filter(function(r){ return v && v[r[0]] && v[r[0]].valor != null; })
+    .sort(function(a, b){ return v[b[0]].valor - v[a[0]].valor; });
+  if (regiones.length) lineas.push('Movilización más por encima de lo normal: ' + regiones[0][1] + ' (' + signed(v[regiones[0][0]].valor) + ').');
+  if (v && v.alimentos_fao && v.alimentos_fao.lectura != null) lineas.push('Alimentos: índice FAO ' + nf(v.alimentos_fao.lectura, 1) + ' (' + signed(v.alimentos_fao.valor) + ').');
+  if (v && v.desplazados_acnur && v.desplazados_acnur.lectura != null) lineas.push('Personas desplazadas: ' + nf(v.desplazados_acnur.lectura, 1) + ' millones.');
+  var cuerpo = lineas.length ? '<ul style="margin:6px 0 8px;padding-left:1.1em">' + lineas.map(function(l){ return '<li>' + esc(l) + '</li>'; }).join('') + '</ul>'
+    : '<p>Las señales aparecerán cuando carguen los datos.</p>';
+  return '<div class="card"><div class="when">¿20??<span class="pill p-conflicto">Conflicto</span></div><h3 style="margin:0 0 4px">¿Próxima guerra?</h3>' +
+    '<div>Nexo no fija una fecha: muestra hacia dónde se mueven las señales de hoy.</div>' + cuerpo +
+    '<div class="vdet">Se actualiza en cada ejecución' + (DATA ? '; datos del ' + fecha(DATA.generado.slice(0, 10)) : '') + '.</div></div>';
 }
 function indiceActual(){
   var cards = track.children, x = track.scrollLeft, best = 0, d = Infinity;
@@ -598,6 +631,11 @@ var SOURCES = [
     {n:'ACLED', w:'Protestas, combates y bombardeos evento por evento. Opcional: necesita cuenta gratuita.', on:true},
     {n:'Freedom House, V-Dem, OxCGRT', w:'Restricciones políticas y sanitarias durante la COVID-19. Calibran el contexto.', on:false}
   ]},
+  {group:'Economía y sociedad', items:[
+    {n:'FAO', w:'Índice mensual de precios de los alimentos, desde 1990. Sus picos anticipan estallidos sociales.', on:true},
+    {n:'ACNUR', w:'Personas desplazadas por la fuerza en el mundo, cada año.', on:true},
+    {n:'Reporteros sin Fronteras', w:'Índice anual de libertad de prensa. Alimenta el juego: con menos libertad es más fácil ocultar un brote.', on:true}
+  ]},
   {group:'Vigilancia animal, genómica y poder económico', items:[
     {n:'WOAH-WAHIS', w:'Brotes en animales, incluida la gripe aviar. Sin API pública.', on:false},
     {n:'GISAID y Pathoplexus', w:'Secuencias genómicas compartidas.', on:false},
@@ -631,12 +669,14 @@ renderFuentes();
 
 function cargar(url){ return fetch(url, {cache:'no-store'}).then(function(r){ return r.ok ? r.json() : null; }).catch(function(){ return null; }); }
 Promise.all([cargar('data/nexo-data.json'), cargar('data/casos.json')]).then(function(r){
-  CASOS = (r[1] && r[1].casos) ? r[1].casos : []; renderCasos();
-  if (!(r[0] && r[0].pronostico && r[0].motores)){
+  CASOS = (r[1] && r[1].casos) ? r[1].casos : [];
+  DATA = (r[0] && r[0].pronostico && r[0].motores) ? r[0] : null;
+  renderCasos();
+  if (!DATA){
     document.getElementById('verdict').innerHTML = '<span class="err">No se pudieron cargar los datos. Recarga la página en unos minutos.</span>';
     return;
   }
-  DATA = r[0]; renderTodo();
+  renderTodo();
 });
 
 var ro = document.getElementById('readout');

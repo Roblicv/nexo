@@ -2,13 +2,14 @@
 # Ninguna variable se ajusta a mano: cada valor sale de una fuente pública con la regla escrita aquí.
 # Cambiar una regla exige subir "version" y queda registrado en el historial de Git.
 
-version: 4
+version: 5
 registrado: "2026-11-04"
 cambios:
   - "v1 (2026-10-29): primera versión."
   - "v2 (2026-11-03): se elimina la simulación; se añaden conflicto armado, conflicto EE. UU.-Irán y cooperación entre países; hipótesis de la tregua; ejecución cada 2 días."
   - "v3 (2026-11-04): Francia y Brasil se sustituyen por regiones (Latinoamérica, Europa occidental, Europa del Este); el juego del pilar 1 toma sus entradas de los datos."
   - "v4 (2026-11-04): GDELT pasa de la API de consultas (limitada con errores 429) a sus archivos de eventos; las regiones se miden por el lugar del evento; se añade el contraste entre medios rusos, chinos y el resto."
+  - "v5 (2026-11-04): se añaden el precio de los alimentos (FAO), las personas desplazadas (ACNUR) y la libertad de prensa (RSF), que alimenta el juego."
 
 transformacion: "x = tanh(z / 2), con z = (lectura - media de la línea base) / desviación de la línea base"
 vigencia_dias: 28  # una lectura más vieja que esto se muestra, pero no entra al pronóstico
@@ -175,6 +176,28 @@ variables:
     que: "Conflicto armado sobre el total de eventos"
     lectura: "Porcentaje de eventos de conflicto armado en noticias del resto de dominios"
     linea_base: "Igual que la mundial"
+  # Economía y sociedad. Sus datos son mensuales o anuales, por eso tienen su propia vigencia.
+  alimentos_fao:
+    motor: alimentos
+    fuente: fao
+    vigencia_dias: 75
+    etiqueta: "Precio de los alimentos (FAO)"
+    lectura: "Índice mensual de precios de los alimentos de la FAO, último mes publicado"
+    linea_base: "Los 36 meses anteriores"
+  desplazados_acnur:
+    motor: desplazamiento
+    fuente: acnur
+    vigencia_dias: 550
+    etiqueta: "Personas desplazadas por la fuerza (ACNUR)"
+    lectura: "Refugiados, solicitantes de asilo, desplazados internos y otras personas que necesitan protección, al cierre del último año, en millones"
+    linea_base: "Los 5 años anteriores"
+  prensa_rsf:
+    motor: prensa
+    fuente: rsf
+    vigencia_dias: 400
+    etiqueta: "Libertad de prensa (RSF)"
+    lectura: "Puntuación media mundial del índice de Reporteros sin Fronteras, de 0 a 100"
+    linea_base: "Los años anteriores desde 2022, cuando RSF cambió su método"
   conflicto_acled:
     motor: conflicto
     fuente: acled
@@ -198,6 +221,9 @@ motores:
   prot:   {e_previa: 0.05, combinacion: "ACLED si está disponible; si no, GDELT eventos mundial"}
   conflicto: {e_previa: 0.15, combinacion: "ACLED si está disponible; si no, GDELT mundial", razon: "La guerra debilita la vigilancia y los sistemas de salud"}
   cooperacion: {e_previa: -0.10, combinacion: "media de las variables disponibles", razon: "Más cooperación abarata anunciar un brote (pilar 1)"}
+  alimentos: {e_previa: 0.05, combinacion: "FAO", razon: "Los picos de precio de los alimentos anticipan estallidos sociales"}
+  desplazamiento: {e_previa: 0.10, combinacion: "ACNUR", razon: "Los desplazados viven en condiciones donde las epidemias se propagan más rápido"}
+  prensa: {e_previa: 0.0, combinacion: "RSF", razon: "Entra por el juego: con más libertad de prensa es más difícil ocultar un brote"}
   ganado: {e_previa: 0.25, pendiente: "WOAH-WAHIS no tiene API pública"}
   suelo:  {e_previa: 0.20, pendiente: "Global Forest Watch publica una vez al año"}
   fauna:  {e_previa: 0.15, pendiente: "Sin serie abierta y continua"}
@@ -216,7 +242,8 @@ juego:
     a: {motor: cooperacion, k: 0.5, efecto: "Más cooperación, más apoyo al país que anuncia"}
     g: {motor: cooperacion, k: 0.3, efecto: "Más cooperación, más costo reputacional por ocultar"}
     c: {motor: prot, k: 0.3, efecto: "Más movilización, más costo político interno de anunciar"}
-  limites: {pi: [0.02, 0.98]}
+    s: {motor: prensa, k: 0.3, efecto: "Más libertad de prensa, más fácil que se descubra un ocultamiento"}
+  limites: {pi: [0.02, 0.98], s: [0.0, 1.0]}
   regla: "El equilibrio de hoy se muestra siempre; su efecto entra al pronóstico solo cuando el motor del juego se valide."
 
 hipotesis:

@@ -74,15 +74,40 @@
    ]
   },
   {
-   "id": "2020",
-   "titulo": "2020",
-   "nota": "Reconstrucción documental. Muestra cómo interactuaron las variables; un solo caso no prueba hacia dónde apunta la flecha causal.",
-   "leccion": "La demora del aviso en Wuhan muestra el pilar 1; las restricciones a protestas en 158 países, el pilar 3. Y el llamado a una tregua mundial no se cumplió: la pandemia no detuvo el conflicto armado.",
+   "id": "2008-2026",
+   "titulo": "2008–2026",
+   "nota": "Un caso abierto: todavía lo estamos viviendo. Incluye en detalle la pandemia de 2019-2020, y desde 2015 Nexo tiene datos diarios de GDELT para medirlo.",
+   "leccion": "Tiene paralelos con 1918–1939: pandemias, una gran crisis económica, ciclos de protesta y guerras regionales que se encadenan. Pero dos casos no hacen una ley, y hay diferencias grandes: armas nucleares que disuaden la guerra directa entre potencias, instituciones como la OMS y la ONU, y economías mucho más entrelazadas. Si las crisis anticipan más conflicto es una pregunta que los datos de Nexo podrán poner a prueba.",
    "eventos": [
+    {
+     "fecha": "2008-09-15",
+     "pilar": "economia",
+     "texto": "Quiebra de Lehman Brothers y crisis financiera mundial. La recesión se extiende a 2009."
+    },
+    {
+     "fecha": "2009-06-11",
+     "pilar": "agencias",
+     "texto": "La OMS declara la pandemia de gripe A(H1N1), la primera del siglo XXI, en plena recesión."
+    },
+    {
+     "fecha": "2011",
+     "pilar": "movilizacion",
+     "texto": "Primavera Árabe, Indignados en España y Occupy Wall Street: la crisis económica se traduce en protestas masivas."
+    },
+    {
+     "fecha": "2014-03",
+     "pilar": "conflicto",
+     "texto": "Rusia se anexiona Crimea y empieza la guerra en el Donbás."
+    },
+    {
+     "fecha": "2014-08-08",
+     "pilar": "agencias",
+     "texto": "La OMS declara emergencia internacional por el ébola en África Occidental."
+    },
     {
      "fecha": "2019",
      "pilar": "movilizacion",
-     "texto": "Ola de protestas en muchos países: Hong Kong, Chile, Líbano, Irak, Ecuador, Colombia y Francia, entre otros."
+     "texto": "Ola de protestas en muchos países: Hong Kong, Chile, Líbano, Irak, Colombia y Francia, entre otros."
     },
     {
      "fecha": "2019-12-30",
@@ -115,6 +140,11 @@
      "texto": "La OMS declara una emergencia de salud pública de importancia internacional."
     },
     {
+     "fecha": "2020-03",
+     "pilar": "movilizacion",
+     "texto": "Chile aplaza su plebiscito constitucional de abril a octubre por la pandemia."
+    },
+    {
      "fecha": "2020-03-11",
      "pilar": "agencias",
      "texto": "La OMS califica la COVID-19 de pandemia."
@@ -125,14 +155,14 @@
      "texto": "El secretario general de la ONU pide un alto el fuego mundial para enfrentar la pandemia."
     },
     {
-     "fecha": "2020-03",
-     "pilar": "movilizacion",
-     "texto": "Chile aplaza su plebiscito constitucional de abril a octubre por la pandemia."
-    },
-    {
      "fecha": "2020-03-29",
      "pilar": "movilizacion",
      "texto": "Hong Kong limita las reuniones públicas a cuatro personas; las marchas masivas se apagan."
+    },
+    {
+     "fecha": "2020-04",
+     "pilar": "economia",
+     "texto": "El FMI describe la caída de la economía mundial como la peor recesión desde la Gran Depresión."
     },
     {
      "fecha": "2020-05-13",
@@ -160,9 +190,29 @@
      "texto": "Freedom House documenta nuevas restricciones a las protestas en 158 de 192 países, y protestas significativas en al menos 90."
     },
     {
-     "fecha": "2020-10-25",
+     "fecha": "2022-02-24",
+     "pilar": "conflicto",
+     "texto": "Rusia invade Ucrania a gran escala. Siguen años de inflación alta por la energía y los alimentos."
+    },
+    {
+     "fecha": "2023-10-07",
+     "pilar": "conflicto",
+     "texto": "Ataque de Hamás contra Israel y guerra en Gaza."
+    },
+    {
+     "fecha": "2026-02-28",
+     "pilar": "conflicto",
+     "texto": "EE. UU. e Israel atacan Irán; comienza la guerra de 2026 y un choque petrolero mundial."
+    },
+    {
+     "fecha": "2026-05-16",
+     "pilar": "agencias",
+     "texto": "La OMS declara emergencia internacional por la enfermedad del virus Bundibugyo, de la familia del ébola."
+    },
+    {
+     "fecha": "2026-10",
      "pilar": "movilizacion",
-     "texto": "Chile celebra el plebiscito aplazado."
+     "texto": "Jornadas masivas en Francia contra la vida cara, con prohibiciones de manifestación y toques de queda."
     }
    ]
   }

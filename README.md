@@ -27,7 +27,7 @@ pipeline/                          código en Python
   ejecutar.py                      orquesta todo: descarga, reglas, validación, publicación
   modelo.py                        la misma matemática que la página
   validacion.py                    prueba hacia atrás con puntuación de Brier
-  fuentes/                         un archivo por fuente (OMS, ECDC, CDC vía Delphi, GDELT, ACLED)
+  fuentes/                         un archivo por fuente (OMS, ECDC, CDC vía Delphi, GDELT, ACLED, FAO, ACNUR, RSF)
                                    gdelt_eventos.py lee los archivos de eventos de GDELT, sin límite de consultas
 datos/
   emergencias_oms.yaml             resultado observado para validar

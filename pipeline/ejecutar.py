@@ -15,13 +15,14 @@ import requests
 import yaml
 
 from . import modelo, validacion, variables
-from .fuentes import acled, cdc, comun, ecdc, gdelt, gdelt_eventos, oms
+from .fuentes import acled, acnur, cdc, comun, ecdc, fao, gdelt, gdelt_eventos, oms, rsf
 
 RAIZ = pathlib.Path(__file__).resolve().parent.parent
 SALIDA = RAIZ / "docs" / "data" / "nexo-data.json"
 LECTURAS = RAIZ / "datos" / "lecturas.csv"
 FUENTES = {"oms_don": oms.leer, "ecdc_erviss": ecdc.leer, "delphi_fluview": cdc.leer,
-           "gdelt": gdelt.leer, "gdelt_eventos": gdelt_eventos.leer, "acled": acled.leer}
+           "gdelt": gdelt.leer, "gdelt_eventos": gdelt_eventos.leer, "acled": acled.leer,
+           "fao": fao.leer, "acnur": acnur.leer, "rsf": rsf.leer}
 
 
 def _yaml(ruta: pathlib.Path) -> dict:
@@ -62,7 +63,8 @@ def _leer_lista(s, reglas, anterior, hoy, lista, salida, extras) -> None:
             r = FUENTES[regla["fuente"]](s, regla, hoy)
             z, x = variables.transformar(r["lectura"], r["media"], r["desviacion"])
             edad = (hoy - dt.date.fromisoformat(r["fecha_dato"])).days
-            salida[clave] = {**info, "estado": "ok" if edad <= reglas["vigencia_dias"] else "desactualizado",
+            vigencia = regla.get("vigencia_dias", reglas["vigencia_dias"])
+            salida[clave] = {**info, "estado": "ok" if edad <= vigencia else "desactualizado",
                              "lectura": round(r["lectura"], 4), "media": round(r["media"], 4),
                              "desviacion": round(r["desviacion"], 4), "z": round(z, 3), "valor": round(x, 3),
                              "fecha_dato": r["fecha_dato"], "detalle": r["detalle"], "detalle_lectura": r["detalle"]}
@@ -118,9 +120,11 @@ def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> 
         else:
             predictor = {int(a): v for a, v in ex["anuales"].items() if int(a) < hoy.year}
             texto = f"{reglas['variables'][fuente]['etiqueta']} del año anterior"
+            if fuente == "prensa_rsf":
+                continue  # la prensa entra solo por el juego
         v = validacion.validar(predictor, resultado, **kw) if predictor else {
             "estado": "historial_insuficiente", "n": 0, "mensaje": "Sin serie anual esta vez."}
-        if v["estado"] == "historial_insuficiente" and fuente != "brotes_oms":
+        if v["estado"] == "historial_insuficiente" and reglas["variables"][fuente]["fuente"] == "gdelt_eventos":
             v["mensaje"] = (f"La historia de GDELT se está rellenando hacia atrás en cada ejecución: hay "
                             f"{len(predictor)} años completos y la regla pide {kw['minimo_anios']}.")
         m["validacion"] = {"predictor": texto, **v}
@@ -131,6 +135,10 @@ def validar_motores(reglas: dict, motores: dict, extras: dict, hoy: dt.date) -> 
     for nombre, m in motores.items():
         if m["validacion"] is None:
             de_gdelt = any(reglas["variables"][k]["fuente"] == "gdelt_eventos" for k in m["componentes"])
+            if nombre == "prensa":
+                m["validacion"] = {"estado": "historial_insuficiente", "mensaje":
+                                   "Entra por el juego. Su historia comparable empieza en 2022, cuando RSF cambió su método."}
+                continue
             m["validacion"] = {"estado": "historial_insuficiente", "mensaje": (
                 "La historia de GDELT desde 2015 se está rellenando hacia atrás en cada ejecución; "
                 "cuando cubra 10 años completos, este motor se pondrá a prueba." if de_gdelt else
