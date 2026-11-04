@@ -84,6 +84,14 @@ p{margin:0 0 10px;max-width:68ch}
 @keyframes destello{0%{opacity:.9;transform:scale(1)}12%{opacity:0;transform:scale(3.2)}100%{opacity:0}}
 .blip.alerta .core{animation:latido 1.2s ease-in-out infinite}
 .blip.sel .core{stroke:#fff;stroke-width:2}
+.radar-ley{display:flex;flex-wrap:wrap;justify-content:center;gap:4px 14px;font-size:.78rem;color:var(--muted);margin:2px 0 0;max-width:none}
+.radar-ley .pt{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:6px;vertical-align:middle}
+.pt.am{background:var(--amber);box-shadow:0 0 6px var(--amber)} .pt.az{background:var(--cyan);box-shadow:0 0 6px var(--cyan)}
+.aviso{border:1px solid var(--amber);color:var(--amber);padding:8px 12px;margin:10px 0 0;font-size:.88rem;max-width:none}
+.resumen{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.ecu{font-family:var(--display);font-size:1rem;line-height:1.9;background:rgba(3,7,13,.7);border:1px solid var(--line);border-left:2px solid var(--cyan);padding:10px 14px;margin:8px 0 12px;overflow-x:auto;overflow-wrap:break-word}
+.ecu .v{color:var(--cyan);font-style:italic}
+.ecu sub,.ecu sup{font-size:.72em}
 .verdict{font-family:var(--display);font-weight:500;font-size:clamp(1.08rem,3.6vw,1.3rem);line-height:1.4;margin:4px 0 0}
 .verdict b{color:var(--cyan);font-weight:700}
 .seg{display:inline-flex;border:1px solid var(--line-strong);margin:10px 0 4px}
@@ -124,8 +132,8 @@ p{margin:0 0 10px;max-width:68ch}
 /* ---------- ruta de la señal (hoja inferior) ---------- */
 .sheet-bg{position:fixed;inset:0;background:rgba(1,4,8,.55);z-index:40;opacity:0;pointer-events:none;transition:opacity .2s}
 .sheet-bg.open{opacity:1;pointer-events:auto}
-.sheet{position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:78vh;overflow:auto;background:linear-gradient(180deg,#0a1d2b,#06121c);border-top:1px solid var(--cyan);box-shadow:0 -10px 40px rgba(95,212,255,.15);transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding:14px 18px calc(env(safe-area-inset-bottom,0px) + 18px)}
-.sheet.open{transform:none}
+.sheet{visibility:hidden;position:fixed;left:0;right:0;bottom:0;z-index:41;max-height:78vh;overflow:auto;background:linear-gradient(180deg,#0a1d2b,#06121c);border-top:1px solid var(--cyan);box-shadow:0 -10px 40px rgba(95,212,255,.15);transform:translateY(105%);transition:transform .28s cubic-bezier(.2,.8,.2,1);padding:14px 18px calc(env(safe-area-inset-bottom,0px) + 18px)}
+.sheet.open{transform:none;visibility:visible}
 .sheet-inner{max-width:760px;margin:0 auto}
 .sheet-head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
 .sheet-head h3{margin:0;font-size:1.15rem}
@@ -218,7 +226,7 @@ ol.method li{margin:0 0 9px}
 
 /* ---------- teletipo ---------- */
 .ticker{position:fixed;left:0;right:0;bottom:0;z-index:25;background:rgba(3,7,13,.94);border-top:1px solid var(--line-strong);overflow:hidden;padding:8px 0 calc(env(safe-area-inset-bottom,0px) + 8px)}
-.ticker-track{display:inline-flex;gap:34px;white-space:nowrap;padding-left:100%;animation:teletipo 70s linear infinite;font-family:var(--mono);font-size:.8rem}
+.ticker-track{display:inline-flex;gap:34px;white-space:nowrap;padding-left:100%;animation:teletipo 80s linear infinite;font-family:var(--mono);font-size:.8rem}
 .ticker:hover .ticker-track{animation-play-state:paused}
 @keyframes teletipo{to{transform:translateX(-100%)}}
 .ticker b{color:var(--cyan);font-weight:400}
@@ -283,14 +291,16 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
     </div>
     <div class="nucleo" id="nucleo-wrap">
       <svg id="radar" viewBox="-30 -30 460 460" role="img" aria-label="Radar de señales: cuanto más lejos del centro, más se aleja de lo normal"></svg>
+      <p class="radar-ley"><span><i class="pt am"></i>Por encima de lo normal</span><span><i class="pt az"></i>Por debajo</span><span>Más lejos del centro, más se aleja de lo normal</span></p>
     </div>
     <div class="h-texto">
       <div class="seg" role="group" aria-label="Qué cuenta como pandemia">
         <button type="button" data-type="cualquiera" aria-pressed="true">Cualquiera</button>
-        <button type="button" data-type="severa" aria-pressed="false">Severa, como 2020</button>
+        <button type="button" data-type="severa" aria-pressed="false">Severa</button>
       </div>
       <p class="verdict" id="verdict" aria-live="polite">Cargando datos…</p>
       <p class="stamp" id="stamp"></p>
+      <p class="aviso" id="aviso" hidden></p>
     </div>
   </div>
   <div class="panel chart">
@@ -341,7 +351,7 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
 </section>
 
 <section id="casos">
-  <h2>Casos históricos</h2>
+  <details class="fold" id="casos-fold"><summary>Casos históricos</summary><div class="in">
   <p class="small">Ejemplos reales de los pilares funcionando a la vez. Un caso muestra cómo interactuaron las variables, pero no prueba hacia dónde apunta la flecha causal. Desliza para recorrerlo.</p>
   <div class="tabs" id="caso-tabs" role="group" aria-label="Caso histórico"></div>
   <p class="small" id="caso-nota"></p>
@@ -351,6 +361,7 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
     <span id="caso-pos" aria-live="polite"></span>
     <button type="button" class="arrow next" id="caso-next" aria-label="Evento siguiente"></button>
   </div>
+  </div></details>
 </section>
 
 <section id="contexto">
@@ -372,13 +383,40 @@ footer{max-width:1120px;margin:24px auto 0;padding:16px;border-top:1px solid var
 
 <section id="metodo">
   <details class="fold"><summary>Método</summary><div class="in">
-    <ol class="method">
-      <li><strong>Datos.</strong> Cada 2 días se descargan las fuentes conectadas y cada lectura se compara con su propia historia: x = tanh(z / 2), entre −1 y +1.</li>
-      <li><strong>Juego.</strong> Las señales de conflicto, cooperación, movilización y prensa ajustan los incentivos del dilema de reportar; su equilibrio da la demora de detección y la probabilidad de que un brote escape.</li>
-      <li><strong>Probabilidad.</strong> La tasa histórica de pandemias (5 desde 1900; 2 severas) crece 1,5 % al año y se multiplica por los motores validados: λ(año) = λ₀ · 1,015<sup>año − 2026</sup> · ∏ e<sup>eᵢ·xᵢ</sup>. La curva es P = 1 − e<sup>−Σλ</sup>, con 1 500 simulaciones para la banda.</li>
-      <li><strong>Validación.</strong> Un motor, incluido el juego, solo entra si mejora los aciertos frente a la tasa base al probarlo hacia atrás. Si no, su peso es 0.</li>
-    </ol>
-    <p class="small">El radar muestra cada señal a una distancia del centro proporcional a cuánto se aleja de lo normal; el barrido es decorativo. Es una herramienta para ordenar evidencia, no un pronóstico oficial ni asesoramiento sanitario.</p>
+    <p>Todo el pronóstico cabe en una ecuación. Las piezas se explican debajo, en el orden en que se calculan.</p>
+    <div class="ecu">P(Y) = <sup>1</sup>⁄<sub>N</sub> Σ<sub>s=1…N</sub> [ 1 − exp( − Σ<sub>t=2027…Y</sub> λ<sub>0,s</sub> · (1 + g<sub>s</sub>)<sup>t − 2026</sup> · M<sub>s</sub> · (E / E<sub>0</sub>)<sup>v<sub>J</sub></sup> · e<sup>Σ<sub>m</sub> v<sub>m</sub> e<sub>m</sub> x<sub>m</sub></sup> ) ]</div>
+
+    <h3>1. Cada lectura se compara con su propia historia</h3>
+    <div class="ecu">z<sub>i</sub> = (L<sub>i</sub> − μ<sub>i</sub>) / σ<sub>i</sub><br>x<sub>i</sub> = tanh(z<sub>i</sub> / 2) &nbsp;∈ (−1, 1)</div>
+    <p class="small">L es la lectura de hoy; μ y σ, la media y la desviación de su línea base. σ nunca baja del 5 % de μ, para que una base muy estable no convierta ruido en alarma.</p>
+
+    <h3>2. Las lecturas se agrupan en motores</h3>
+    <div class="ecu">x<sub>m</sub> = <sup>1</sup>⁄<sub>|A<sub>m</sub>|</sub> Σ<sub>i ∈ A<sub>m</sub></sub> x<sub>i</sub></div>
+    <p class="small">A<sub>m</sub> son las variables del motor que están al día. Si ACLED está disponible, tiene prioridad sobre GDELT.</p>
+
+    <h3>3. El juego convierte los motores en una demora de detección</h3>
+    <div class="ecu">θ<sub>j</sub> = θ<sub>j</sub><sup>0</sup> · e<sup>Σ<sub>m</sub> k<sub>j,m</sub> x<sub>m</sub></sup><br>q = 0,2 + 0,7 s</div>
+    <div class="ecu">U<sub>anunciar</sub> = −c − π b + (1 − π) a<br>U<sub>retrasar</sub> = −q (g + b) − 3</div>
+    <div class="ecu">p = 1 / (1 + e<sup>−(U<sub>anunciar</sub> − U<sub>retrasar</sub>) / 1,5</sup>)<br>D = p (3,5 − 2 s) + 9 (1 − p)<br>E = 1 − e<sup>−D / 6</sup></div>
+    <p class="small">θ son los parámetros: c, costo interno de anunciar; π, probabilidad de sanciones; b, su costo; a, apoyo internacional; g, costo de ser descubierto; s, vigilancia y transparencia. Parten de θ<sup>0</sup> = (3; 0,5; 5; 2; 5; 0,5) y cada motor los mueve con su coeficiente k; π y s se mantienen entre 0 y 1. p es la probabilidad de anuncio temprano, D la demora en semanas y E la probabilidad de que un brote escape. E<sub>0</sub> es la de los parámetros base.</p>
+
+    <h3>4. La tasa de pandemias de cada año</h3>
+    <div class="ecu">λ(t) = λ<sub>0</sub> · (1 + g)<sup>t − 2026</sup> · (E / E<sub>0</sub>)<sup>v<sub>J</sub></sup> · e<sup>Σ<sub>m</sub> v<sub>m</sub> e<sub>m</sub> x<sub>m</sub></sup></div>
+    <p class="small">λ<sub>0</sub> sale de la historia: 5 pandemias desde 1900, 2 de ellas severas, en 126 años. g = 1,5 % al año, un tercio del aumento de derrames zoonóticos medido por Meadows y colegas (2023). v vale 1 solo si el motor, o el juego (v<sub>J</sub>), superó la validación; si no, vale 0 y no mueve nada.</p>
+
+    <h3>5. La incertidumbre</h3>
+    <div class="ecu">λ<sub>0</sub> ~ Gamma(n + ½; 126)<br>g ~ máx(0; Normal(0,015; 0,0075))<br>M ~ e<sup>Normal(0; 0,25)</sup><br>N = 1 500</div>
+    <p class="small">Cada una de las 1 500 simulaciones usa una tasa base, una tendencia y un multiplicador distintos. La curva es la media de P; la banda, sus percentiles 10 y 90; y el año del 50 % es el primer año en que P(Y) ≥ 0,5.</p>
+
+    <h3>6. El norte: la validación</h3>
+    <div class="ecu">p̂<sub>t</sub> = 1 / (1 + e<sup>−(β<sub>0</sub> + β<sub>1</sub> x<sub>t−1</sub>)</sup>)<br>B = <sup>1</sup>⁄<sub>n</sub> Σ<sub>t</sub> (p̂<sub>t</sub> − y<sub>t</sub>)<sup>2</sup><br>v<sub>m</sub> = 1 ⇔ B<sub>motor</sub> &lt; B<sub>base</sub><br>e<sub>m</sub> = 2 β<sub>1</sub> σ<sub>x</sub></div>
+    <p class="small">y<sub>t</sub> vale 1 si en el año t la OMS declaró una emergencia internacional. Cada año se predice solo con los anteriores, con un ajuste logístico regularizado, y se compara con la tasa base usando la puntuación de Brier: menos es mejor.</p>
+
+    <h3>7. El tipo de pandemia</h3>
+    <div class="ecu">P(f) = w · π<sub>f</sub> e<sup>Σ<sub>m</sub> k<sub>f,m</sub> x<sub>m</sub></sup> / Z + (1 − w) · π<sub>f</sub><br>w = e<sup>−(año − 2026) / 6</sup></div>
+    <p class="small">π<sub>f</sub> es el reparto histórico por familia de virus y Z normaliza a 100 %. Solo los motores validados inclinan el reparto.</p>
+
+    <p class="small">El radar muestra cada señal a una distancia del centro proporcional a |x|; el barrido es decorativo. Es una herramienta para ordenar evidencia, no un pronóstico oficial ni asesoramiento sanitario.</p>
   </div></details>
 </section>
 </main>
@@ -682,7 +720,18 @@ function renderJuego(){
 
 /* ---------- el norte ---------- */
 function renderNorte(){
-  var html = '', sinFuente = [];
+  var html = '', sinFuente = [], cuenta = {};
+  Object.keys(DATA.motores).forEach(function(k){
+    var m = DATA.motores[k], e = (m.validacion || {}).estado;
+    var clave = (!m.componentes || !m.componentes.length) ? 'sin_fuente' : e;
+    cuenta[clave] = (cuenta[clave] || 0) + 1;
+  });
+  var NOMBRES_RES = {validada:['validado', 'validados', 't-ok'], no_mejora:['no mejora', 'no mejoran', 't-warn'],
+    historial_insuficiente:['espera historia', 'esperan historia', 't-off'], sin_fuente:['sin fuente', 'sin fuente', 't-off']};
+  html += '<div class="resumen">' + ['validada', 'no_mejora', 'historial_insuficiente', 'sin_fuente'].map(function(k){
+    var n = cuenta[k] || 0, t = NOMBRES_RES[k];
+    return '<span class="tag ' + t[2] + '">' + n + ' ' + (n === 1 ? t[0] : t[1]) + '</span>';
+  }).join('') + '</div>';
   Object.keys(DATA.motores).forEach(function(k){
     var m = DATA.motores[k], val = m.validacion || {};
     if (!m.componentes || !m.componentes.length){ sinFuente.push(NOMBRE_MOTOR[k] || k); return; }
@@ -795,6 +844,7 @@ prevB.addEventListener('click', function(){ irA(indiceActual() - 1); });
 nextB.addEventListener('click', function(){ irA(indiceActual() + 1); });
 var esperando = false;
 track.addEventListener('scroll', function(){ if (esperando) return; esperando = true; requestAnimationFrame(function(){ esperando = false; posicion(); }); });
+document.getElementById('casos-fold').addEventListener('toggle', posicion);
 document.getElementById('caso-tabs').addEventListener('click', function(ev){ var b = ev.target.closest('[data-caso]'); if (!b) return; CASO_I = +b.dataset.caso; renderCasos(); });
 
 /* ---------- eventos y fuentes ---------- */
@@ -848,6 +898,12 @@ function renderCabecera(){
   document.getElementById('link-txt').textContent = ok + '/' + activas + ' fuentes al día, ' + fecha(DATA.generado.slice(0, 10));
   document.getElementById('led').className = 'led vivo' + (ok < activas * 0.6 ? ' warn' : '');
   document.getElementById('stamp').textContent = 'Datos del ' + fecha(DATA.generado.slice(0, 10)) + '. Reglas versión ' + DATA.version_reglas + '. Se actualiza cada 2 días.';
+  var dias = Math.floor((Date.now() - Date.parse(DATA.generado)) / 864e5);
+  if (dias >= 5){
+    var av = document.getElementById('aviso'); av.hidden = false;
+    av.textContent = 'Los datos tienen ' + dias + ' días. La tarea automática debería correr cada 2 días: revisa la pestaña Actions del repositorio por si se pausó o falló.';
+    document.getElementById('led').className = 'led warn';
+  }
 }
 
 /* ---------- arranque ---------- */
