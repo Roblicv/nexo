@@ -953,8 +953,7 @@ function renderCabecera(){
 /* ---------- arranque ---------- */
 function arranque(){
   var boot = document.getElementById('boot'), txt = document.getElementById('boot-txt');
-  var visto = false; try { visto = sessionStorage.getItem('nexo-arranque') === '1'; sessionStorage.setItem('nexo-arranque', '1'); } catch(e) {}
-  if (QUIETO || visto || !DATA){ boot.classList.add('fuera'); return; }
+  if (QUIETO || !DATA){ boot.classList.add('fuera'); return; }
   var lineas = ['NEXO, reglas versión ' + DATA.version_reglas];
   Object.keys(DATA.variables).forEach(function(k){
     var v = DATA.variables[k]; if (v.estado === 'desactivada') return;
