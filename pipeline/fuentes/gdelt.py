@@ -1,12 +1,13 @@
 """GDELT: intensidad de cobertura de noticias sobre un tema (API DOC 2.0).
 
 GDELT limita las consultas por dirección IP, y las máquinas de GitHub comparten direcciones.
-Por eso se espera 10 segundos entre consultas y, si responde 429 (demasiadas peticiones),
-se reintenta con esperas cada vez más largas.
+Por eso se espera unos 20 segundos entre consultas y, si responde 429 (demasiadas peticiones),
+se reintenta con esperas más largas. Las consultas que aun así fallen se repiten al final de la ejecución.
 """
 from __future__ import annotations
 
 import datetime as dt
+import random
 import statistics
 import time
 
@@ -15,15 +16,15 @@ import requests
 from .comun import AGENTE, FuenteError, resumen
 
 URL = "https://api.gdeltproject.org/api/v2/doc/doc"
-ESPERA_ENTRE_CONSULTAS = 10
-ESPERAS_429 = (30, 60, 120)
+ESPERA_ENTRE_CONSULTAS = 20
+ESPERAS_429 = (40, 80)
 _ULTIMA_LLAMADA = [0.0]
 
 
 def _consultar(consulta: str) -> dict:
     params = {"query": consulta, "mode": "timelinevol", "format": "json", "timespan": "12w"}
     for intento in range(len(ESPERAS_429) + 1):
-        espera = ESPERA_ENTRE_CONSULTAS - (time.time() - _ULTIMA_LLAMADA[0])
+        espera = ESPERA_ENTRE_CONSULTAS + random.uniform(0, 5) - (time.time() - _ULTIMA_LLAMADA[0])
         if espera > 0:
             time.sleep(espera)
         _ULTIMA_LLAMADA[0] = time.time()

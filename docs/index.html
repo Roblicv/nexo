@@ -157,9 +157,9 @@ details.fold>summary:hover .chev{background:var(--forest-soft)}
 .b-yes{background:var(--forest-soft);color:var(--forest)}
 .b-no{background:var(--ochre-soft);color:var(--ochre)}
 .off-line{font-size:.82rem;color:var(--muted);margin:8px 0 0}
-.inline-stats{display:flex;flex-wrap:wrap;gap:8px 22px;margin:12px 0}
+.inline-stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px 14px;margin:12px 0}
 .inline-stats div b{display:block;font-family:"Newsreader",Georgia,serif;font-weight:500;font-size:1.45rem;font-variant-numeric:tabular-nums}
-.inline-stats div span{font-size:.8rem;color:var(--muted)}
+.inline-stats div span{font-size:.76rem;line-height:1.35;color:var(--muted);display:block}
 .p-conflicto{background:var(--ochre-soft);color:var(--ochre)}
 .err{padding:14px 16px;border:1px solid var(--line);border-radius:8px;background:var(--surface)}
 section.fold-sec{padding:18px 0 6px}
@@ -188,9 +188,9 @@ section.fold-sec{padding:18px 0 6px}
     <nav class="sections" aria-label="Secciones">
       <a href="#pronostico">Pronóstico</a>
       <a href="#lecturas">Lecturas</a>
+      <a href="#juego">Juego</a>
       <a href="#norte">El norte</a>
       <a href="#tipo">Tipo</a>
-      <a href="#juego">Juego</a>
       <a href="#contexto">Contexto</a>
       <a href="#casos">Casos</a>
       <a href="#fuentes">Fuentes</a>
@@ -205,8 +205,9 @@ section.fold-sec{padding:18px 0 6px}
   <p class="lede">Probabilidad acumulada, año por año, calculada solo con datos públicos y reglas fijas. Nadie mueve los valores a mano.</p>
   <div class="seg" role="group" aria-label="Qué cuenta como pandemia">
     <button type="button" data-type="cualquiera" aria-pressed="true">Cualquier pandemia</button>
-    <button type="button" data-type="severa" aria-pressed="false">Solo severas</button>
+    <button type="button" data-type="severa" aria-pressed="false">Severa, como 2020</button>
   </div>
+  <p class="small">Severas: 1918 y 2020. «Cualquier pandemia» suma también las de 1957, 1968 y 2009, que fueron más leves.</p>
   <p class="verdict" id="verdict" aria-live="polite">Cargando datos…</p>
   <figure>
     <svg id="chart" viewBox="0 0 360 230" role="img" aria-label="Probabilidad acumulada de pandemia por año, 2027 a 2075"></svg>
@@ -224,6 +225,19 @@ section.fold-sec{padding:18px 0 6px}
   <div id="lecturas-panel"></div>
 </section>
 
+<section id="juego">
+  <h2>El juego de hoy</h2>
+  <p class="small">El pilar 1 convierte las lecturas de conflicto, cooperación y movilización en los incentivos que tiene un país para anunciar un brote nuevo. Se recalcula en cada ejecución.</p>
+  <div class="inline-stats" id="juego-stats"></div>
+  <div id="juego-entradas"></div>
+  <details class="fold">
+    <summary><h3>Cómo funciona el juego</h3><span class="chev" aria-hidden="true"></span></summary>
+    <p>Un país que detecta un brote elige entre anunciarlo pronto o retrasarlo. Anunciar trae costos internos y, a veces, sanciones de otros países; retrasar arriesga que se descubra y que el brote crezca. El equilibrio fija cuántas semanas tarda el mundo en enterarse, y esas semanas deciden si el brote se contiene o escapa.</p>
+    <p>Con más conflicto suben las sanciones esperadas; con más cooperación sube el apoyo al país que anuncia y el costo de ocultar; con más movilización social sube el costo político interno de dar la noticia. Cada efecto está escrito en las reglas.</p>
+    <div class="doc"><p>Precedente: en noviembre de 2021 Sudáfrica compartió rápido la secuencia de ómicron y decenas de países respondieron con prohibiciones de viaje. Científicos advirtieron que castigar la transparencia incentiva el silencio.</p></div>
+  </details>
+</section>
+
 <section id="norte">
   <h2>El norte: solo entra lo que acierta</h2>
   <p class="small">Cada motor se prueba hacia atrás contra los años con emergencias sanitarias internacionales. Si no anticipa mejor que la tasa base, su peso es 0. Lo mismo vale para las hipótesis.</p>
@@ -234,16 +248,6 @@ section.fold-sec{padding:18px 0 6px}
   <h2>Qué tipo de pandemia</h2>
   <p class="small" id="tipo-nota"></p>
   <div class="bars" id="bars"></div>
-</section>
-
-<section id="juego" class="fold-sec">
- <details class="fold">
-  <summary><h2>El dilema de reportar un brote</h2><span class="chev" aria-hidden="true"></span></summary>
-  <p>Cuando un país detecta un brote nuevo elige entre anunciarlo pronto o retrasarlo. Anunciar trae costos internos y, a veces, sanciones de otros países; retrasar arriesga que se descubra y que el brote crezca. El equilibrio de ese juego fija cuántas semanas tarda el mundo en enterarse, y esas semanas deciden si un brote se contiene o escapa.</p>
-  <div class="doc"><p>Precedente: en noviembre de 2021 Sudáfrica compartió rápido la secuencia de ómicron y decenas de países respondieron con prohibiciones de viaje. Científicos advirtieron que castigar la transparencia incentiva el silencio.</p></div>
-  <div class="inline-stats" id="juego-stats"></div>
-  <p class="small">Estos parámetros son supuestos registrados en las reglas, no datos medidos. La variable de cooperación entre países es el primer paso para medirlos.</p>
- </details>
 </section>
 
 <section id="contexto" class="fold-sec">
@@ -285,17 +289,13 @@ section.fold-sec{padding:18px 0 6px}
 <section id="metodo" class="fold-sec">
  <details class="fold">
   <summary><h2>Método</h2><span class="chev" aria-hidden="true"></span></summary>
-  <div class="formula">λ(año) = λ₀ · (1 + g)<sup>año − 2026</sup> · ∏ e<sup>eᵢ·xᵢ</sup></div>
-  <div class="formula">P(al menos una hasta el año Y) = 1 − exp(−Σ λ(año))</div>
   <ol class="method">
-    <li><strong>Tasa base λ₀.</strong> Cinco pandemias reconocidas entre 1900 y 2025 (1918, 1957, 1968, 2009 y 2020) dan unos 4 % anual; las dos severas, unos 2 % anual, en línea con Marani y colegas (PNAS, 2021).</li>
-    <li><strong>Tendencia g.</strong> Fija en las reglas: un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023).</li>
-    <li><strong>Lecturas.</strong> Cada una se convierte en x = tanh(z / 2), donde z mide cuántas desviaciones se aleja de su línea base. Una lectura de más de 28 días se muestra, pero no entra.</li>
-    <li><strong>Validación.</strong> Un motor solo multiplica la tasa si mejora la puntuación de Brier fuera de muestra frente a la tasa base. Si no, su elasticidad eᵢ es 0.</li>
-    <li><strong>Incertidumbre.</strong> 1 500 simulaciones con la tasa base, la tendencia y los multiplicadores variando según su incertidumbre. La curva es la media; la banda, los percentiles 10 y 90.</li>
-    <li><strong>Frecuencia.</strong> Una tarea de GitHub corre cada 2 días. Cada cambio de datos y de reglas queda en el historial del repositorio.</li>
+    <li><strong>Datos.</strong> Cada 2 días se descargan las fuentes conectadas y cada lectura se compara con su propia historia: x = tanh(z / 2), entre −1 y +1.</li>
+    <li><strong>Juego.</strong> Las lecturas de conflicto, cooperación y movilización ajustan los incentivos del dilema de reportar; su equilibrio da la demora de detección y la probabilidad de que un brote escape.</li>
+    <li><strong>Probabilidad.</strong> La tasa histórica de pandemias (5 desde 1900; 2 severas) crece 1,5 % al año y se multiplica por los motores validados: λ(año) = λ₀ · 1,015<sup>año − 2026</sup> · ∏ e<sup>eᵢ·xᵢ</sup>. La curva es P = 1 − e<sup>−Σλ</sup>, con 1 500 simulaciones para la banda de incertidumbre.</li>
+    <li><strong>Validación.</strong> Un motor, incluido el juego, solo entra si mejora los aciertos frente a la tasa base al probarlo hacia atrás. Si no, su peso es 0.</li>
   </ol>
-  <p class="small">Límites: pocos eventos históricos y muchos motores aún sin fuente automática. Es una herramienta para ordenar evidencia, no un pronóstico oficial ni asesoramiento sanitario.</p>
+  <p class="small">Contraste externo: Airfinity estimó en 2023 un 27,5 % de probabilidad de una pandemia tan mortal como la COVID-19 en la década siguiente; aquí, la de una severa entre 2027 y 2036 sale del mismo orden. Es una herramienta para ordenar evidencia, no un pronóstico oficial ni asesoramiento sanitario.</p>
  </details>
 </section>
 </main>
@@ -389,7 +389,7 @@ function renderPronostico(){
 var GRUPOS = [
   ['Agencias sanitarias', ['brotes_oms', 'resp_europa', 'ili_eeuu']],
   ['Conflicto y cooperación', ['conflicto_global', 'eeuu_iran', 'cooperacion_global', 'conflicto_acled']],
-  ['Movilización social', ['movilizacion_global', 'movilizacion_francia', 'movilizacion_brasil', 'protestas_acled']]
+  ['Movilización social', ['movilizacion_global', 'movilizacion_latam', 'movilizacion_europa_oeste', 'movilizacion_europa_este', 'protestas_acled']]
 ];
 function renderLecturas(){
   var vars = DATA.variables, usadas = {}, html = '';
@@ -425,6 +425,10 @@ function renderNorte(){
       (val.brier_base !== undefined ? ' Brier con la tasa base: ' + nf(val.brier_base, 3) + '; con la variable: ' + nf(val.brier_con_variable, 3) + ' (' + val.n + ' años).' : '') +
       (m.en_pronostico ? ' Entra al pronóstico con elasticidad ' + nf(m.e, 2) + '.' : '') + '</div></div>';
   });
+  if (DATA.juego && DATA.juego.validacion){
+    var vj = DATA.juego.validacion;
+    html += '<div class="vrow"><div class="vhead"><span class="lbl">Juego (pilar 1)</span><span class="vval"></span>' + badge(vj.estado) + '</div><div class="vdet">' + esc(vj.mensaje || '') + '</div></div>';
+  }
   var hip = DATA.hipotesis || (DATA.hipotesis_autor ? {autor: DATA.hipotesis_autor} : {});
   var NOMBRES_H = {autor:'Hipótesis del autor', tregua:'Hipótesis de la tregua'};
   Object.keys(hip).forEach(function(k){
@@ -470,12 +474,36 @@ function renderTipo(){
 }
 
 /* ---------- secciones plegadas ---------- */
+var NOMBRE_PARAM = {pi:'probabilidad de sanciones', a:'apoyo internacional', g:'costo de ocultar', c:'costo interno de anunciar'};
 function renderJuego(){
   var j = DATA.juego; if (!j) return;
+  var hoy = j.hoy || j, base = j.base || j;
+  function cmp(v, b, f){ return f(v) === f(b) ? 'igual que la base' : 'base: ' + f(b); }
+  var fp = function(v){ return pct(v); }, fs = function(v){ return nf(v, 1) + ' sem.'; };
   document.getElementById('juego-stats').innerHTML =
-    '<div><b>' + pct(j.p_anuncio) + '</b><span>Probabilidad de anuncio temprano</span></div>' +
-    '<div><b>' + nf(j.demora_semanas, 1) + ' sem.</b><span>Demora media de detección</span></div>' +
-    '<div><b>' + pct(j.escape) + '</b><span>Probabilidad de que un brote escape</span></div>';
+    '<div><b>' + pct(hoy.p_anuncio) + '</b><span>Anuncio temprano, ' + cmp(hoy.p_anuncio, base.p_anuncio, fp) + '</span></div>' +
+    '<div><b>' + fs(hoy.demora_semanas) + '</b><span>Demora de detección, ' + cmp(hoy.demora_semanas, base.demora_semanas, fs) + '</span></div>' +
+    '<div><b>' + pct(hoy.escape) + '</b><span>Probabilidad de que un brote escape, ' + cmp(hoy.escape, base.escape, fp) + '</span></div>';
+  var html = '';
+  if (j.entradas && j.entradas.length){
+    var porMotor = {}, orden = [];
+    j.entradas.forEach(function(e){ if (!porMotor[e.motor]){ porMotor[e.motor] = {valor:e.valor, efectos:[]}; orden.push(e.motor); }
+      var f = e.factor !== undefined ? e.factor : Math.exp((e.k || 0) * e.valor);
+      porMotor[e.motor].efectos.push((NOMBRE_PARAM[e.parametro] || e.parametro) + (f > 1.0005 ? ' sube' : f < 0.9995 ? ' baja' : ' igual') + (e.factor !== undefined || e.k ? ' (×' + nf(f, 2) + ')' : ''));
+    });
+    html += '<div class="panel">' + orden.map(function(m){
+      var e = porMotor[m];
+      return '<div class="vrow"><div class="vhead"><span class="lbl">' + esc(mayus(NOMBRE_MOTOR[m] || m)) + '</span><span class="vval">' + signed(e.valor) + '</span></div>' +
+        '<div class="vdet">' + mayus(e.efectos.join(', ')) + '.</div></div>';
+    }).join('') + '</div>';
+  } else if (j.hoy) {
+    html += '<p class="off-line">Sin lecturas al día de conflicto, cooperación ni movilización: el juego usa sus valores base.</p>';
+  }
+  if (j.multiplicador !== undefined){
+    html += '<p class="small">Efecto sobre la tasa de pandemias: ×' + nf(j.multiplicador, 2) + '. ' +
+      (j.en_pronostico ? 'Ya entra a la curva.' : 'Entrará a la curva cuando el motor del juego se valide.') + '</p>';
+  }
+  document.getElementById('juego-entradas').innerHTML = html;
 }
 var TIPO_EVENTO = {eleccion:'Elección', protesta:'Protesta', conflicto:'Conflicto'};
 function renderEventos(){
@@ -543,7 +571,7 @@ var SOURCES = [
     {n:'Africa CDC, OPS, UKHSA, JIHS, KDCA, NCDC, Brasil', w:'Informes semanales nacionales y regionales.', on:false}
   ]},
   {group:'Conflicto, cooperación y movilización', items:[
-    {n:'GDELT', w:'Cobertura mundial de noticias sobre protestas, conflicto armado, diplomacia y negociaciones; también EE. UU.-Irán, Francia y Brasil.', on:true},
+    {n:'GDELT', w:'Cobertura mundial de noticias sobre protestas, conflicto armado, diplomacia y negociaciones; también EE. UU.-Irán, Latinoamérica y Europa.', on:true},
     {n:'ACLED', w:'Protestas, combates y bombardeos evento por evento. Opcional: necesita cuenta gratuita.', on:true},
     {n:'Freedom House, V-Dem, OxCGRT', w:'Restricciones políticas y sanitarias durante la COVID-19. Calibran el contexto.', on:false}
   ]},

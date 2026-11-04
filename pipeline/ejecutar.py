@@ -44,7 +44,18 @@ def _mensaje(e: Exception) -> str:
 
 def leer_variables(s, reglas: dict, anterior: dict, hoy: dt.date) -> tuple[dict, dict]:
     salida, extras = {}, {}
-    for clave, regla in reglas["variables"].items():
+    _leer_lista(s, reglas, anterior, hoy, list(reglas["variables"].items()), salida, extras)
+    # GDELT limita las consultas: las que fallaron se repiten una vez al final.
+    fallidas = [(k, r) for k, r in reglas["variables"].items()
+                if r["fuente"] == "gdelt" and salida[k]["estado"] in ("error", "desactualizado")]
+    if fallidas:
+        print(f"  Segundo intento con GDELT para {len(fallidas)} consultas")
+        _leer_lista(s, reglas, anterior, hoy, fallidas, salida, extras)
+    return {k: salida[k] for k in reglas["variables"]}, extras
+
+
+def _leer_lista(s, reglas, anterior, hoy, lista, salida, extras) -> None:
+    for clave, regla in lista:
         info = {"etiqueta": regla["etiqueta"], "motor": regla.get("motor"), "fuente": regla["fuente"],
                 "regla": f"{regla['lectura']}. Línea base: {regla['linea_base']}."}
         try:
@@ -70,7 +81,6 @@ def leer_variables(s, reglas: dict, anterior: dict, hoy: dt.date) -> tuple[dict,
                 salida[clave] = {**info, "estado": "desactivada" if desactivada else "error",
                                  "valor": None, "detalle": mensaje[:300]}
             print(f"  --   {clave}: {mensaje[:160]}")
-    return salida, extras
 
 
 def combinar_motores(reglas: dict, vars_: dict) -> dict:
@@ -153,7 +163,15 @@ def main() -> None:
     motores = combinar_motores(reglas, vars_)
     validar_motores(reglas, motores, extras, hoy)
 
-    juego = modelo.juego(modelo.JUEGO_BASE)
+    rj = reglas["juego"]
+    j_base = modelo.juego(rj["base"])
+    j_hoy, params_hoy, usadas = modelo.juego_con_datos(rj["base"], rj["entradas"], motores, rj.get("limites", {}))
+    juego = {"base": {k: round(v, 4) for k, v in j_base.items()},
+             "hoy": {k: round(v, 4) for k, v in j_hoy.items()},
+             "parametros_hoy": params_hoy, "entradas": usadas,
+             "multiplicador": round(j_hoy["escape"] / j_base["escape"], 4),
+             "en_pronostico": False,
+             "validacion": {"estado": "historial_insuficiente", "mensaje": rj["regla"]}}
     log_m = sum(m["e"] * m["valor"] for m in motores.values() if m["en_pronostico"])
     p = reglas["pronostico"]
     pron = {tipo: modelo.pronostico(cfg["eventos"], cfg["anios"], p["tendencia_anual"], math.exp(log_m),
@@ -172,7 +190,7 @@ def main() -> None:
                    "validacion": reglas["validacion"]["regla"]},
         "variables": vars_,
         "motores": motores,
-        "juego": {k: round(v, 4) for k, v in juego.items()},
+        "juego": juego,
         "multiplicador": round(math.exp(log_m), 4),
         "pronostico": pron,
         "hipotesis": validar_hipotesis(s, reglas, hoy),

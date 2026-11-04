@@ -2,11 +2,12 @@
 # Ninguna variable se ajusta a mano: cada valor sale de una fuente pública con la regla escrita aquí.
 # Cambiar una regla exige subir "version" y queda registrado en el historial de Git.
 
-version: 2
-registrado: "2026-11-03"
+version: 3
+registrado: "2026-11-04"
 cambios:
   - "v1 (2026-10-29): primera versión."
   - "v2 (2026-11-03): se elimina la simulación; se añaden conflicto armado, conflicto EE. UU.-Irán y cooperación entre países; hipótesis de la tregua; ejecución cada 2 días."
+  - "v3 (2026-11-04): Francia y Brasil se sustituyen por regiones (Latinoamérica, Europa occidental, Europa del Este); el juego del pilar 1 toma sus entradas de los datos."
 
 transformacion: "x = tanh(z / 2), con z = (lectura - media de la línea base) / desviación de la línea base"
 vigencia_dias: 28  # una lectura más vieja que esto se muestra, pero no entra al pronóstico
@@ -53,19 +54,26 @@ variables:
     consulta: "theme:PROTEST"
     lectura: "Intensidad de cobertura de noticias sobre protestas, últimas 4 semanas"
     linea_base: "Las 8 semanas anteriores dentro de la ventana de GDELT"
-  movilizacion_francia:
+  movilizacion_latam:
     motor: null
     fuente: gdelt
-    etiqueta: "Movilización en Francia (contexto)"
-    consulta: "theme:PROTEST sourcecountry:france"
-    lectura: "Igual que la mundial, solo medios de Francia"
+    etiqueta: "Movilización en Latinoamérica"
+    consulta: "theme:PROTEST (sourcecountry:argentina OR sourcecountry:bolivia OR sourcecountry:brazil OR sourcecountry:chile OR sourcecountry:colombia OR sourcecountry:ecuador OR sourcecountry:mexico OR sourcecountry:peru OR sourcecountry:venezuela)"
+    lectura: "Cobertura de protestas en medios de nueve países latinoamericanos, últimas 4 semanas"
     linea_base: "Las 8 semanas anteriores"
-  movilizacion_brasil:
+  movilizacion_europa_oeste:
     motor: null
     fuente: gdelt
-    etiqueta: "Movilización en Brasil (contexto)"
-    consulta: "theme:PROTEST sourcecountry:brazil"
-    lectura: "Igual que la mundial, solo medios de Brasil"
+    etiqueta: "Movilización en Europa occidental"
+    consulta: "theme:PROTEST (sourcecountry:france OR sourcecountry:germany OR sourcecountry:spain OR sourcecountry:italy OR sourcecountry:unitedkingdom OR sourcecountry:portugal OR sourcecountry:belgium OR sourcecountry:netherlands)"
+    lectura: "Cobertura de protestas en medios de ocho países de Europa occidental, últimas 4 semanas"
+    linea_base: "Las 8 semanas anteriores"
+  movilizacion_europa_este:
+    motor: null
+    fuente: gdelt
+    etiqueta: "Movilización en Europa del Este"
+    consulta: "theme:PROTEST (sourcecountry:poland OR sourcecountry:ukraine OR sourcecountry:hungary OR sourcecountry:romania OR sourcecountry:serbia OR sourcecountry:georgia OR sourcecountry:slovakia OR sourcecountry:bulgaria)"
+    lectura: "Cobertura de protestas en medios de ocho países de Europa del Este, últimas 4 semanas"
     linea_base: "Las 8 semanas anteriores"
   conflicto_global:
     motor: conflicto
@@ -118,6 +126,19 @@ motores:
   aereo:  {e_previa: 0.15, pendiente: "Los datos de la OACI son de pago"}
   urbano: {e_previa: 0.10, pendiente: "ONU-Hábitat publica una vez al año"}
   conf:   {e_previa: -0.15, pendiente: "Encuestas de confianza anuales"}
+
+juego:
+  descripcion: "Dilema de reportar un brote: el equilibrio se recalcula con los datos de cada ejecución."
+  base: {c: 3, pi: 0.5, b: 5, a: 2, g: 5, s: 0.5}
+  # Cada parámetro se multiplica por e^(k·x), donde x es el valor del motor (−1 a +1) en esta ejecución.
+  entradas:
+    pi: {motor: conflicto, k: 0.6, efecto: "Más conflicto, más probabilidad de sanciones y cierres de fronteras"}
+    pi_coop: {parametro: pi, motor: cooperacion, k: -0.6, efecto: "Más cooperación, menos sanciones"}
+    a: {motor: cooperacion, k: 0.5, efecto: "Más cooperación, más apoyo al país que anuncia"}
+    g: {motor: cooperacion, k: 0.3, efecto: "Más cooperación, más costo reputacional por ocultar"}
+    c: {motor: prot, k: 0.3, efecto: "Más movilización, más costo político interno de anunciar"}
+  limites: {pi: [0.02, 0.98]}
+  regla: "El equilibrio de hoy se muestra siempre; su efecto entra al pronóstico solo cuando el motor del juego se valide."
 
 hipotesis:
   autor:

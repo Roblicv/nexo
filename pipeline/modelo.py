@@ -21,6 +21,23 @@ def juego(p: dict) -> dict:
     return {"p_anuncio": prob, "demora_semanas": demora, "escape": 1 - math.exp(-demora / THETA)}
 
 
+def juego_con_datos(base: dict, entradas: dict, motores: dict, limites: dict) -> tuple[dict, dict, list]:
+    """Ajusta los parámetros del juego con los motores de esta ejecución y recalcula el equilibrio."""
+    params = dict(base)
+    usadas = []
+    for nombre, e in entradas.items():
+        parametro = e.get("parametro", nombre)
+        x = (motores.get(e["motor"]) or {}).get("valor")
+        if x is None:
+            continue
+        params[parametro] *= math.exp(e["k"] * x)
+        usadas.append({"parametro": parametro, "motor": e["motor"], "valor": x, "k": e["k"],
+                       "factor": round(math.exp(e["k"] * x), 3), "efecto": e["efecto"]})
+    for parametro, (lo, hi) in limites.items():
+        params[parametro] = min(hi, max(lo, params[parametro]))
+    return juego(params), {k: round(v, 3) for k, v in params.items()}, usadas
+
+
 def pronostico(eventos: int, anios: int, tendencia: float, multiplicador: float,
                simulaciones: int = 1500, semilla: int = 20261029) -> dict:
     rng = np.random.default_rng(semilla)
