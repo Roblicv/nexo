@@ -1,6 +1,6 @@
 {
  "version_reglas": 5,
- "generado": "2026-11-07T12:43:02+00:00",
+ "generado": "2026-11-09T15:41:20+00:00",
  "reglas": {
   "tendencia": 0.015,
   "justificacion_tendencia": "Un tercio del ~5 % anual de aumento de derrames zoonóticos de alto impacto (Meadows y colegas, BMJ Global Health, 2023).",
@@ -15,14 +15,14 @@
    "fuente": "oms_don",
    "regla": "Notas de Disease Outbreak News publicadas en las últimas 12 semanas. Línea base: La misma ventana de 12 semanas en cada año de 2015 a 2025.",
    "estado": "ok",
-   "lectura": 7,
-   "media": 16.5455,
-   "desviacion": 8.5426,
-   "z": -1.117,
-   "valor": -0.507,
-   "fecha_dato": "2026-10-23",
-   "detalle": "7 notas en 12 semanas; media histórica 16,5 (11 años)",
-   "detalle_lectura": "7 notas en 12 semanas; media histórica 16,5 (11 años)"
+   "lectura": 10,
+   "media": 16.1818,
+   "desviacion": 8.7055,
+   "z": -0.71,
+   "valor": -0.341,
+   "fecha_dato": "2026-11-06",
+   "detalle": "10 notas en 12 semanas; media histórica 16,2 (11 años)",
+   "detalle_lectura": "10 notas en 12 semanas; media histórica 16,2 (11 años)"
   },
   "resp_europa": {
    "etiqueta": "Gripe en Europa (ECDC)",
@@ -60,14 +60,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de protesta en las noticias del mundo, últimas 4 semanas. Línea base: Las mismas 4 semanas en años anteriores (si hay al menos 3) o las 8 semanas previas.",
    "estado": "ok",
-   "lectura": 1.072,
-   "media": 0.7755,
-   "desviacion": 0.1307,
-   "z": 2.269,
-   "valor": 0.813,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Protestas sobre el total de eventos: 1,07 % en las últimas 4 semanas; 0,78 % en las 8 semanas anteriores",
-   "detalle_lectura": "Protestas sobre el total de eventos: 1,07 % en las últimas 4 semanas; 0,78 % en las 8 semanas anteriores"
+   "lectura": 1.0533,
+   "media": 0.7871,
+   "desviacion": 0.1396,
+   "z": 1.908,
+   "valor": 0.742,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Protestas sobre el total de eventos: 1,05 % en las últimas 4 semanas; 0,79 % en las 8 semanas anteriores",
+   "detalle_lectura": "Protestas sobre el total de eventos: 1,05 % en las últimas 4 semanas; 0,79 % en las 8 semanas anteriores"
   },
   "movilizacion_latam": {
    "etiqueta": "Movilización en Latinoamérica",
@@ -75,14 +75,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de protesta ocurridos en 20 países latinoamericanos, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 0.7357,
-   "media": 0.7661,
-   "desviacion": 0.1388,
-   "z": -0.22,
-   "valor": -0.109,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Protestas sobre los eventos ocurridos en Latinoamérica: 0,74 % en las últimas 4 semanas; 0,77 % en las 8 semanas anteriores",
-   "detalle_lectura": "Protestas sobre los eventos ocurridos en Latinoamérica: 0,74 % en las últimas 4 semanas; 0,77 % en las 8 semanas anteriores"
+   "lectura": 0.7389,
+   "media": 0.7646,
+   "desviacion": 0.1356,
+   "z": -0.19,
+   "valor": -0.095,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Protestas sobre los eventos ocurridos en Latinoamérica: 0,74 % en las últimas 4 semanas; 0,76 % en las 8 semanas anteriores",
+   "detalle_lectura": "Protestas sobre los eventos ocurridos en Latinoamérica: 0,74 % en las últimas 4 semanas; 0,76 % en las 8 semanas anteriores"
   },
   "movilizacion_europa_oeste": {
    "etiqueta": "Movilización en Europa occidental",
@@ -90,14 +90,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de protesta ocurridos en 16 países de Europa occidental, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 1.9653,
-   "media": 0.9708,
-   "desviacion": 0.4179,
-   "z": 2.38,
-   "valor": 0.831,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Protestas sobre los eventos ocurridos en Europa occidental: 1,97 % en las últimas 4 semanas; 0,97 % en las 8 semanas anteriores",
-   "detalle_lectura": "Protestas sobre los eventos ocurridos en Europa occidental: 1,97 % en las últimas 4 semanas; 0,97 % en las 8 semanas anteriores"
+   "lectura": 1.9627,
+   "media": 0.9906,
+   "desviacion": 0.4224,
+   "z": 2.302,
+   "valor": 0.818,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Protestas sobre los eventos ocurridos en Europa occidental: 1,96 % en las últimas 4 semanas; 0,99 % en las 8 semanas anteriores",
+   "detalle_lectura": "Protestas sobre los eventos ocurridos en Europa occidental: 1,96 % en las últimas 4 semanas; 0,99 % en las 8 semanas anteriores"
   },
   "movilizacion_europa_este": {
    "etiqueta": "Movilización en Europa del Este",
@@ -105,14 +105,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de protesta ocurridos en 21 países de Europa del Este, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 1.2081,
-   "media": 0.8998,
-   "desviacion": 0.131,
-   "z": 2.352,
-   "valor": 0.826,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Protestas sobre los eventos ocurridos en Europa del Este: 1,21 % en las últimas 4 semanas; 0,90 % en las 8 semanas anteriores",
-   "detalle_lectura": "Protestas sobre los eventos ocurridos en Europa del Este: 1,21 % en las últimas 4 semanas; 0,90 % en las 8 semanas anteriores"
+   "lectura": 1.2183,
+   "media": 0.8967,
+   "desviacion": 0.164,
+   "z": 1.961,
+   "valor": 0.753,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Protestas sobre los eventos ocurridos en Europa del Este: 1,22 % en las últimas 4 semanas; 0,90 % en las 8 semanas anteriores",
+   "detalle_lectura": "Protestas sobre los eventos ocurridos en Europa del Este: 1,22 % en las últimas 4 semanas; 0,90 % en las 8 semanas anteriores"
   },
   "conflicto_global": {
    "etiqueta": "Conflicto armado mundial",
@@ -120,14 +120,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de conflicto armado en las noticias del mundo, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 7.3118,
-   "media": 7.809,
-   "desviacion": 0.3905,
-   "z": -1.274,
-   "valor": -0.563,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Agresiones, combates y violencia masiva sobre el total de eventos: 7,31 % en las últimas 4 semanas; 7,81 % en las 8 semanas anteriores",
-   "detalle_lectura": "Agresiones, combates y violencia masiva sobre el total de eventos: 7,31 % en las últimas 4 semanas; 7,81 % en las 8 semanas anteriores"
+   "lectura": 7.3312,
+   "media": 7.7749,
+   "desviacion": 0.3887,
+   "z": -1.141,
+   "valor": -0.516,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Agresiones, combates y violencia masiva sobre el total de eventos: 7,33 % en las últimas 4 semanas; 7,77 % en las 8 semanas anteriores",
+   "detalle_lectura": "Agresiones, combates y violencia masiva sobre el total de eventos: 7,33 % en las últimas 4 semanas; 7,77 % en las 8 semanas anteriores"
   },
   "eeuu_iran": {
    "etiqueta": "Conflicto EE. UU.-Irán",
@@ -135,14 +135,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos entre países que son conflicto material entre EE. UU. e Irán, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 0.3764,
-   "media": 0.5272,
-   "desviacion": 0.2326,
-   "z": -0.648,
-   "valor": -0.313,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Conflicto material entre EE. UU. e Irán sobre los eventos entre países: 0,38 % en las últimas 4 semanas; 0,53 % en las 8 semanas anteriores",
-   "detalle_lectura": "Conflicto material entre EE. UU. e Irán sobre los eventos entre países: 0,38 % en las últimas 4 semanas; 0,53 % en las 8 semanas anteriores"
+   "lectura": 0.3906,
+   "media": 0.5298,
+   "desviacion": 0.229,
+   "z": -0.608,
+   "valor": -0.295,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Conflicto material entre EE. UU. e Irán sobre los eventos entre países: 0,39 % en las últimas 4 semanas; 0,53 % en las 8 semanas anteriores",
+   "detalle_lectura": "Conflicto material entre EE. UU. e Irán sobre los eventos entre países: 0,39 % en las últimas 4 semanas; 0,53 % en las 8 semanas anteriores"
   },
   "cooperacion_global": {
    "etiqueta": "Cooperación entre países",
@@ -150,14 +150,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos entre países que son cooperación verbal o material, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 75.8221,
-   "media": 73.1268,
-   "desviacion": 3.6563,
-   "z": 0.737,
-   "valor": 0.353,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Cooperación sobre el total de eventos entre países: 75,82 % en las últimas 4 semanas; 73,13 % en las 8 semanas anteriores",
-   "detalle_lectura": "Cooperación sobre el total de eventos entre países: 75,82 % en las últimas 4 semanas; 73,13 % en las 8 semanas anteriores"
+   "lectura": 75.7609,
+   "media": 73.1797,
+   "desviacion": 3.659,
+   "z": 0.705,
+   "valor": 0.339,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Cooperación sobre el total de eventos entre países: 75,76 % en las últimas 4 semanas; 73,18 % en las 8 semanas anteriores",
+   "detalle_lectura": "Cooperación sobre el total de eventos entre países: 75,76 % en las últimas 4 semanas; 73,18 % en las 8 semanas anteriores"
   },
   "goldstein_otros": {
    "etiqueta": "Clima entre países, resto de medios",
@@ -165,14 +165,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Promedio de la escala de Goldstein de los eventos entre países en el resto de medios, últimas 4 semanas. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 1.0036,
-   "media": 0.7207,
-   "desviacion": 0.136,
-   "z": 2.079,
-   "valor": 0.778,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Promedio de Goldstein: +1,00 en las últimas 4 semanas; +0,72 en las 8 semanas anteriores",
-   "detalle_lectura": "Promedio de Goldstein: +1,00 en las últimas 4 semanas; +0,72 en las 8 semanas anteriores"
+   "lectura": 0.9972,
+   "media": 0.7254,
+   "desviacion": 0.1591,
+   "z": 1.708,
+   "valor": 0.693,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Promedio de Goldstein: +1,00 en las últimas 4 semanas; +0,73 en las 8 semanas anteriores",
+   "detalle_lectura": "Promedio de Goldstein: +1,00 en las últimas 4 semanas; +0,73 en las 8 semanas anteriores"
   },
   "goldstein_rusos": {
    "etiqueta": "Clima entre países, medios rusos",
@@ -180,14 +180,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Igual, solo con noticias de dominios rusos (.ru, RT, Sputnik, TASS). Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 0.4004,
-   "media": 0.3202,
-   "desviacion": 0.2815,
-   "z": 0.285,
-   "valor": 0.141,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Promedio de Goldstein: +0,40 en las últimas 4 semanas; +0,32 en las 8 semanas anteriores",
-   "detalle_lectura": "Promedio de Goldstein: +0,40 en las últimas 4 semanas; +0,32 en las 8 semanas anteriores"
+   "lectura": 0.3329,
+   "media": 0.3214,
+   "desviacion": 0.3126,
+   "z": 0.037,
+   "valor": 0.018,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Promedio de Goldstein: +0,33 en las últimas 4 semanas; +0,32 en las 8 semanas anteriores",
+   "detalle_lectura": "Promedio de Goldstein: +0,33 en las últimas 4 semanas; +0,32 en las 8 semanas anteriores"
   },
   "goldstein_chinos": {
    "etiqueta": "Clima entre países, medios chinos",
@@ -195,14 +195,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Igual, solo con noticias de dominios chinos (.cn, Xinhua, CGTN, Global Times, China Daily). Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 2.0211,
-   "media": 1.7832,
-   "desviacion": 0.4163,
-   "z": 0.571,
-   "valor": 0.278,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Promedio de Goldstein: +2,02 en las últimas 4 semanas; +1,78 en las 8 semanas anteriores",
-   "detalle_lectura": "Promedio de Goldstein: +2,02 en las últimas 4 semanas; +1,78 en las 8 semanas anteriores"
+   "lectura": 2.2373,
+   "media": 1.8309,
+   "desviacion": 0.4484,
+   "z": 0.906,
+   "valor": 0.424,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Promedio de Goldstein: +2,24 en las últimas 4 semanas; +1,83 en las 8 semanas anteriores",
+   "detalle_lectura": "Promedio de Goldstein: +2,24 en las últimas 4 semanas; +1,83 en las 8 semanas anteriores"
   },
   "conflicto_rusos": {
    "etiqueta": "Conflicto armado según medios rusos",
@@ -210,14 +210,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de conflicto armado en noticias de dominios rusos. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 8.8296,
-   "media": 9.409,
-   "desviacion": 1.4843,
-   "z": -0.39,
-   "valor": -0.193,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Conflicto armado sobre el total de eventos: 8,83 % en las últimas 4 semanas; 9,41 % en las 8 semanas anteriores",
-   "detalle_lectura": "Conflicto armado sobre el total de eventos: 8,83 % en las últimas 4 semanas; 9,41 % en las 8 semanas anteriores"
+   "lectura": 9.1125,
+   "media": 9.2816,
+   "desviacion": 1.4772,
+   "z": -0.114,
+   "valor": -0.057,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Conflicto armado sobre el total de eventos: 9,11 % en las últimas 4 semanas; 9,28 % en las 8 semanas anteriores",
+   "detalle_lectura": "Conflicto armado sobre el total de eventos: 9,11 % en las últimas 4 semanas; 9,28 % en las 8 semanas anteriores"
   },
   "conflicto_chinos": {
    "etiqueta": "Conflicto armado según medios chinos",
@@ -225,14 +225,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de conflicto armado en noticias de dominios chinos. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 5.3154,
-   "media": 5.6102,
-   "desviacion": 1.6508,
-   "z": -0.179,
-   "valor": -0.089,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Conflicto armado sobre el total de eventos: 5,32 % en las últimas 4 semanas; 5,61 % en las 8 semanas anteriores",
-   "detalle_lectura": "Conflicto armado sobre el total de eventos: 5,32 % en las últimas 4 semanas; 5,61 % en las 8 semanas anteriores"
+   "lectura": 5.4622,
+   "media": 5.4948,
+   "desviacion": 1.6023,
+   "z": -0.02,
+   "valor": -0.01,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Conflicto armado sobre el total de eventos: 5,46 % en las últimas 4 semanas; 5,49 % en las 8 semanas anteriores",
+   "detalle_lectura": "Conflicto armado sobre el total de eventos: 5,46 % en las últimas 4 semanas; 5,49 % en las 8 semanas anteriores"
   },
   "conflicto_otros": {
    "etiqueta": "Conflicto armado según el resto de medios",
@@ -240,14 +240,14 @@
    "fuente": "gdelt_eventos",
    "regla": "Porcentaje de eventos de conflicto armado en noticias del resto de dominios. Línea base: Igual que la mundial.",
    "estado": "ok",
-   "lectura": 7.2718,
-   "media": 7.7782,
-   "desviacion": 0.3889,
-   "z": -1.302,
-   "valor": -0.572,
-   "fecha_dato": "2026-11-06",
-   "detalle": "Conflicto armado sobre el total de eventos: 7,27 % en las últimas 4 semanas; 7,78 % en las 8 semanas anteriores",
-   "detalle_lectura": "Conflicto armado sobre el total de eventos: 7,27 % en las últimas 4 semanas; 7,78 % en las 8 semanas anteriores"
+   "lectura": 7.2816,
+   "media": 7.7476,
+   "desviacion": 0.3874,
+   "z": -1.203,
+   "valor": -0.538,
+   "fecha_dato": "2026-11-08",
+   "detalle": "Conflicto armado sobre el total de eventos: 7,28 % en las últimas 4 semanas; 7,75 % en las 8 semanas anteriores",
+   "detalle_lectura": "Conflicto armado sobre el total de eventos: 7,28 % en las últimas 4 semanas; 7,75 % en las 8 semanas anteriores"
   },
   "alimentos_fao": {
    "etiqueta": "Precio de los alimentos (FAO)",
@@ -315,7 +315,7 @@
  },
  "motores": {
   "brotes": {
-   "valor": -0.149,
+   "valor": -0.093,
    "componentes": [
     "brotes_oms",
     "resp_europa",
@@ -335,13 +335,13 @@
     "estado": "no_mejora",
     "n": 13,
     "brier_base": 0.2867,
-    "brier_con_variable": 0.3091,
+    "brier_con_variable": 0.3092,
     "elasticidad": 0.0,
     "mensaje": "La variable no mejora los aciertos: su peso queda en 0."
    }
   },
   "prot": {
-   "valor": 0.813,
+   "valor": 0.742,
    "componentes": [
     "movilizacion_global",
     "protestas_acled"
@@ -357,11 +357,11 @@
     "predictor": "Movilización social mundial del año anterior",
     "estado": "historial_insuficiente",
     "n": 0,
-    "mensaje": "La historia de GDELT ya cubre desde el 20 dic 2024. Cada ejecución añade unos 150 días hacia atrás: llegará a 2015 en unas 24 ejecuciones, cerca de 48 días. Cuando cubra 10 años completos, este motor se pondrá a prueba."
+    "mensaje": "La historia de GDELT ya cubre desde el 23 jul 2024. Cada ejecución añade unos 150 días hacia atrás: llegará a 2015 en unas 23 ejecuciones, cerca de 46 días. Cuando cubra 10 años completos, este motor se pondrá a prueba."
    }
   },
   "conflicto": {
-   "valor": -0.563,
+   "valor": -0.516,
    "componentes": [
     "conflicto_global",
     "conflicto_acled"
@@ -377,11 +377,11 @@
     "predictor": "Conflicto armado mundial del año anterior",
     "estado": "historial_insuficiente",
     "n": 0,
-    "mensaje": "La historia de GDELT ya cubre desde el 20 dic 2024. Cada ejecución añade unos 150 días hacia atrás: llegará a 2015 en unas 24 ejecuciones, cerca de 48 días. Cuando cubra 10 años completos, este motor se pondrá a prueba."
+    "mensaje": "La historia de GDELT ya cubre desde el 23 jul 2024. Cada ejecución añade unos 150 días hacia atrás: llegará a 2015 en unas 23 ejecuciones, cerca de 46 días. Cuando cubra 10 años completos, este motor se pondrá a prueba."
    }
   },
   "cooperacion": {
-   "valor": 0.353,
+   "valor": 0.339,
    "componentes": [
     "cooperacion_global"
    ],
@@ -396,7 +396,7 @@
     "predictor": "Cooperación entre países del año anterior",
     "estado": "historial_insuficiente",
     "n": 0,
-    "mensaje": "La historia de GDELT ya cubre desde el 20 dic 2024. Cada ejecución añade unos 150 días hacia atrás: llegará a 2015 en unas 24 ejecuciones, cerca de 48 días. Cuando cubra 10 años completos, este motor se pondrá a prueba."
+    "mensaje": "La historia de GDELT ya cubre desde el 23 jul 2024. Cada ejecución añade unos 150 días hacia atrás: llegará a 2015 en unas 23 ejecuciones, cerca de 46 días. Cuando cubra 10 años completos, este motor se pondrá a prueba."
    }
   },
   "alimentos": {
@@ -559,57 +559,57 @@
    "escape": 0.3856
   },
   "hoy": {
-   "p_anuncio": 0.9608,
-   "demora_semanas": 2.867,
-   "escape": 0.3799
+   "p_anuncio": 0.9603,
+   "demora_semanas": 2.8706,
+   "escape": 0.3802
   },
   "parametros_hoy": {
-   "c": 3.829,
-   "pi": 0.289,
+   "c": 3.748,
+   "pi": 0.299,
    "b": 5,
-   "a": 2.386,
-   "g": 5.559,
+   "a": 2.369,
+   "g": 5.535,
    "s": 0.441
   },
   "entradas": [
    {
     "parametro": "pi",
     "motor": "conflicto",
-    "valor": -0.563,
+    "valor": -0.516,
     "k": 0.6,
-    "factor": 0.713,
+    "factor": 0.734,
     "efecto": "Más conflicto, más probabilidad de sanciones y cierres de fronteras"
    },
    {
     "parametro": "pi",
     "motor": "cooperacion",
-    "valor": 0.353,
+    "valor": 0.339,
     "k": -0.6,
-    "factor": 0.809,
+    "factor": 0.816,
     "efecto": "Más cooperación, menos sanciones"
    },
    {
     "parametro": "a",
     "motor": "cooperacion",
-    "valor": 0.353,
+    "valor": 0.339,
     "k": 0.5,
-    "factor": 1.193,
+    "factor": 1.185,
     "efecto": "Más cooperación, más apoyo al país que anuncia"
    },
    {
     "parametro": "g",
     "motor": "cooperacion",
-    "valor": 0.353,
+    "valor": 0.339,
     "k": 0.3,
-    "factor": 1.112,
+    "factor": 1.107,
     "efecto": "Más cooperación, más costo reputacional por ocultar"
    },
    {
     "parametro": "c",
     "motor": "prot",
-    "valor": 0.813,
+    "valor": 0.742,
     "k": 0.3,
-    "factor": 1.276,
+    "factor": 1.249,
     "efecto": "Más movilización, más costo político interno de anunciar"
    },
    {
@@ -621,7 +621,7 @@
     "efecto": "Más libertad de prensa, más fácil que se descubra un ocultamiento"
    }
   ],
-  "multiplicador": 0.9852,
+  "multiplicador": 0.9862,
   "en_pronostico": false,
   "validacion": {
    "estado": "historial_insuficiente",
@@ -1163,6 +1163,11 @@
    "fecha": "2026-11-07",
    "anio_50": 2041,
    "p_2027_2036": 0.3736
+  },
+  {
+   "fecha": "2026-11-09",
+   "anio_50": 2041,
+   "p_2027_2036": 0.3736
   }
  ],
  "series": {
@@ -1190,6 +1195,10 @@
    [
     "2026-11-07",
     -0.507
+   ],
+   [
+    "2026-11-09",
+    -0.341
    ]
   ],
   "resp_europa": [
@@ -1215,6 +1224,10 @@
    ],
    [
     "2026-11-07",
+    -0.029
+   ],
+   [
+    "2026-11-09",
     -0.029
    ]
   ],
@@ -1242,6 +1255,10 @@
    [
     "2026-11-07",
     0.09
+   ],
+   [
+    "2026-11-09",
+    0.09
    ]
   ],
   "movilizacion_global": [
@@ -1264,6 +1281,10 @@
    [
     "2026-11-07",
     0.813
+   ],
+   [
+    "2026-11-09",
+    0.742
    ]
   ],
   "eeuu_iran": [
@@ -1282,6 +1303,10 @@
    [
     "2026-11-07",
     -0.313
+   ],
+   [
+    "2026-11-09",
+    -0.295
    ]
   ],
   "cooperacion_global": [
@@ -1300,6 +1325,10 @@
    [
     "2026-11-07",
     0.353
+   ],
+   [
+    "2026-11-09",
+    0.339
    ]
   ],
   "movilizacion_latam": [
@@ -1314,6 +1343,10 @@
    [
     "2026-11-07",
     -0.109
+   ],
+   [
+    "2026-11-09",
+    -0.095
    ]
   ],
   "movilizacion_europa_oeste": [
@@ -1328,6 +1361,10 @@
    [
     "2026-11-07",
     0.831
+   ],
+   [
+    "2026-11-09",
+    0.818
    ]
   ],
   "movilizacion_europa_este": [
@@ -1342,6 +1379,10 @@
    [
     "2026-11-07",
     0.826
+   ],
+   [
+    "2026-11-09",
+    0.753
    ]
   ],
   "conflicto_global": [
@@ -1356,6 +1397,10 @@
    [
     "2026-11-07",
     -0.563
+   ],
+   [
+    "2026-11-09",
+    -0.516
    ]
   ],
   "goldstein_otros": [
@@ -1370,6 +1415,10 @@
    [
     "2026-11-07",
     0.778
+   ],
+   [
+    "2026-11-09",
+    0.693
    ]
   ],
   "goldstein_rusos": [
@@ -1384,6 +1433,10 @@
    [
     "2026-11-07",
     0.141
+   ],
+   [
+    "2026-11-09",
+    0.018
    ]
   ],
   "goldstein_chinos": [
@@ -1398,6 +1451,10 @@
    [
     "2026-11-07",
     0.278
+   ],
+   [
+    "2026-11-09",
+    0.424
    ]
   ],
   "conflicto_rusos": [
@@ -1412,6 +1469,10 @@
    [
     "2026-11-07",
     -0.193
+   ],
+   [
+    "2026-11-09",
+    -0.057
    ]
   ],
   "conflicto_chinos": [
@@ -1426,6 +1487,10 @@
    [
     "2026-11-07",
     -0.089
+   ],
+   [
+    "2026-11-09",
+    -0.01
    ]
   ],
   "conflicto_otros": [
@@ -1440,6 +1505,10 @@
    [
     "2026-11-07",
     -0.572
+   ],
+   [
+    "2026-11-09",
+    -0.538
    ]
   ],
   "alimentos_fao": [
@@ -1453,6 +1522,10 @@
    ],
    [
     "2026-11-07",
+    0.578
+   ],
+   [
+    "2026-11-09",
     0.578
    ]
   ],
@@ -1468,6 +1541,10 @@
    [
     "2026-11-07",
     0.445
+   ],
+   [
+    "2026-11-09",
+    0.445
    ]
   ],
   "prensa_rsf": [
@@ -1481,6 +1558,10 @@
    ],
    [
     "2026-11-07",
+    -0.415
+   ],
+   [
+    "2026-11-09",
     -0.415
    ]
   ]
